@@ -1,6 +1,7 @@
 package pl.papistudio.localizer3000;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -25,7 +26,7 @@ public class EditLocationActivity extends Activity {
 			currentlyEditedLocation = (Location)i.getParcelableExtra("location");
 			
 			getFragmentManager().beginTransaction()
-					.add(R.id.container, new LocationEditFirstFragment()).commit();
+					.add(R.id.container, new LocationEditFirstFragment(), "EditPart1").commit();
 		}
 		else 
 		{
@@ -56,5 +57,14 @@ public class EditLocationActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+    @Override
+	public void onBackPressed() {
+    	Fragment fragment;
+	    if ((fragment = getFragmentManager().findFragmentByTag("EditPart1")) != null)
+	    	((LocationEditFirstFragment)fragment).reactToUserLeavingEdition();
+	    else
+	    	super.onBackPressed();
 	}
 }

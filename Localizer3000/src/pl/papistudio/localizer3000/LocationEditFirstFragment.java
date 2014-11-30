@@ -44,7 +44,19 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 	public void onClick(View v) {
 		if(v.getId() == R.id.edit_location_cancel_button)
 			showCancelConfirmationDialog();
+		// TODO: create behaviour for next fragment
 		//if(v.getId() == R.id.edit_location_next_button)		
+	}
+	
+	/**
+	 * Method invoked when user leaves edition of location.
+	 * In case of editing non-existing location confirmation dialog
+	 * is shown that warns about possible loss of work.
+	 */
+	public void reactToUserLeavingEdition() {
+		// TODO: Distinguish between user leaving from newly created
+		//		 location or from editing existing one!
+		showCancelConfirmationDialog();
 	}
 	
 	/**

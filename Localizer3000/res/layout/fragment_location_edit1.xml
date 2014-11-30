@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="10dp"
-        android:text="@string/fragment_location_edit_text"
+        android:text="@string/fragment_location_edit_text_part1"
         android:textSize="28sp" />
 
     <View

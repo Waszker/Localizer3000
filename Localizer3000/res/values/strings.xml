@@ -20,10 +20,10 @@
     <string name="fragment_location_details_wifi">Wifi:</string>
     <string name="fragment_location_details_bluetooth">Bluetooth:</string>
     <string name="fragment_location_details_nfc">NFC:</string>
-    <string name="title_activity_edit_location">EditLocationActivity</string>
+    <string name="title_activity_edit_location">Edit location</string>
     
 <!--     Location edit -->
-    <string name="fragment_location_edit_text">Edit location</string>
+    <string name="fragment_location_edit_text_part1">Edit location I</string>
     <string name="edit_location_name_edittext_hint">Enter location name</string>
     <string name="next_text">Next</string>
     <string name="cancel_text">Cancel</string>
