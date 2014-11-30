@@ -50,7 +50,8 @@
 			        android:layout_width="fill_parent"
 			        android:layout_height="wrap_content"
 			        android:inputType="text"
-			        android:textAlignment="center"/>
+			        android:textAlignment="center"					
+                    android:layout_weight="1"/>
 	            
 	        </TableRow>
 	        
@@ -72,11 +73,14 @@
 			    	android:text="@string/fragment_location_details_active_days"
 			    	android:textSize="@dimen/location_details_static_text"/>
 	            
-	            <LinearLayout 
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:orientation="vertical"
-	                android:layout_gravity="center">
+	            <org.apmem.tools.layouts.FlowLayout
+	                xmlns:f="http://schemas.android.com/apk/res/pl.papistudio.localizer3000"
+				    xmlns:android="http://schemas.android.com/apk/res/android"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"					
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    f:orientation="horizontal">
 	                
 		            <ToggleButton 
 		                android:id="@+id/toggle_monday"
@@ -97,7 +101,7 @@
 		                android:layout_width="wrap_content"
 		                android:layout_height="wrap_content"
 		                android:textOff="Wed"
-		                android:textOn="Wed"	/> 
+		                android:textOn="Wed" 	/> 
 		            
 		            <ToggleButton 
 		                android:id="@+id/toggle_thursday"
@@ -127,7 +131,7 @@
 		                android:textOff="Sun"
 		                android:textOn="Sun"	/> 
 		            
-	            </LinearLayout>
+	            </org.apmem.tools.layouts.FlowLayout>
 	            
 	        </TableRow>
 	        
@@ -155,7 +159,8 @@
 	          		android:layout_column="1"
 	                android:layout_width="fill_parent"
 	                android:layout_height="wrap_content"
-	                android:layout_gravity="center"/>
+	                android:gravity="center"					
+                    android:layout_weight="1"/>
 	            
 	        </TableRow>
 	        
@@ -176,7 +181,8 @@
 	          		android:layout_column="1"
 	                android:layout_width="fill_parent"
 	                android:layout_height="wrap_content"
-	                android:layout_gravity="center"/>
+	                android:gravity="center"					
+                    android:layout_weight="1"/>
 	            
 	        </TableRow>
 	        
@@ -197,7 +203,8 @@
 	          		android:layout_column="1"
 	                android:layout_width="fill_parent"
 	                android:layout_height="wrap_content"
-	                android:layout_gravity="center"/>
+	                android:gravity="start"					
+                    android:layout_weight="1"/>
 	            
 	        </TableRow>
             
