@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+<!--     Header -->
+    <TextView        
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:gravity="center"
+    	android:text="@string/fragment_location_edit_text"
+    	android:textSize="28sp" 
+    	android:padding="10dp"/>
+    
+    <View
+	    android:layout_width="fill_parent"
+	    android:layout_height="1dp"
+	    android:background="@android:color/darker_gray"
+	    android:padding="5dp"/>
+    
+<!--     ScrollView with our location edit options -->
+    <ScrollView 
+        android:layout_width="fill_parent"
+	    android:layout_height="0dp"
+	    android:layout_weight="1">
+	    
+         <TableLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="0dp"
+	  		android:stretchColumns="0,1" 
+	        android:padding="10dp">
+	        
+	        <TableRow
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content">
+	            
+	            <TextView 
+			    	android:layout_width="fill_parent"
+			    	android:layout_height="wrap_content"
+	          		android:layout_column="0"
+			    	android:text="@string/fragment_location_details_name"
+			    	android:textSize="@dimen/location_details_static_text"/>
+	            
+	            
+			    <EditText 
+			        android:id="@+id/edit_location_name"
+	          		android:layout_column="1"
+			        android:hint="@string/edit_location_name_edittext_hint"
+			        android:layout_width="fill_parent"
+			        android:layout_height="wrap_content"
+			        android:inputType="text"
+			        android:textAlignment="center"/>
+	            
+	        </TableRow>
+	        
+	        <View
+			    android:layout_width="fill_parent"
+			    android:layout_height="1dp"
+			    android:background="@android:color/darker_gray"
+			    android:padding="5dp"/>
+	        
+<!--       Days of week -->
+		 <TableRow
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content">
+	            
+	            <TextView 
+			    	android:layout_width="fill_parent"
+			    	android:layout_height="wrap_content"
+	          		android:layout_column="0"
+			    	android:text="@string/fragment_location_details_active_days"
+			    	android:textSize="@dimen/location_details_static_text"/>
+	            
+	            <LinearLayout 
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:orientation="vertical"
+	                android:layout_gravity="center">
+	                
+		            <ToggleButton 
+		                android:id="@+id/toggle_monday"
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:textOff="Mon"
+		                android:textOn="Mon"	/> 
+		            
+		            <ToggleButton 
+		                android:id="@+id/toggle_tuesday"
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:textOff="Tue"
+		                android:textOn="Tue"	/> 
+		            
+		            <ToggleButton 
+		                android:id="@+id/toggle_wednesday"
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:textOff="Wed"
+		                android:textOn="Wed"	/> 
+		            
+		            <ToggleButton 
+		                android:id="@+id/toggle_thursday"
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:textOff="Thu"
+		                android:textOn="Thu"	/> 
+		            
+		            <ToggleButton 
+		                android:id="@+id/toggle_friday"
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:textOff="Fri"
+		                android:textOn="Fri"	/> 
+		            
+		            <ToggleButton 
+		                android:id="@+id/toggle_saturday"
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:textOff="Sat"
+		                android:textOn="Sat"	/> 
+		            
+		            <ToggleButton 
+		                android:id="@+id/toggle_sunday"
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:textOff="Sun"
+		                android:textOn="Sun"	/> 
+		            
+	            </LinearLayout>
+	            
+	        </TableRow>
+	        
+	        <View
+			    android:layout_width="fill_parent"
+			    android:layout_height="1dp"
+			    android:background="@android:color/darker_gray"
+			    android:padding="5dp"/>
+	
+<!--       WiFi, Bluetooth, NFC -->       
+	        <TableRow
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:paddingTop="5dp">
+	            
+	            <TextView 
+			    	android:layout_width="fill_parent"
+			    	android:layout_height="wrap_content"
+	          		android:layout_column="0"
+			    	android:text="@string/fragment_location_details_wifi"
+			    	android:textSize="@dimen/location_details_static_text"/>
+	            
+	            <Switch 
+	                android:id="@+id/edit_location_wifi_switch"
+	          		android:layout_column="1"
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_gravity="center"/>
+	            
+	        </TableRow>
+	        
+	        <TableRow
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:paddingTop="5dp">
+	            
+	            <TextView 
+			    	android:layout_width="fill_parent"
+			    	android:layout_height="wrap_content"
+	          		android:layout_column="0"
+			    	android:text="@string/fragment_location_details_bluetooth"
+			    	android:textSize="@dimen/location_details_static_text"/>
+	            
+	            <Switch 
+	                android:id="@+id/edit_location_bluetooth_switch"
+	          		android:layout_column="1"
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_gravity="center"/>
+	            
+	        </TableRow>
+	        
+	        <TableRow
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:paddingTop="5dp">
+	            
+	            <TextView 
+			    	android:layout_width="fill_parent"
+			    	android:layout_height="wrap_content"
+	          		android:layout_column="0"
+			    	android:text="@string/fragment_location_details_nfc"
+			    	android:textSize="@dimen/location_details_static_text"/>
+	            
+	            <Switch 
+	                android:id="@+id/edit_location_nfc_switch"
+	          		android:layout_column="1"
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_gravity="center"/>
+	            
+	        </TableRow>
+            
+        </TableLayout>
+        
+    </ScrollView>
+   
+<!--     Buttons at the end -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:gravity="bottom"
+        android:layout_gravity="bottom">
+        
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_marginLeft="4dip"
+            android:layout_marginRight="4dip"
+            android:background="?android:attr/dividerVertical"
+            android:layout_alignParentTop="true" />
+        
+        <View
+            android:id="@+id/ViewColorPickerHelper"
+            android:layout_width="1dip"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="4dip"
+            android:layout_marginTop="4dip"
+            android:background="?android:attr/dividerVertical" 
+            android:layout_centerHorizontal="true"/>
+        
+        <Button
+            android:id="@+id/edit_location_cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@id/ViewColorPickerHelper"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_alignParentBottom="true"
+            android:text="@string/cancel_text"/>
+        
+        <Button
+            android:id="@+id/edit_location_next_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_alignParentBottom="true" 
+            android:layout_toEndOf="@id/ViewColorPickerHelper"
+            android:text="@string/next_text" />
+        
+    </RelativeLayout>
+    
+
+</LinearLayout>

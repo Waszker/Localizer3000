@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <TextView        
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:gravity="center"
+    	android:text="@string/fragment_location_details_text"
+    	android:textSize="28sp" 
+    	android:padding="10dp"/>
+    
+    <View
+	    android:layout_width="fill_parent"
+	    android:layout_height="1dp"
+	    android:background="@android:color/darker_gray"
+	    android:padding="5dp"/>
+
+<!-- Table holding all location info -->
+	<ScrollView 
+	        android:layout_width="fill_parent"
+	        android:layout_height="0dp"
+	        android:layout_weight="1" >
+	    <TableLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="0dp"
+	  		android:stretchColumns="0,1" 
+	        android:padding="10dp">
+	
+	        <TableRow
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content">
+	            
+	            <TextView 
+			    	android:layout_width="fill_parent"
+			    	android:layout_height="wrap_content"
+	          		android:layout_column="0"
+			    	android:text="@string/fragment_location_details_name"
+			    	android:textSize="@dimen/location_details_static_text"/>
+	            
+	            <TextView 
+	                android:id="@+id/details_location_name"
+			    	android:layout_width="fill_parent"
+			    	android:layout_height="wrap_content"
+	          		android:layout_column="1"
+			    	android:textSize="@dimen/location_details_variable_text"/>
+	            
+	        </TableRow>
+	
+	        <TableRow
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content" >
+	            
+	            <TextView 
+			    	android:layout_width="fill_parent"
+			    	android:layout_height="wrap_content"
+	          		android:layout_column="0"
+			    	android:text="@string/fragment_location_details_days"
+			    	android:textSize="@dimen/location_details_static_text"/>
+	            
+	            <TextView 
+	                android:id="@+id/details_location_days"
+			    	android:layout_width="fill_parent"
+			    	android:layout_height="wrap_content"
+	          		android:layout_column="1"
+			    	android:textSize="@dimen/location_details_variable_text"/>
+	            
+	        </TableRow>
+	
+	        <TableRow
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content" >
+	            
+	            <TextView 
+			    	android:layout_width="fill_parent"
+			    	android:layout_height="wrap_content"
+	          		android:layout_column="0"
+			    	android:text="@string/fragment_location_details_profile"
+			    	android:textSize="@dimen/location_details_static_text"/>
+	            
+	            <TextView 
+	                android:id="@+id/details_location_profile"
+			    	android:layout_width="fill_parent"
+			    	android:layout_height="wrap_content"
+	          		android:layout_column="1"
+			    	android:textSize="@dimen/location_details_variable_text"/>
+	            
+	        </TableRow>
+	
+	        <TableRow
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content" >
+	            
+	            <TextView 
+			    	android:layout_width="fill_parent"
+			    	android:layout_height="wrap_content"
+	          		android:layout_column="0"
+			    	android:text="@string/fragment_location_details_wifi"
+			    	android:textSize="@dimen/location_details_static_text"/>
+	            
+	            <TextView 
+	                android:id="@+id/details_location_wifi"
+			    	android:layout_width="fill_parent"
+			    	android:layout_height="wrap_content"
+	          		android:layout_column="1"
+			    	android:textSize="@dimen/location_details_variable_text"/>
+	            
+	        </TableRow>
+	        
+	        <TableRow
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content" >
+	            
+	            <TextView 
+			    	android:layout_width="fill_parent"
+			    	android:layout_height="wrap_content"
+	          		android:layout_column="0"
+			    	android:text="@string/fragment_location_details_bluetooth"
+			    	android:textSize="@dimen/location_details_static_text"/>
+	            
+	            <TextView 
+	                android:id="@+id/details_location_bluetooth"
+			    	android:layout_width="fill_parent"
+			    	android:layout_height="wrap_content"
+	          		android:layout_column="1"
+			    	android:textSize="@dimen/location_details_variable_text"/>
+	            
+	        </TableRow>
+	        
+	        <TableRow
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content" >
+	            
+	            <TextView 
+			    	android:layout_width="fill_parent"
+			    	android:layout_height="wrap_content"
+	          		android:layout_column="0"
+			    	android:text="@string/fragment_location_details_nfc"
+			    	android:textSize="@dimen/location_details_static_text"/>
+	            
+	            <TextView 
+	                android:id="@+id/details_location_nfc"
+			    	android:layout_width="fill_parent"
+			    	android:layout_height="wrap_content"
+	          		android:layout_column="1"
+			    	android:textSize="@dimen/location_details_variable_text"/>
+	            
+	        </TableRow>
+	        
+	    </TableLayout>
+    </ScrollView>
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:gravity="bottom"
+        android:layout_gravity="bottom">
+        
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_marginLeft="4dip"
+            android:layout_marginRight="4dip"
+            android:background="?android:attr/dividerVertical"
+            android:layout_alignParentTop="true" />
+        
+        <View
+            android:id="@+id/ViewColorPickerHelper"
+            android:layout_width="1dip"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="4dip"
+            android:layout_marginTop="4dip"
+            android:background="?android:attr/dividerVertical" 
+            android:layout_centerHorizontal="true"/>
+        
+        <Button
+            android:id="@+id/details_delete_location_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@id/ViewColorPickerHelper"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_alignParentBottom="true"
+            android:text="@string/delete_text"/>
+        
+        <Button
+            android:id="@+id/details_edit_location_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_alignParentBottom="true" 
+            android:layout_toEndOf="@id/ViewColorPickerHelper"
+            android:text="@string/edit_text" />
+        
+    </RelativeLayout>
+
+</LinearLayout>
