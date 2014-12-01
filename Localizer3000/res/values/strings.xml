@@ -7,11 +7,11 @@
     <string name="edit_text">Edit</string>
     <string name="delete_text">Delete</string>
     <string name="main_activity_text1">Current localization:</string>
-    <string name="main_activity_button1_text">Add localization</string>
-    <string name="main_activity_button2_text">My localizations</string>
+    <string name="main_activity_button1_text">Add location</string>
+    <string name="main_activity_button2_text">My locations</string>
     <string name="current_localization">Unknown</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_saved_localizations">SavedLocalizations</string>
+    <string name="title_activity_saved_localizations">Saved locations</string>
     <string name="fragment_location_details_text">Location details</string>
     <string name="fragment_location_details_name">Location name:</string>
     <string name="fragment_location_details_days">Active on days:</string>
@@ -20,6 +20,7 @@
     <string name="fragment_location_details_wifi">Wifi:</string>
     <string name="fragment_location_details_bluetooth">Bluetooth:</string>
     <string name="fragment_location_details_nfc">NFC:</string>
+    <string name="fragment_location_details_mobile_data">Mobile Data:</string>
     <string name="title_activity_edit_location">Edit location</string>
     
 <!--     Location edit -->

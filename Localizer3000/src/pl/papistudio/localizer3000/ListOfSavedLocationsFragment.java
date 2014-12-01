@@ -3,6 +3,8 @@ package pl.papistudio.localizer3000;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mobeta.android.dslv.DragSortListView;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -107,13 +109,15 @@ public class ListOfSavedLocationsFragment extends Fragment {
 	
 	private void fillListWithLocations(View v) {
 		// TODO change way of declaring and filling list
+		// TODO: add reactions to deleting items by fling!
+		// TODO: check: https://github.com/bauerca/drag-sort-listview/blob/master/demo/res/layout/checkable_main.xml
 		locations = new ArrayList<>();
-		locations.add(new Location("DOM", true, false, false));
-		locations.add(new Location("Babcia", true, true, true));
-		locations.add(new Location("Uczelnia", true, false, true));
-		locations.add(new Location("Miasto", false, false, true));
+		locations.add(new Location("DOM", true, false, false, true));
+		locations.add(new Location("Babcia", true, true, true, true));
+		locations.add(new Location("Uczelnia", true, false, true, false));
+		locations.add(new Location("Miasto", false, false, true, true));
 		
-		ListView listView = (ListView)v.findViewById(R.id.list_of_localizations);
+		DragSortListView listView = (DragSortListView)v.findViewById(R.id.list_of_localizations);
 		LocationListAdapter adapter = new LocationListAdapter(getActivity(), locations);
 		listView.setAdapter(adapter);		
 		addListViewClickListener(listView, adapter);

@@ -26,12 +26,14 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 	/*   VARIABLES    */
 	/******************/
 	private Location location;
+	private boolean shouldRequestExitConfirmation;
 	
 	/******************/
 	/*   FUNCTIONS    */
-	/******************/
+	/******************/	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {		
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {	
+		shouldRequestExitConfirmation = false;	
 		View rootView = inflater.inflate(R.layout.fragment_location_edit1, container, false);
 		getLocationReference();
 		fillNullLocation();
@@ -56,7 +58,10 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 	public void reactToUserLeavingEdition() {
 		// TODO: Distinguish between user leaving from newly created
 		//		 location or from editing existing one!
-		showCancelConfirmationDialog();
+		if(shouldRequestExitConfirmation)
+			showCancelConfirmationDialog();
+		else
+			LocationEditFirstFragment.this.getActivity().finish();
 	}
 	
 	/**
@@ -80,6 +85,7 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 		((Switch)v.findViewById(R.id.edit_location_wifi_switch)).setChecked(location.isWifiOn());
 		((Switch)v.findViewById(R.id.edit_location_bluetooth_switch)).setChecked(location.isBluetoothOn());
 		((Switch)v.findViewById(R.id.edit_location_nfc_switch)).setChecked(location.isNfcOn());
+		((Switch)v.findViewById(R.id.edit_location_mobile_data_switch)).setChecked(location.isMobData());
 	}
 	 
 	 /**
@@ -90,7 +96,10 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 	  */
 	 private void fillNullLocation() {
 		 if(location == null)
-			 location = new Location("", false, false, false);
+		 {
+			 location = new Location("", false, false, false, false);
+			 shouldRequestExitConfirmation = true;
+		 }
 	 }
 	 
 	 private void showCancelConfirmationDialog() {

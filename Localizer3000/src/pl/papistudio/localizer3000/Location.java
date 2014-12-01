@@ -8,8 +8,9 @@ public class Location implements Parcelable {
 	/*   VARIABLES    */
 	/******************/
 	private String name;
-	private boolean isWifiOn, isBluetoothOn, isNfcOn;
+	private boolean isWifiOn, isBluetoothOn, isNfcOn, isMobData;
 	private boolean isMon, isTue, isWed, isThu, isFri, isSat, isSun;
+	private android.location.Location location;
 	
 	/******************/
 	/*   FUNCTIONS    */
@@ -22,7 +23,7 @@ public class Location implements Parcelable {
 	 */
 	public Location(String name) {
 		this.name = name;
-		this.isWifiOn = this.isBluetoothOn = this.isNfcOn = true;
+		this.isWifiOn = this.isBluetoothOn = this.isNfcOn = isMobData = true;
 		setDaysOfWeek(true, true, true, true, true, true, true);
 	}
 	
@@ -34,11 +35,12 @@ public class Location implements Parcelable {
 	 * @param isBluetoothOn
 	 * @param isNfcOn
 	 */
-	public Location(String name, boolean isWifiOn, boolean isBluetoothOn, boolean isNfcOn) {
+	public Location(String name, boolean isWifiOn, boolean isBluetoothOn, boolean isNfcOn, boolean isMobData) {
 		this.name = name;
 		this.isWifiOn = isWifiOn;
 		this.isBluetoothOn = isBluetoothOn;
 		this.isNfcOn = isNfcOn;
+		this.isMobData = isMobData;
 		setDaysOfWeek(true, true, true, true, true, true, true);
 	}
 	
@@ -96,6 +98,14 @@ public class Location implements Parcelable {
 
 	public void setNfcOn(boolean isNfcOn) {
 		this.isNfcOn = isNfcOn;
+	}
+
+	public boolean isMobData() {
+		return isMobData;
+	}
+
+	public void setMobData(boolean isMobData) {
+		this.isMobData = isMobData;
 	}
 
 	public boolean isMon() {
@@ -158,12 +168,15 @@ public class Location implements Parcelable {
 	 * Parcelable part
 	 * @see http://stackoverflow.com/questions/7181526/how-can-i-make-my-custom-objects-be-parcelable
 	 * @see android.os.Parcelable#describeContents()
+	 * @see http://blog.logicexception.com/2012/09/a-parcelable-tutorial-for-android.html
 	 */
 	public Location(Parcel in) {
 		name = in.readString();
 		isWifiOn = (in.readByte() != 0 ? true : false);
 		isBluetoothOn = (in.readByte() != 0 ? true : false);
 		isNfcOn = (in.readByte() != 0 ? true : false);
+		isMobData = (in.readByte() != 0 ? true : false);
+		location = (in.readParcelable(null));
 	}
 	
 	@Override
@@ -177,6 +190,8 @@ public class Location implements Parcelable {
 		dest.writeByte((byte)(isWifiOn ? 1 : 0));
 		dest.writeByte((byte)(isBluetoothOn ? 1 : 0));
 		dest.writeByte((byte)(isNfcOn ? 1 : 0));
+		dest.writeByte((byte)(isMobData ? 1 : 0));
+		dest.writeParcelable(location, flags);
 	}
 	
 	@SuppressWarnings("rawtypes")
