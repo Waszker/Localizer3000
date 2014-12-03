@@ -1,3 +1,4 @@
+ <!-- Icons taken from: http://www.iconsdb.com/icons/preview/white/activity-feed-xxl.png -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -13,49 +14,55 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="25sp"
-        android:text="@string/main_activity_text1" />
-    
+        android:layout_marginTop="30dp"
+        android:text="@string/main_activity_text1"
+        android:textSize="28sp" />
+
     <TextView
         android:id="@+id/current_location_textview"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="26sp"
         android:paddingTop="20dp"
-        android:text="@string/current_localization" />
-    
-    <LinearLayout
+        android:text="@string/current_localization"
+        android:textSize="26sp" />
+
+    <Button
+        android:id="@+id/service_start_stop_button"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:gravity="center|bottom"
-    	android:orientation="vertical" >
-    	
-        <Button 
-            android:id="@+id/service_start_stop_button"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:gravity="center"
-	        android:layout_marginBottom="5dp"
-	        android:onClick="startStopServiceOnClick" />
-	    
-	    <Button 
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:gravity="center"
-	        android:layout_marginBottom="5dp"
-	        android:text="@string/main_activity_button1_text"
-	        android:onClick="addNewLocationClick" />
-	    
-	    <Button 
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:gravity="center"
-	        android:layout_marginBottom="5dp"
-	        android:text="@string/main_activity_button2_text"
-	        android:onClick="showSavedLocationsClick" />
-	    
-    </LinearLayout>
-    
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:gravity="center"
+        android:onClick="startStopServiceOnClick" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom" >
+
+        <com.melnykov.fab.FloatingActionButton
+            xmlns:fab="http://schemas.android.com/apk/res/pl.papistudio.localizer3000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:onClick="addNewLocationClick"
+            android:src="@drawable/add_location"
+            fab:fab_colorNormal="@color/material_blue"
+            fab:fab_colorPressed="@color/material_blue_lighter"
+            fab:fab_colorRipple="@color/material_blue" />
+
+        <com.melnykov.fab.FloatingActionButton
+            xmlns:fab="http://schemas.android.com/apk/res/pl.papistudio.localizer3000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:onClick="showSavedLocationsClick"
+            android:src="@drawable/list_icon"
+            fab:fab_colorNormal="@color/material_blue"
+            fab:fab_colorPressed="@color/material_blue_lighter"
+            fab:fab_colorRipple="@color/material_blue" />
+    </RelativeLayout>
 
 </LinearLayout>

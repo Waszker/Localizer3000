@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <!-- http://www.google.com/design/spec/style/color.html#color-ui-color-palette -->
+    <!-- http://paletton.com/#uid=13v0u0kllllaFw0g0qFqFg0w0aF -->
+
+    <color name="material_blue">#29526D</color>
+    <color name="material_blue_lighter">#486F88</color>
+    <color name="text_color_regular">#BCC1C5</color>
+</resources>

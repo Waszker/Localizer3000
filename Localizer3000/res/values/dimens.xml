@@ -3,9 +3,16 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    
-	<!-- Dimensions used in location details fragment -->
+
+    <!-- Dimensions used in location details fragment -->
     <dimen name="location_details_static_text">20sp</dimen>
     <dimen name="location_details_variable_text">25sp</dimen>
+
+    <!-- Dimensions for FAB -->
+    <dimen name="fab_size_normal">56dp</dimen>
+    <dimen name="fab_size_mini">40dp</dimen>
+    <dimen name="fab_shadow_size">12dp</dimen>
+    <dimen name="fab_scroll_threshold">4dp</dimen>
+    <dimen name="fab_elevation_lollipop">8dp</dimen>
 
 </resources>
