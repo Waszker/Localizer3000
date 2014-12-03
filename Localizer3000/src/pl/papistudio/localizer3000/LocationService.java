@@ -54,6 +54,7 @@ public class LocationService extends Service {
 					Thread.sleep(interval);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
+					// TODO: change it!
 					e.printStackTrace();
 				}
 				
