@@ -9,13 +9,14 @@
     tools:context="pl.papistudio.localizer3000.SavedLocalizations$PlaceholderFragment" >
 
     <com.mobeta.android.dslv.DragSortListView
-		xmlns:dslv="http://schemas.android.com/apk/res/pl.papistudio.localizer3000" 
+        xmlns:dslv="http://schemas.android.com/apk/res/pl.papistudio.localizer3000"
         android:id="@+id/list_of_localizations"
         android:layout_width="fill_parent"
-    	android:layout_height="fill_parent" 
-    	dslv:drag_enabled="true" 
-    	dslv:drag_start_mode="onLongPress"
-    	dslv:remove_enabled="true"
-    	dslv:remove_mode="flingRemove"	/>
-    
+        android:layout_height="fill_parent"
+        android:focusable="true"
+        dslv:drag_enabled="true"
+        dslv:drag_start_mode="onLongPress"
+        dslv:remove_enabled="false"
+        dslv:remove_mode="flingRemove" />
+
 </LinearLayout>

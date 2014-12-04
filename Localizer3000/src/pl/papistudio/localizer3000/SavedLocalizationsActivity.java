@@ -1,6 +1,7 @@
 package pl.papistudio.localizer3000;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,11 +45,14 @@ public class SavedLocalizationsActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
+			FragmentTransaction ft = getFragmentManager().beginTransaction();
+			ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out,
+					android.R.animator.fade_in, android.R.animator.fade_out);
+            ft.replace(android.R.id.content, new PreferencesFragment());
+			ft.addToBackStack(null);
+            ft.commit();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

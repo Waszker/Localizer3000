@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- XML file for toggle button behaviour -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+        
+    <!-- When selected -->
+    <item android:drawable="@color/material_blue_toggle_checked"
+          android:state_checked="true" />    
+    
+    <!-- When not selected -->
+    <item android:drawable="@color/material_blue_toggle_unchecked"
+        android:state_checked="false"/>
+
+ </selector>

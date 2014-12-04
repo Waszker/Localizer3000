@@ -53,56 +53,129 @@
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 f:orientation="horizontal" >
-
-                <ToggleButton
-                    android:id="@+id/toggle_monday"
+                
+                <com.andexert.library.RippleView
+                    xmlns:ripple="http://schemas.android.com/apk/res/pl.papistudio.localizer3000"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textOff="Mon"
-                    android:textOn="Mon" />
+                    android:padding="1dp"
+                    ripple:rv_centered="true" >
 
-                <ToggleButton
-                    android:id="@+id/toggle_tuesday"
+                    <ToggleButton
+                        android:id="@+id/toggle_monday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/toggle_button_background"
+                        android:textColor="@drawable/toggle_button_text"
+                        android:textOff="Mon"
+                        android:textOn="Mon" />
+                    
+                </com.andexert.library.RippleView>
+
+                <com.andexert.library.RippleView
+                    xmlns:ripple="http://schemas.android.com/apk/res/pl.papistudio.localizer3000"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textOff="Tue"
-                    android:textOn="Tue" />
+                    android:padding="1dp"
+                    ripple:rv_centered="true" >
 
-                <ToggleButton
-                    android:id="@+id/toggle_wednesday"
+                    <ToggleButton
+                        android:id="@+id/toggle_tuesday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/toggle_button_background"
+                        android:textColor="@drawable/toggle_button_text"
+                        android:textOff="Tue"
+                        android:textOn="Tue" />
+                </com.andexert.library.RippleView>
+
+                <com.andexert.library.RippleView
+                    xmlns:ripple="http://schemas.android.com/apk/res/pl.papistudio.localizer3000"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textOff="Wed"
-                    android:textOn="Wed" />
+                    android:padding="1dp"
+                    ripple:rv_centered="true" >
 
-                <ToggleButton
-                    android:id="@+id/toggle_thursday"
+                    <ToggleButton
+                        android:id="@+id/toggle_wednesday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/toggle_button_background"
+                        android:textColor="@drawable/toggle_button_text"
+                        android:textOff="Wed"
+                        android:textOn="Wed" />
+                </com.andexert.library.RippleView>
+
+                <com.andexert.library.RippleView
+                    xmlns:ripple="http://schemas.android.com/apk/res/pl.papistudio.localizer3000"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textOff="Thu"
-                    android:textOn="Thu" />
+                    android:padding="1dp"
+                    ripple:rv_centered="true" >
 
-                <ToggleButton
-                    android:id="@+id/toggle_friday"
+                    <ToggleButton
+                        android:id="@+id/toggle_thursday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/toggle_button_background"
+                        android:textColor="@drawable/toggle_button_text"
+                        android:textOff="Thu"
+                        android:textOn="Thu" />
+                </com.andexert.library.RippleView>
+
+                <com.andexert.library.RippleView
+                    xmlns:ripple="http://schemas.android.com/apk/res/pl.papistudio.localizer3000"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textOff="Fri"
-                    android:textOn="Fri" />
+                    android:padding="1dp"
+                    ripple:rv_centered="true" >
 
-                <ToggleButton
-                    android:id="@+id/toggle_saturday"
+                    <ToggleButton
+                        android:id="@+id/toggle_friday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/toggle_button_background"
+                        android:textColor="@drawable/toggle_button_text"
+                        android:textOff="Fri"
+                        android:textOn="Fri" />
+                </com.andexert.library.RippleView>
+
+                <com.andexert.library.RippleView
+                    xmlns:ripple="http://schemas.android.com/apk/res/pl.papistudio.localizer3000"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textOff="Sat"
-                    android:textOn="Sat" />
+                    android:padding="1dp"
+                    ripple:rv_centered="true" >
 
-                <ToggleButton
-                    android:id="@+id/toggle_sunday"
+                    <ToggleButton
+                        android:id="@+id/toggle_saturday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/toggle_button_background"
+                        android:textColor="@drawable/toggle_button_text"
+                        android:textOff="Sat"
+                        android:textOn="Sat" />
+                </com.andexert.library.RippleView>
+
+                <com.andexert.library.RippleView
+                    xmlns:ripple="http://schemas.android.com/apk/res/pl.papistudio.localizer3000"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textOff="Sun"
-                    android:textOn="Sun" />
+                    android:padding="1dp"
+                    ripple:rv_centered="true" >
+
+                    <ToggleButton
+                        android:id="@+id/toggle_sunday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/toggle_button_background"
+                        android:textColor="@drawable/toggle_button_text"
+                        android:textOff="Sun"
+                        android:textOn="Sun" />
+                </com.andexert.library.RippleView>
+
             </org.apmem.tools.layouts.FlowLayout>
 
             <View

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- XML file for toggle button text behaviour -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+        
+    <!-- When selected -->
+    <item android:color="@color/text_color_bold"
+          android:state_checked="true" />    
+    
+    <!-- When not selected -->
+    <item android:color="@color/text_color_fading"
+        android:state_checked="false"/>
+
+ </selector>

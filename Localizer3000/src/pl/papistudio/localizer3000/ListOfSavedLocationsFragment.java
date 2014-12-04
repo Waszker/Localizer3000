@@ -3,22 +3,24 @@ package pl.papistudio.localizer3000;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mobeta.android.dslv.DragSortListView;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
+import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.mobeta.android.dslv.DragSortListView;
 
 /**
  * Fragment displaying list of saved locations.
@@ -45,6 +47,7 @@ public class ListOfSavedLocationsFragment extends Fragment {
 		private LayoutInflater inflater;
 		private List<Location> list;
 		private TextView locationName;
+		private Activity activity;
 
 		/******************/
 		/*   FUNCTIONS    */
@@ -52,6 +55,7 @@ public class ListOfSavedLocationsFragment extends Fragment {
 		public LocationListAdapter(Activity context, List<Location> list)
 		{
 			super();
+			activity = context;
 			this.inflater = LayoutInflater.from(context);
 			this.list = list;
 		}
@@ -68,12 +72,11 @@ public class ListOfSavedLocationsFragment extends Fragment {
 
 		@Override
 		public long getItemId(int position) {
-			// TODO Auto-generated method stub
 			return 0;
 		}
 
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
+		public View getView(final int position, View convertView, ViewGroup parent) {
 			View rowView = convertView;
 
 		    if(rowView == null)
@@ -84,10 +87,20 @@ public class ListOfSavedLocationsFragment extends Fragment {
 		    locationName.setText(list.get(position).getName());
 		    
 		    /* Setting color */
+		    // TODO: change!
 		    if(position % 2 == 0)
-		    	locationName.setBackgroundColor(Color.BLACK);
+		    	((RelativeLayout)rowView.findViewById(R.id.list_item_location)).setBackgroundColor(activity.getResources().getColor(R.color.material_blue));
 		    else
-		    	locationName.setBackgroundColor(Color.DKGRAY);
+		    	((RelativeLayout)rowView.findViewById(R.id.list_item_location)).setBackgroundColor(activity.getResources().getColor(R.color.material_blue_lighter));
+		    
+		    /* Adding listener to onclick */
+		    ((ImageButton)rowView.findViewById(R.id.delete_item_button)).setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					Log.d("Item delete", "Deleted item number: " + position);
+				}
+			});
 
 		    return rowView;
 		}
@@ -112,10 +125,13 @@ public class ListOfSavedLocationsFragment extends Fragment {
 		// TODO: add reactions to deleting items by fling!
 		// TODO: check: https://github.com/bauerca/drag-sort-listview/blob/master/demo/res/layout/checkable_main.xml
 		locations = new ArrayList<>();
+		for(int i=0; i<100; i++)
+		{
 		locations.add(new Location("DOM", true, false, false, true));
 		locations.add(new Location("Babcia", true, true, true, true));
 		locations.add(new Location("Uczelnia", true, false, true, false));
 		locations.add(new Location("Miasto", false, false, true, true));
+		}
 		
 		DragSortListView listView = (DragSortListView)v.findViewById(R.id.list_of_localizations);
 		LocationListAdapter adapter = new LocationListAdapter(getActivity(), locations);

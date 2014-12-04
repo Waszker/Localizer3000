@@ -30,7 +30,6 @@ public class LocationService extends Service {
 	private android.location.Location location;
 	private int interval;
 	private int startMode = Service.START_NOT_STICKY; // TODO: change it!
-	private int bindedClientsCount;
 	
 	private List<Object> receivers;
 	private List<Method> methods;
@@ -58,19 +57,32 @@ public class LocationService extends Service {
 					e.printStackTrace();
 				}
 				
-				//if(lastKnowLocation != location) TODO: look about it!
-					checkAndUpdateMainActivityLocation();
+				if(lastKnowLocation != location)
+				{
+					updateAndBroadcastNewLocation();
+					takeActions();
+				}
 			}
 			LocationService.this.stopSelf();
 		}
 		
-		private void checkAndUpdateMainActivityLocation() {
+		/**
+		 * After location has changed broadcast it to all registered clients.
+		 * This can be invoked when new client registers just to make it faster
+		 * to get location info.
+		 */
+		public void updateAndBroadcastNewLocation() {
 			// TODO: react to location changes!!!
 	        Log.d("Location Service", "Location updated " + receivers.size());
 			lastKnowLocation = location;
 			
+			if(lastKnowLocation != null)
+				broadcastNewLocation(lastKnowLocation);			
+		}
+		
+		private void broadcastNewLocation(android.location.Location loc) {
 			Object[] params = new Object[1];
-			params[0] = location;
+			params[0] = loc;
 			for(int i=0; i<receivers.size(); i++)
 				try {
 					methods.get(i).invoke(receivers.get(i), params);
@@ -79,6 +91,10 @@ public class LocationService extends Service {
 					// TODO: Do something productive?
 					e.printStackTrace();
 				}
+		}
+		
+		private void takeActions() {
+			// TODO: this function should do all the stuff with location change!
 		}
 	}
 
@@ -89,7 +105,6 @@ public class LocationService extends Service {
 	@Override
     public void onCreate() {
 		createLocationListener();
-		bindedClientsCount = 0;
 		receivers = new ArrayList<>();
 		methods = new ArrayList<>();
     }
@@ -106,21 +121,18 @@ public class LocationService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
     	Log.d("Location Service", "Client binded");
-    	bindedClientsCount++;
         return mBinder;
     }
     
     @Override
     public boolean onUnbind(Intent intent) {
     	Log.d("Location Service", "Client unbinded");
-    	bindedClientsCount--;
         return true;
     }
     
     @Override
     public void onRebind(Intent intent) {
     	Log.d("Location Service", "Client rebinded");
-    	bindedClientsCount++;
     }
     
     @Override
@@ -138,6 +150,7 @@ public class LocationService extends Service {
     public void requestLocationUpdates(Object receiver, Method method) {
     	receivers.add(receiver);
     	methods.add(method);
+    	serviceThread.updateAndBroadcastNewLocation();
     }
     
     /**

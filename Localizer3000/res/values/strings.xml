@@ -6,7 +6,8 @@
 <!--     Location list and details -->
     <string name="edit_text">Edit</string>
     <string name="delete_text">Delete</string>
-    <string name="main_activity_text1">Current localization:</string>
+    <string name="main_activity_service_status_text">Service status:</string>
+    <string name="main_activity_text1">Current coordinates:</string>
     <string name="main_activity_button1_text">Add location</string>
     <string name="main_activity_button2_text">My locations</string>
     <string name="current_localization">Unknown</string>

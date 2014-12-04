@@ -15,8 +15,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 public class MainActivity extends Activity {
 	/******************/
@@ -71,10 +71,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		setServiceButtonTextAccordingToServiceState();
-		
-		// TODO: Think about changing that?
-		if(!isLocationServiceNotRunning())
-			isServiceBinded = bindService(new Intent(this, LocationService.class), serviceConnection, BIND_AUTO_CREATE);
+		bindIfLocationServiceRunning();		
 	}
 
 	@Override
@@ -119,7 +116,7 @@ public class MainActivity extends Activity {
 	 * @param v
 	 */
 	public void startStopServiceOnClick(View v) {
-		if(((Button)v).getText().equals("Start service"))
+		if(((ToggleButton)v).isChecked())
 			startLocationServiceAndBindToIt();
 		else
 		{
@@ -160,10 +157,10 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void run() {
-				((TextView)findViewById(R.id.current_location_textview)).setText(location.getLatitude() 
-																				 + " " + location.getLongitude()
-																				 + " with accu: " 
-																				 + location.getAccuracy());
+				((TextView) findViewById(R.id.current_location_textview))
+						.setText(location.getLatitude() + "\n"
+								+ location.getLongitude() + "\nwith accu: "
+								+ location.getAccuracy());
 			}
 		});
 	}
@@ -177,20 +174,24 @@ public class MainActivity extends Activity {
 			intent.putExtra("interval", 5000);
 			startService(intent);			
 		}
-		else
-		{
-			// TODO: react to service working by setting appropriate button icons
-		}
 		
-		isServiceBinded = bindService(intent, serviceConnection, BIND_AUTO_CREATE);
+		bindIfLocationServiceRunning();
 	}
 
 	private void setServiceButtonTextAccordingToServiceState() {
-		Button b = (Button)findViewById(R.id.service_start_stop_button);
-		if(isLocationServiceNotRunning())
-			b.setText("Start service");
+		ToggleButton b = (ToggleButton)findViewById(R.id.service_start_stop_button);
+		boolean isServiceNotRunning = isLocationServiceNotRunning();
+		
+		if(isServiceNotRunning)
+		{
+			b.setText("Not running");
+			b.setChecked(false);
+		}
 		else
-			b.setText("Stop service");			
+		{
+			b.setText("Running");
+			b.setChecked(true);
+		}
 	}
 	
 	private boolean isLocationServiceNotRunning() {
@@ -199,8 +200,16 @@ public class MainActivity extends Activity {
 		
 		for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE))
 			if (LocationService.class.getName().equals(service.service.getClassName()))
+			{
 				isNotRunning = false;
+				break;
+			}
 		
 		return isNotRunning;
+	}
+	
+	private void bindIfLocationServiceRunning() {
+		if(!isLocationServiceNotRunning())
+			isServiceBinded = bindService(new Intent(this, LocationService.class), serviceConnection, BIND_AUTO_CREATE);
 	}
 }
