@@ -67,7 +67,12 @@ public class EditLocationActivity extends Activity {
 	public void onBackPressed() {
     	Fragment fragment;
 	    if ((fragment = getFragmentManager().findFragmentByTag("EditPart1")) != null)
-	    	((LocationEditFirstFragment)fragment).reactToUserLeavingEdition();
+	    {
+	    	if(((LocationEditFirstFragment)fragment).isVisible())
+	    		((LocationEditFirstFragment)fragment).reactToUserLeavingEdition();
+	    	else
+	    		super.onBackPressed();
+	    }
 	    else
 	    	super.onBackPressed();
 	}

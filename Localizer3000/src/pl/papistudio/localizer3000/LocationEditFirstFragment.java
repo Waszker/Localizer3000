@@ -2,6 +2,7 @@ package pl.papistudio.localizer3000;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -46,8 +47,8 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 	public void onClick(View v) {
 		if(v.getId() == R.id.edit_location_cancel_button)
 			showCancelConfirmationDialog();
-		// TODO: create behaviour for next fragment
-		//if(v.getId() == R.id.edit_location_next_button)		
+		if(v.getId() == R.id.edit_location_next_button)
+			showSecondEditFragment();
 	}
 	
 	/**
@@ -127,4 +128,14 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 		    })
 		    .show();
 	}
+	 
+	 private void showSecondEditFragment() {
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+		ft.setCustomAnimations(android.R.animator.fade_in,
+				android.R.animator.fade_out, android.R.animator.fade_in,
+				android.R.animator.fade_out);
+		ft.replace(getId(),	new LocationEditSecondFragment());
+		ft.addToBackStack(null);
+		ft.commit();
+	 }
 }
