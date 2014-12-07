@@ -68,7 +68,7 @@ public class LocationDetailsFragment extends Fragment implements OnClickListener
 		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_wifi), location.isWifiOn());
 		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_bluetooth), location.isBluetoothOn());
 		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_nfc), location.isNfcOn());
-		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_mobile_data), location.isMobData());
+		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_mobile_data), location.isMobileData());
 	}
 	
 	private void setTextAndColorForBooleanValues(TextView view, boolean booleanValue) {

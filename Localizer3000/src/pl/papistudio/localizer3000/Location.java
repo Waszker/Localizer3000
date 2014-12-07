@@ -118,11 +118,11 @@ public class Location implements Parcelable {
 		this.isNfcOn = isNfcOn;
 	}
 
-	public boolean isMobData() {
+	public boolean isMobileData() {
 		return isMobileData;
 	}
 
-	public void setMobData(boolean isMobData) {
+	public void setMobileData(boolean isMobData) {
 		this.isMobileData = isMobData;
 	}
 	
@@ -246,8 +246,8 @@ public class Location implements Parcelable {
 		isVibrationOn = (in.readByte() != 0 ? true : false);
 		isSMSsendOn = (in.readByte() != 0 ? true : false);
 		radius = (in.readInt());
-		timeFrom=(in.readParcelable(null));
-		timeTo=(in.readParcelable(null));
+		timeFrom=(in.readParcelable(Time.class.getClassLoader()));
+		timeTo=(in.readParcelable(Time.class.getClassLoader()));
 		location = (in.readParcelable(null));
 	}
 	

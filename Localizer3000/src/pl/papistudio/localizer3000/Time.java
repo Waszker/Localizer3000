@@ -3,47 +3,42 @@ package pl.papistudio.localizer3000;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Time implements Parcelable{
-	
-	/* http://alvinalexander.com/java/jwarehouse/android/core/java/android/widget/TimePicker.java.shtml */
-	
+public class Time implements Parcelable {	
+	/* http://alvinalexander.com/java/jwarehouse/android/core/java/android/widget/TimePicker.java.shtml */	
 	/******************/
 	/*   VARIABLES    */
 	/******************/
+	 private int hour = 0; // 0-23
+	 private int minute = 0; // 0-59
 	
-	 private int Hour = 0; // 0-23
-	 private int Minute = 0; // 0-59
-	
 	 
-	 /******************/
-	 /*   FUNCTIONS    */
-	 /******************/
-	 
-	 public Time() {
-			Hour = 0;
-			Minute = 0;
-		}
-	 
-	 public Time(int hour, int minute) {
-			Hour = hour;
-			Minute = minute;
-		}
+	/******************/
+	/*   FUNCTIONS    */
+	/******************/	 
+	public Time() {
+		hour = 0;
+		minute = 0;
+	}
 
-	 
+	public Time(int hour, int minute) {
+		this.hour = hour;
+		this.minute = minute;
+	}
+
 	public int getHour() {
-		return Hour;
+		return hour;
 	}
 
 	public void setHour(int hour) {
-		Hour = hour;
+		this.hour = hour;
 	}
 
 	public int getMinute() {
-		return Minute;
+		return minute;
 	}
 
 	public void setMinute(int minute) {
-		Minute = minute;
+		this.minute = minute;
 	}
 
 	/*
@@ -54,8 +49,8 @@ public class Time implements Parcelable{
 	 */
 	public Time(Parcel in)
 	{
-		Hour=in.readInt();
-		Minute=in.readInt();
+		hour=in.readInt();
+		minute=in.readInt();
 	}
 	
 	@Override
@@ -65,8 +60,8 @@ public class Time implements Parcelable{
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeInt(Hour);
-		dest.writeInt(Minute);		
+		dest.writeInt(hour);
+		dest.writeInt(minute);		
 	}
 	
 	@SuppressWarnings("rawtypes")

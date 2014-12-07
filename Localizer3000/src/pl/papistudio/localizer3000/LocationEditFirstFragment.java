@@ -1,17 +1,21 @@
 package pl.papistudio.localizer3000;
 
+import java.util.Calendar;
+
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 /**
@@ -49,6 +53,12 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 			showCancelConfirmationDialog();
 		if(v.getId() == R.id.edit_location_next_button)
 			showSecondEditFragment();
+		
+		// TODO: change that!!!
+		if(v.getId() == R.id.edit_location_time_from_button)
+			showTimePicker();
+		if(v.getId() == R.id.edit_location_time_to_button)
+			showTimePicker();
 	}
 	
 	/**
@@ -75,6 +85,8 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 	private void addOnClickActionsToButtons(View v) {
 		((Button)v.findViewById(R.id.edit_location_cancel_button)).setOnClickListener(this);
 		((Button)v.findViewById(R.id.edit_location_next_button)).setOnClickListener(this);
+		((Button)v.findViewById(R.id.edit_location_time_from_button)).setOnClickListener(this);
+		((Button)v.findViewById(R.id.edit_location_time_to_button)).setOnClickListener(this);
 	}
 	
 	/**
@@ -86,7 +98,9 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 		((Switch)v.findViewById(R.id.edit_location_wifi_switch)).setChecked(location.isWifiOn());
 		((Switch)v.findViewById(R.id.edit_location_bluetooth_switch)).setChecked(location.isBluetoothOn());
 		((Switch)v.findViewById(R.id.edit_location_nfc_switch)).setChecked(location.isNfcOn());
-		((Switch)v.findViewById(R.id.edit_location_mobile_data_switch)).setChecked(location.isMobData());
+		((Switch)v.findViewById(R.id.edit_location_mobile_data_switch)).setChecked(location.isMobileData());
+		((Switch)v.findViewById(R.id.edit_location_sound_switch)).setChecked(location.isSoundOn());
+		((Switch)v.findViewById(R.id.edit_location_vibration_switch)).setChecked(location.isVibrationOn());
 	}
 	 
 	 /**
@@ -137,5 +151,28 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 		ft.replace(getId(),	new LocationEditSecondFragment());
 		ft.addToBackStack(null);
 		ft.commit();
+	 }
+	 
+	 private void showTimePicker() {
+			// TODO: change that!!!
+		int hour = 0;
+		int minute = 0;
+
+		TimePickerDialog mTimePicker = new TimePickerDialog(getActivity(),
+				new TimePickerDialog.OnTimeSetListener() {
+					@Override
+					public void onTimeSet(TimePicker timePicker,
+							int selectedHour, int selectedMinute) {
+
+						Calendar currentTime = Calendar.getInstance();
+						currentTime.set(Calendar.HOUR_OF_DAY, selectedHour);
+						currentTime.set(Calendar.MINUTE, selectedMinute);
+
+//						Date selectedDate = currentTime.getTime();
+					}
+				}, hour, minute, true);// Yes 24 hour time
+
+		mTimePicker.setTitle("Select Starting Time");
+		mTimePicker.show();
 	 }
 }

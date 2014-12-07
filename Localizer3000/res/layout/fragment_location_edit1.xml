@@ -270,9 +270,79 @@
                         android:layout_column="1"
                         android:layout_gravity="center" />
                 </TableRow>
+                
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp" >
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:text="@string/fragment_location_details_sound"
+                        android:textSize="@dimen/location_details_static_text" />
+
+                    <Switch
+                        android:id="@+id/edit_location_sound_switch"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:layout_gravity="center" />
+                </TableRow>
+                
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp" >
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:text="@string/fragment_location_details_vibrations"
+                        android:textSize="@dimen/location_details_static_text" />
+
+                    <Switch
+                        android:id="@+id/edit_location_vibration_switch"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:layout_gravity="center" />
+                </TableRow>
+                
             </TableLayout>
-        </LinearLayout>
-    </ScrollView>
+            
+            <!-- Time picker -->
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_margin="15dp"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/fragment_location_details_active_time"
+                android:textSize="@dimen/location_details_static_text" />
+
+            <Button
+                android:id="@+id/edit_location_time_from_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/fragment_location_edit_time_from" />
+
+            <Button
+                android:id="@+id/edit_location_time_to_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/fragment_location_edit_time_to" />
+            
+        </LinearLayout>      
+                
+    </ScrollView>   
 
     <!-- Buttons at the end -->
 
