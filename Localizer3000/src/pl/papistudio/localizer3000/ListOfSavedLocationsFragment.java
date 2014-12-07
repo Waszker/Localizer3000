@@ -127,10 +127,10 @@ public class ListOfSavedLocationsFragment extends Fragment {
 		locations = new ArrayList<>();
 		for(int i=0; i<100; i++)
 		{
-		locations.add(new Location("DOM", true, false, false, true));
-		locations.add(new Location("Babcia", true, true, true, true));
-		locations.add(new Location("Uczelnia", true, false, true, false));
-		locations.add(new Location("Miasto", false, false, true, true));
+		locations.add(new Location("DOM", true, false, false, true, true, true, 100));
+		locations.add(new Location("Babcia", true, true, true, true, true, true, 100));
+		locations.add(new Location("Uczelnia", true, false, true, false, true, true, 100));
+		locations.add(new Location("Miasto", false, false, true, true, true, true, 100));
 		}
 		
 		DragSortListView listView = (DragSortListView)v.findViewById(R.id.list_of_localizations);

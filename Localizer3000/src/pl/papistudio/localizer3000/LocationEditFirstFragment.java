@@ -98,7 +98,7 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 	 private void fillNullLocation() {
 		 if(location == null)
 		 {
-			 location = new Location("", false, false, false, false);
+			 location = new Location("", false, false, false, false, false, false, 100);
 			 shouldRequestExitConfirmation = true;
 		 }
 	 }

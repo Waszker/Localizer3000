@@ -3,12 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     
-    <fragment
+    <com.google.android.gms.maps.MapView
         android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/keys"
-        class="com.google.android.gms.maps.MapFragment" />
+        android:layout_above="@+id/keys" />
     
 
     <!-- Buttons at the end -->
