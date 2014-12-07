@@ -8,7 +8,9 @@ public class Location implements Parcelable {
 	/*   VARIABLES    */
 	/******************/
 	private String name;
-	private boolean isWifiOn, isBluetoothOn, isNfcOn, isMobData;
+	private boolean isWifiOn, isBluetoothOn, isNfcOn, isMobileData, isSoundOn, isVibrationOn, isSMSsendOn;
+	private int radius; //in meters
+	private Time timeFrom, timeTo;
 	private boolean isMon, isTue, isWed, isThu, isFri, isSat, isSun;
 	private android.location.Location location;
 	
@@ -17,13 +19,17 @@ public class Location implements Parcelable {
 	/******************/
 	/**
 	 * Creates location with specified name.
-	 * Location by default has all options enabled and is active
-	 * on each day of the week.
+	 * Location by default has all options except isSMSsendOn enabled and is active
+	 * on each day of the week from 00:00 to 23:59 with Radius=100m.
 	 * @param name
 	 */
 	public Location(String name) {
 		this.name = name;
-		this.isWifiOn = this.isBluetoothOn = this.isNfcOn = isMobData = true;
+		this.isWifiOn = this.isBluetoothOn = this.isNfcOn = this.isMobileData = this.isSoundOn = this.isVibrationOn =true;
+		this.isSMSsendOn=false;
+		this.radius=100;
+		setTimeFrom(new Time(0,0));
+		setTimeTo(new Time(23,59));
 		setDaysOfWeek(true, true, true, true, true, true, true);
 	}
 	
@@ -34,13 +40,25 @@ public class Location implements Parcelable {
 	 * @param isWifiOn
 	 * @param isBluetoothOn
 	 * @param isNfcOn
+	 * @param isMobData
+	 * @param isSoundOn
+	 * @param isVibrationOn
+	 * @param radius
 	 */
-	public Location(String name, boolean isWifiOn, boolean isBluetoothOn, boolean isNfcOn, boolean isMobData) {
+	public Location(String name, boolean isWifiOn, boolean isBluetoothOn,
+			boolean isNfcOn, boolean isMobData, boolean isSoundOn,
+			boolean isVibrationOn, int radius) {
 		this.name = name;
 		this.isWifiOn = isWifiOn;
 		this.isBluetoothOn = isBluetoothOn;
 		this.isNfcOn = isNfcOn;
-		this.isMobData = isMobData;
+		this.isMobileData = isMobData;
+		this.isSoundOn = isSoundOn;
+		this.isVibrationOn = isVibrationOn;
+		this.isSMSsendOn = false;
+		this.radius = radius;
+		setTimeFrom(new Time(0, 0));
+		setTimeTo(new Time(23, 59));
 		setDaysOfWeek(true, true, true, true, true, true, true);
 	}
 	
@@ -101,11 +119,59 @@ public class Location implements Parcelable {
 	}
 
 	public boolean isMobData() {
-		return isMobData;
+		return isMobileData;
 	}
 
 	public void setMobData(boolean isMobData) {
-		this.isMobData = isMobData;
+		this.isMobileData = isMobData;
+	}
+	
+	public boolean isSoundOn() {
+		return isSoundOn;
+	}
+
+	public void setSoundOn(boolean isSoundOn) {
+		this.isSoundOn = isSoundOn;
+	}
+
+	public boolean isVibrationOn() {
+		return isVibrationOn;
+	}
+
+	public void setVibrationOn(boolean isVibrationOn) {
+		this.isVibrationOn = isVibrationOn;
+	}
+
+	public boolean isSMSsendOn() {
+		return isSMSsendOn;
+	}
+
+	public void setSMSsendOn(boolean isSMSsendOn) {
+		this.isSMSsendOn = isSMSsendOn;
+	}
+
+	public double getRadius() {
+		return radius;
+	}
+
+	public void setRadius(int radius) {
+		this.radius = radius;
+	}
+
+	public Time getTimeFrom() {
+		return timeFrom;
+	}
+
+	public void setTimeFrom(Time timeFrom) {
+		this.timeFrom = timeFrom;
+	}
+
+	public Time getTimeTo() {
+		return timeTo;
+	}
+
+	public void setTimeTo(Time timeTo) {
+		this.timeTo = timeTo;
 	}
 
 	public boolean isMon() {
@@ -175,7 +241,13 @@ public class Location implements Parcelable {
 		isWifiOn = (in.readByte() != 0 ? true : false);
 		isBluetoothOn = (in.readByte() != 0 ? true : false);
 		isNfcOn = (in.readByte() != 0 ? true : false);
-		isMobData = (in.readByte() != 0 ? true : false);
+		isMobileData = (in.readByte() != 0 ? true : false);
+		isSoundOn= (in.readByte() != 0 ? true : false);
+		isVibrationOn = (in.readByte() != 0 ? true : false);
+		isSMSsendOn = (in.readByte() != 0 ? true : false);
+		radius = (in.readInt());
+		timeFrom=(in.readParcelable(null));
+		timeTo=(in.readParcelable(null));
 		location = (in.readParcelable(null));
 	}
 	
@@ -190,8 +262,15 @@ public class Location implements Parcelable {
 		dest.writeByte((byte)(isWifiOn ? 1 : 0));
 		dest.writeByte((byte)(isBluetoothOn ? 1 : 0));
 		dest.writeByte((byte)(isNfcOn ? 1 : 0));
-		dest.writeByte((byte)(isMobData ? 1 : 0));
+		dest.writeByte((byte)(isMobileData ? 1 : 0));
+		dest.writeByte((byte)(isSoundOn ? 1 : 0));
+		dest.writeByte((byte)(isVibrationOn ? 1 : 0));
+		dest.writeByte((byte)(isSMSsendOn ? 1 : 0));
+		dest.writeInt(radius);
+		dest.writeParcelable(timeFrom, flags);
+		dest.writeParcelable(timeTo, flags);
 		dest.writeParcelable(location, flags);
+
 	}
 	
 	@SuppressWarnings("rawtypes")
