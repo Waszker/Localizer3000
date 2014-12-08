@@ -68,6 +68,26 @@
 			    	android:textSize="@dimen/location_details_variable_text"/>
 	            
 	        </TableRow>
+	        
+	        <TableRow
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content" >
+	            
+	            <TextView 
+			    	android:layout_width="fill_parent"
+			    	android:layout_height="wrap_content"
+	          		android:layout_column="0"
+			    	android:text="@string/fragment_location_details_active_time"
+			    	android:textSize="@dimen/location_details_static_text"/>
+	            
+	            <TextView 
+	                android:id="@+id/details_location_hours"
+			    	android:layout_width="fill_parent"
+			    	android:layout_height="wrap_content"
+	          		android:layout_column="1"
+			    	android:textSize="@dimen/location_details_variable_text"/>
+	            
+	        </TableRow>
 	
 	        <TableRow
 	            android:layout_width="wrap_content"
@@ -77,11 +97,31 @@
 			    	android:layout_width="fill_parent"
 			    	android:layout_height="wrap_content"
 	          		android:layout_column="0"
-			    	android:text="@string/fragment_location_details_profile"
+			    	android:text="@string/fragment_location_details_sound"
 			    	android:textSize="@dimen/location_details_static_text"/>
 	            
 	            <TextView 
-	                android:id="@+id/details_location_profile"
+	                android:id="@+id/details_location_sounds"
+			    	android:layout_width="fill_parent"
+			    	android:layout_height="wrap_content"
+	          		android:layout_column="1"
+			    	android:textSize="@dimen/location_details_variable_text"/>
+	            
+	        </TableRow>
+	        
+	        <TableRow
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content" >
+	            
+	            <TextView 
+			    	android:layout_width="fill_parent"
+			    	android:layout_height="wrap_content"
+	          		android:layout_column="0"
+			    	android:text="@string/fragment_location_details_vibrations"
+			    	android:textSize="@dimen/location_details_static_text"/>
+	            
+	            <TextView 
+	                android:id="@+id/details_location_vibrations"
 			    	android:layout_width="fill_parent"
 			    	android:layout_height="wrap_content"
 	          		android:layout_column="1"
@@ -162,6 +202,26 @@
 	            
 	            <TextView 
 	                android:id="@+id/details_location_mobile_data"
+			    	android:layout_width="fill_parent"
+			    	android:layout_height="wrap_content"
+	          		android:layout_column="1"
+			    	android:textSize="@dimen/location_details_variable_text"/>
+	            
+	        </TableRow>
+	        
+	        <TableRow
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content" >
+	            
+	            <TextView 
+			    	android:layout_width="fill_parent"
+			    	android:layout_height="wrap_content"
+	          		android:layout_column="0"
+			    	android:text="@string/fragment_location_details_SMS"
+			    	android:textSize="@dimen/location_details_static_text"/>
+	            
+	            <TextView 
+	                android:id="@+id/details_location_SMS"
 			    	android:layout_width="fill_parent"
 			    	android:layout_height="wrap_content"
 	          		android:layout_column="1"

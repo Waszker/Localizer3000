@@ -15,15 +15,15 @@
     <string name="title_activity_saved_localizations">Saved locations</string>
     <string name="fragment_location_details_text">Location details</string>
     <string name="fragment_location_details_name">Location name:</string>
-    <string name="fragment_location_details_profile">Active profile:</string>
     <string name="fragment_location_details_active_days">Active on days:</string>
     <string name="fragment_location_details_active_time">Active time:</string>
+    <string name="fragment_location_details_sound">Sounds:</string>
+    <string name="fragment_location_details_vibrations">Vibrations:</string>
     <string name="fragment_location_details_wifi">Wifi:</string>
     <string name="fragment_location_details_bluetooth">Bluetooth:</string>
     <string name="fragment_location_details_nfc">NFC:</string>
     <string name="fragment_location_details_mobile_data">Mobile Data:</string>
-    <string name="fragment_location_details_sound">Sound:</string>
-    <string name="fragment_location_details_vibrations">Vibrations:</string>
+	<string name="fragment_location_details_SMS">SMS:</string>
     <string name="title_activity_edit_location">Edit location</string>
     
 <!--     Location edit -->

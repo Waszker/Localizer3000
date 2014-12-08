@@ -12,5 +12,6 @@
     <color name="text_color_bold">#FFFFFF</color>
     <color name="text_color_fading">#9FA3A2</color>
     <color name="rippelColor">#FFFFFF</color>
+    <color name="offOption">#123752</color>
     
 </resources>
