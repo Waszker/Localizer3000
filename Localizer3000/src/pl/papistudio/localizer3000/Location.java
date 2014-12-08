@@ -14,6 +14,8 @@ public class Location implements Parcelable {
 	private boolean isMon, isTue, isWed, isThu, isFri, isSat, isSun;
 	private android.location.Location location;
 	
+	
+
 	/******************/
 	/*   FUNCTIONS    */
 	/******************/
@@ -94,6 +96,14 @@ public class Location implements Parcelable {
 		this.name = name;
 	}
 
+	public android.location.Location getLocation() {
+		return location;
+	}
+
+	public void setLocation(android.location.Location location) {
+		this.location = location;
+	}
+	
 	public boolean isWifiOn() {
 		return isWifiOn;
 	}
