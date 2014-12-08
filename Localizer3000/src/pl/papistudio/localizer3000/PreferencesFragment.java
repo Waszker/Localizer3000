@@ -1,7 +1,9 @@
 package pl.papistudio.localizer3000;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
@@ -12,12 +14,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 public class PreferencesFragment extends PreferenceFragment implements OnPreferenceClickListener {
 	/******************/
 	/*   VARIABLES    */
 	/******************/
-	
+	private int interval;
+	private SharedPreferences sharedPref;
 	
 	/******************/
 	/*   FUNCTIONS    */
@@ -27,7 +31,8 @@ public class PreferencesFragment extends PreferenceFragment implements OnPrefere
         super.onCreate(savedInstanceState);
         
         addPreferencesFromResource(R.xml.preferences);
-        ((Preference)findPreference("interval")).setOnPreferenceClickListener(this);
+        addOnClickListeners();
+        initializePreferenceVariables();
     }
     
     @Override
@@ -46,37 +51,60 @@ public class PreferencesFragment extends PreferenceFragment implements OnPrefere
 		return false;
 	}
 	
+	private void addOnClickListeners() {
+        ((Preference)findPreference("interval")).setOnPreferenceClickListener(this);		
+	}
+	
+	private void initializePreferenceVariables() {
+		sharedPref = getActivity().getSharedPreferences(MainActivity.SHARED_PREFERENCES, 
+													 	Context.MODE_PRIVATE);
+        interval = sharedPref.getInt(MainActivity.INTERVAL_PREFERENCE, 5);
+        changeIntervalPreferenceText();
+	}
+	
 	private void showPickerDialog() {
 		// taken from
 		// http://stackoverflow.com/questions/15536908/preference-activity-on-preference-click-listener
-		RelativeLayout linearLayout = new RelativeLayout(getActivity());
-		final NumberPicker aNumberPicker = new NumberPicker(getActivity());
-		aNumberPicker.setMaxValue(60);
-		aNumberPicker.setMinValue(1);
-//		aNumberPicker.setValue(getActivity().getSharedPreferences(name, mode))
-
+		final NumberPicker picker = new NumberPicker(getActivity());
+		RelativeLayout layout = getNumberPickerLayout(picker);
+		prepareNumberPicker(picker);		
+		getPickerDialog(picker, layout).show();
+	}
+	
+	private void prepareNumberPicker(NumberPicker picker) {
+		picker.setMaxValue(60);
+		picker.setMinValue(1);
+		picker.setValue(interval);		
+	}
+	
+	private RelativeLayout getNumberPickerLayout(NumberPicker picker) {
+		RelativeLayout relativeLayout = new RelativeLayout(getActivity());
 		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
 				50, 50);
 		RelativeLayout.LayoutParams numPicerParams = new RelativeLayout.LayoutParams(
-					RelativeLayout.LayoutParams.WRAP_CONTENT,
-					RelativeLayout.LayoutParams.WRAP_CONTENT);
+				RelativeLayout.LayoutParams.WRAP_CONTENT,
+				RelativeLayout.LayoutParams.WRAP_CONTENT);
 		numPicerParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-
-		linearLayout.setLayoutParams(params);
-		linearLayout.addView(aNumberPicker, numPicerParams);
-
-		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-				getActivity());
+		relativeLayout.setLayoutParams(params);
+		relativeLayout.addView(picker, numPicerParams);
+		
+		return relativeLayout;
+	}
+	
+	private AlertDialog getPickerDialog(final NumberPicker picker, RelativeLayout layout) {
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
 		alertDialogBuilder.setTitle("Select the number");
-		alertDialogBuilder.setView(linearLayout);
+		alertDialogBuilder.setView(layout);
 		alertDialogBuilder
 				.setCancelable(false)
 				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						Log.e("",
-								"New Quantity Value : "
-										+ aNumberPicker.getValue());
-
+					public void onClick(DialogInterface dialog, int id) {						
+						interval = picker.getValue();
+						saveIntervalToSharedPreferences();
+						changeIntervalPreferenceText();
+						Toast.makeText(getActivity(), "Interval value changed.\n" +
+								"Please restart location service for changes to take effect.", Toast.LENGTH_LONG).show();
+						Log.d("Preference Fragment", "New interval value : " + picker.getValue());
 					}
 				})
 				.setNegativeButton("Cancel",
@@ -85,7 +113,16 @@ public class PreferencesFragment extends PreferenceFragment implements OnPrefere
 								dialog.cancel();
 							}
 						});
-		AlertDialog alertDialog = alertDialogBuilder.create();
-		alertDialog.show();
+		return alertDialogBuilder.create();
+	}
+	
+	private void saveIntervalToSharedPreferences() {
+		SharedPreferences.Editor editor = sharedPref.edit();
+		editor.putInt(MainActivity.INTERVAL_PREFERENCE, interval);
+		editor.commit();
+	}
+	
+	private void changeIntervalPreferenceText() {
+		((Preference)findPreference("interval")).setSummary(interval + " min.");
 	}
 }

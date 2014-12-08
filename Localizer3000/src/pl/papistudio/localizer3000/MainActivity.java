@@ -23,6 +23,8 @@ public class MainActivity extends Activity {
 	/******************/
 	/*   VARIABLES    */
 	/******************/
+	public static final String SHARED_PREFERENCES = "SHARED_PREFERENCES";
+	public static final String INTERVAL_PREFERENCE = "INTERVAL_PREFERENCE";
 	private LocationService locationService;
 	private boolean isServiceBinded;
 	private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -77,7 +79,7 @@ public class MainActivity extends Activity {
 		// Create new helper
         DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());
         // Get the database. If it does not exist, this is where it will also be created.
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+		// SQLiteDatabase db = dbHelper.getWritableDatabase();
 	}
 
 	@Override
@@ -176,8 +178,8 @@ public class MainActivity extends Activity {
 		
 		if(isLocationServiceNotRunning())
 		{
-			// TODO: define interval in settings!!!!
-			intent.putExtra("interval", 5000);
+			// TODO: change interval sending!
+			intent.putExtra("interval", 1000*getSharedPreferences(MainActivity.SHARED_PREFERENCES, Context.MODE_PRIVATE).getInt(INTERVAL_PREFERENCE, 5));
 			startService(intent);			
 		}
 		

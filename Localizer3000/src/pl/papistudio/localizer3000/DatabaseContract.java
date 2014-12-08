@@ -9,8 +9,8 @@ public class DatabaseContract {
 	public static abstract class TableDefinition implements BaseColumns {
         public static final String TABLE_NAME = "LocationsTable";
         public static final String COLUMN_NAME_LOCATION_NAME = "Name";
-        public static final String COLUMN_NAME_LONGITUDE = "Longitude"; //D£UGOŒÆ GEOGRAFICZNA
-        public static final String COLUMN_NAME_LATITUDE = "Latitude"; //SZEROKOŒÆ GEOGRAFICZNA
+        public static final String COLUMN_NAME_LONGITUDE = "Longitude"; // Dï¿½UGOï¿½ï¿½ GEOGRAFICZNA
+        public static final String COLUMN_NAME_LATITUDE = "Latitude"; 	// SZEROKOï¿½ï¿½ GEOGRAFICZNA
         public static final String COLUMN_NAME_ISMONDAY = "isMonday";
         public static final String COLUMN_NAME_ISTUESDAY = "isTuesday";
         public static final String COLUMN_NAME_ISWEDNESDAY = "isWednesday";
@@ -42,9 +42,9 @@ public class DatabaseContract {
             + TableDefinition.TABLE_NAME + " (" +
             TableDefinition._ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
             TableDefinition.COLUMN_NAME_LOCATION_NAME + TEXT_TYPE + COMMA_SEP + 
-            TableDefinition.COLUMN_NAME_LONGITUDE + TEXT_TYPE + COMMA_SEP +
+            TableDefinition.COLUMN_NAME_LONGITUDE + REAL_TYPE + COMMA_SEP +
 	        TableDefinition.COLUMN_NAME_LATITUDE + REAL_TYPE + COMMA_SEP +
-	        TableDefinition.COLUMN_NAME_ISMONDAY + REAL_TYPE + COMMA_SEP +
+	        TableDefinition.COLUMN_NAME_ISMONDAY + INTEGER_TYPE + COMMA_SEP +
 	        TableDefinition.COLUMN_NAME_ISTUESDAY + INTEGER_TYPE + COMMA_SEP +
 	        TableDefinition.COLUMN_NAME_ISWEDNESDAY + INTEGER_TYPE + COMMA_SEP +
 	        TableDefinition.COLUMN_NAME_ISTHURSDAY + INTEGER_TYPE + COMMA_SEP +
@@ -62,7 +62,7 @@ public class DatabaseContract {
 	        TableDefinition.COLUMN_NAME_ISBLUETOOTH + INTEGER_TYPE + COMMA_SEP +
 	        TableDefinition.COLUMN_NAME_ISNFC + INTEGER_TYPE + COMMA_SEP +
 	        TableDefinition.COLUMN_NAME_ISMOBILEDATA + INTEGER_TYPE + COMMA_SEP +
-	        TableDefinition.COLUMN_NAME_ISSMS + INTEGER_TYPE + COMMA_SEP +           
+	        TableDefinition.COLUMN_NAME_ISSMS + INTEGER_TYPE +           
             " )";
 
         private static final String SQL_DELETE_ENTRIES =
