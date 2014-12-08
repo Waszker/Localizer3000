@@ -1,13 +1,9 @@
 package pl.papistudio.localizer3000;
 
-import android.R;
-import android.R.string;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,6 +63,21 @@ public class LocationDetailsFragment extends Fragment implements OnClickListener
 	}
 	
 	private void fillLocationDetails(View v) {
+		((TextView)v.findViewById(R.id.details_location_name)).setText(location.getName());
+		((TextView)v.findViewById(R.id.details_location_days)).setText(createActiveDaysString());
+		((TextView)v.findViewById(R.id.details_location_hours)).setText(createActiveHoursString());
+		
+		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_sounds), location.isSoundOn());
+		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_vibrations), location.isVibrationOn());
+		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_wifi), location.isWifiOn());
+		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_bluetooth), location.isBluetoothOn());
+		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_nfc), location.isNfcOn());
+		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_mobile_data), location.isMobileData());
+		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_nfc), location.isNfcOn());
+		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_SMS), location.isSMSsendOn());
+	}
+	
+	private String createActiveDaysString() {
 		StringBuilder stringBuilder = new StringBuilder();
 		if(location.isMon()==true)
 			stringBuilder.append("Mon ");
@@ -82,27 +93,16 @@ public class LocationDetailsFragment extends Fragment implements OnClickListener
 			stringBuilder.append("Sat ");
 		if(location.isSun()==true)
 			stringBuilder.append("Sun ");
-		String activeDaysString = stringBuilder.toString();
-		
+		return stringBuilder.toString();
+	}
+	
+	private String createActiveHoursString() {
 		StringBuilder stringBuilderHours = new StringBuilder();
 		stringBuilderHours.append(location.getTimeFrom().getHour()+":");
 		stringBuilderHours.append(location.getTimeFrom().getMinute()+"  -  ");
 		stringBuilderHours.append(location.getTimeTo().getHour()+":");
 		stringBuilderHours.append(location.getTimeTo().getMinute()+"");
-		String activeHoursString = stringBuilderHours.toString();
-		
-		((TextView)v.findViewById(R.id.details_location_name)).setText(location.getName());
-		((TextView)v.findViewById(R.id.details_location_days)).setText(activeDaysString);
-		((TextView)v.findViewById(R.id.details_location_hours)).setText(activeHoursString);
-		
-		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_sounds), location.isSoundOn());
-		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_vibrations), location.isVibrationOn());
-		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_wifi), location.isWifiOn());
-		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_bluetooth), location.isBluetoothOn());
-		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_nfc), location.isNfcOn());
-		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_mobile_data), location.isMobileData());
-		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_nfc), location.isNfcOn());
-		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_SMS), location.isSMSsendOn());
+		return stringBuilderHours.toString();
 	}
 	
 	private void setTextAndColorForBooleanValues(TextView view, boolean booleanValue) {
@@ -110,12 +110,12 @@ public class LocationDetailsFragment extends Fragment implements OnClickListener
 		if(booleanValue)
 		{
 			view.setText("ON");
-			view.setTextColor(R.color.material_blue_toggle_unchecked);
+			view.setTextColor(getResources().getColor(R.color.material_blue_toggle_unchecked));
 		}
 		else
 		{
 			view.setText("OFF");
-			view.setTextColor(R.color.offOption);		
+			view.setTextColor(getResources().getColor(R.color.offOption));		
 		}
 	}
 	
