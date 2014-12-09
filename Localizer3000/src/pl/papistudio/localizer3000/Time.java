@@ -9,9 +9,8 @@ public class Time implements Parcelable {
 	/*   VARIABLES    */
 	/******************/
 	 private int hour = 0; // 0-23
-	 private int minute = 0; // 0-59
+	 private int minute = 0; // 0-59		 
 	
-	 
 	/******************/
 	/*   FUNCTIONS    */
 	/******************/	 
@@ -41,6 +40,23 @@ public class Time implements Parcelable {
 		this.minute = minute;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder stringBuilder = new StringBuilder(6);
+		
+		if(hour < 10)
+			stringBuilder.append("0" + hour+":");
+		else
+			stringBuilder.append(hour+":");
+		
+		if(minute < 10)
+			stringBuilder.append("0" + minute);
+		else
+			stringBuilder.append(minute);
+		
+		return stringBuilder.toString();
+	}
+	
 	/*
 	 * Parcelable part
 	 * @see http://stackoverflow.com/questions/7181526/how-can-i-make-my-custom-objects-be-parcelable

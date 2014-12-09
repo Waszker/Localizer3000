@@ -248,6 +248,13 @@ public class Location implements Parcelable {
 	 */
 	public Location(Parcel in) {
 		name = in.readString();
+		isMon = (in.readByte() != 0 ? true : false);
+		isTue = (in.readByte() != 0 ? true : false);
+		isWed = (in.readByte() != 0 ? true : false);
+		isThu = (in.readByte() != 0 ? true : false);
+		isFri = (in.readByte() != 0 ? true : false);
+		isSat = (in.readByte() != 0 ? true : false);
+		isSun = (in.readByte() != 0 ? true : false);
 		isWifiOn = (in.readByte() != 0 ? true : false);
 		isBluetoothOn = (in.readByte() != 0 ? true : false);
 		isNfcOn = (in.readByte() != 0 ? true : false);
@@ -269,6 +276,13 @@ public class Location implements Parcelable {
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(name);
+		dest.writeByte((byte)(isMon ? 1 : 0));
+		dest.writeByte((byte)(isTue ? 1 : 0));
+		dest.writeByte((byte)(isWed ? 1 : 0));
+		dest.writeByte((byte)(isThu ? 1 : 0));
+		dest.writeByte((byte)(isFri ? 1 : 0));
+		dest.writeByte((byte)(isSat ? 1 : 0));
+		dest.writeByte((byte)(isSun ? 1 : 0));
 		dest.writeByte((byte)(isWifiOn ? 1 : 0));
 		dest.writeByte((byte)(isBluetoothOn ? 1 : 0));
 		dest.writeByte((byte)(isNfcOn ? 1 : 0));

@@ -1,7 +1,5 @@
 package pl.papistudio.localizer3000;
 
-import java.util.Calendar;
-
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -17,6 +15,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 /**
  * Fragment displaying editable location
@@ -56,9 +55,9 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 		
 		// TODO: change that!!!
 		if(v.getId() == R.id.edit_location_time_from_button)
-			showTimePicker();
+			location.setTimeFrom(showTimePicker(location.getTimeFrom()));
 		if(v.getId() == R.id.edit_location_time_to_button)
-			showTimePicker();
+			location.setTimeTo(showTimePicker(location.getTimeTo()));
 	}
 	
 	/**
@@ -101,6 +100,16 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 		((Switch)v.findViewById(R.id.edit_location_mobile_data_switch)).setChecked(location.isMobileData());
 		((Switch)v.findViewById(R.id.edit_location_sound_switch)).setChecked(location.isSoundOn());
 		((Switch)v.findViewById(R.id.edit_location_vibration_switch)).setChecked(location.isVibrationOn());
+		
+		((ToggleButton)v.findViewById(R.id.toggle_monday)).setChecked(location.isMon());
+		((ToggleButton)v.findViewById(R.id.toggle_tuesday)).setChecked(location.isTue());
+		((ToggleButton)v.findViewById(R.id.toggle_wednesday)).setChecked(location.isWed());
+		((ToggleButton)v.findViewById(R.id.toggle_thursday)).setChecked(location.isThu());
+		((ToggleButton)v.findViewById(R.id.toggle_friday)).setChecked(location.isFri());
+		((ToggleButton)v.findViewById(R.id.toggle_saturday)).setChecked(location.isSat());
+		((ToggleButton)v.findViewById(R.id.toggle_sunday)).setChecked(location.isSun());
+		
+		setActiveTimeStrings(v, location.getTimeFrom(), location.getTimeTo());
 	}
 	 
 	 /**
@@ -113,6 +122,7 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 		 if(location == null)
 		 {
 			 location = new Location("", false, false, false, false, false, false, 100);
+			 ((EditLocationActivity)getActivity()).currentlyEditedLocation = location;
 			 shouldRequestExitConfirmation = true;
 		 }
 	 }
@@ -144,10 +154,7 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 	}
 	 
 	private void showSecondEditFragment() {
-		location.setName(String.valueOf(((TextView) getView().findViewById(R.id.edit_location_name)).getText()));
-		location.setLocation(new android.location.Location("PLAY"));
-		((EditLocationActivity) getActivity()).currentlyEditedLocation = location;
-		// TODO: change it? 
+		fillEditedLocationDetails();
 		FragmentTransaction ft = getFragmentManager().beginTransaction();
 		ft.setCustomAnimations(android.R.animator.fade_in,
 				android.R.animator.fade_out, android.R.animator.fade_in,
@@ -157,26 +164,45 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 		ft.commit();
 	 }
 	 
-	 private void showTimePicker() {
-			// TODO: change that!!!
-		int hour = 0;
-		int minute = 0;
+	 private Time showTimePicker(Time locationTime) {
+		final Time selectedTime = new Time();
 
-		TimePickerDialog mTimePicker = new TimePickerDialog(getActivity(),
-				new TimePickerDialog.OnTimeSetListener() {
+		TimePickerDialog mTimePicker = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
 					@Override
-					public void onTimeSet(TimePicker timePicker,
-							int selectedHour, int selectedMinute) {
-
-						Calendar currentTime = Calendar.getInstance();
-						currentTime.set(Calendar.HOUR_OF_DAY, selectedHour);
-						currentTime.set(Calendar.MINUTE, selectedMinute);
-
-//						Date selectedDate = currentTime.getTime();
+					public void onTimeSet(TimePicker timePicker,int selectedHour, int selectedMinute) {
+						selectedTime.setHour(selectedHour);
+						selectedTime.setMinute(selectedMinute);
+						setActiveTimeStrings(getView(), location.getTimeFrom(), location.getTimeTo());
 					}
-				}, hour, minute, true);// Yes 24 hour time
+				}, locationTime.getHour(), locationTime.getMinute(), true /* 24 hour time */);
+		mTimePicker.setTitle("Select starting hour");
+		mTimePicker.setCancelable(false);
+		mTimePicker.show();		
+		
+		return selectedTime;
+	 }
+	 
+	 private void setActiveTimeStrings(View v, Time from, Time to) {
+		 ((Button)v.findViewById(R.id.edit_location_time_from_button)).setText("From: " + from.toString());
+		 ((Button)v.findViewById(R.id.edit_location_time_to_button)).setText("To: " + to.toString());		 
+	 }
+	 
+	 private void fillEditedLocationDetails() {
+			location.setName(String.valueOf(((TextView) getView().findViewById(R.id.edit_location_name)).getText()));
+			location.setWifiOn(((Switch)getView().findViewById(R.id.edit_location_wifi_switch)).isChecked());
+			location.setBluetoothOn(((Switch)getView().findViewById(R.id.edit_location_bluetooth_switch)).isChecked());
+			location.setNfcOn(((Switch)getView().findViewById(R.id.edit_location_nfc_switch)).isChecked());
+			location.setMobileData(((Switch)getView().findViewById(R.id.edit_location_mobile_data_switch)).isChecked());
+			location.setSoundOn(((Switch)getView().findViewById(R.id.edit_location_sound_switch)).isChecked());
+			location.setVibrationOn(((Switch)getView().findViewById(R.id.edit_location_vibration_switch)).isChecked());
+			location.setLocation(new android.location.Location("PLAY")); // TODO: get location!
 
-		mTimePicker.setTitle("Select Starting Time");
-		mTimePicker.show();
+			location.setMon(((ToggleButton)getView().findViewById(R.id.toggle_monday)).isChecked());
+			location.setTue(((ToggleButton)getView().findViewById(R.id.toggle_tuesday)).isChecked());
+			location.setWed(((ToggleButton)getView().findViewById(R.id.toggle_wednesday)).isChecked());
+			location.setThu(((ToggleButton)getView().findViewById(R.id.toggle_thursday)).isChecked());
+			location.setFri(((ToggleButton)getView().findViewById(R.id.toggle_friday)).isChecked());
+			location.setSat(((ToggleButton)getView().findViewById(R.id.toggle_saturday)).isChecked());
+			location.setSun(((ToggleButton)getView().findViewById(R.id.toggle_sunday)).isChecked());		 
 	 }
 }

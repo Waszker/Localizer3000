@@ -9,7 +9,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -75,11 +74,6 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		setServiceButtonTextAccordingToServiceState();
 		bindIfLocationServiceRunning();		
-		
-		// Create new helper
-        DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());
-        // Get the database. If it does not exist, this is where it will also be created.
-		// SQLiteDatabase db = dbHelper.getWritableDatabase();
 	}
 
 	@Override

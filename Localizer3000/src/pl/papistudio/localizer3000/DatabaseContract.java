@@ -64,8 +64,8 @@ public class DatabaseContract {
 	        TableDefinition.COLUMN_NAME_ISSMS + INTEGER_TYPE +           
             " )";
 
-        private static final String SQL_DELETE_ENTRIES =
-            "DROP TABLE IF EXISTS " + TableDefinition.TABLE_NAME;
+//        private static final String SQL_DELETE_ENTRIES =
+//            "DROP TABLE IF EXISTS " + TableDefinition.TABLE_NAME;
                
     }
 }
