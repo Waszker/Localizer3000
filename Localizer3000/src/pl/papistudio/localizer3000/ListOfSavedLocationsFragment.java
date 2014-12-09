@@ -124,14 +124,8 @@ public class ListOfSavedLocationsFragment extends Fragment {
 		// TODO change way of declaring and filling list
 		// TODO: add reactions to deleting items by fling!
 		// TODO: check: https://github.com/bauerca/drag-sort-listview/blob/master/demo/res/layout/checkable_main.xml
-		locations = new ArrayList<>();
-		for(int i=0; i<100; i++)
-		{
-		locations.add(new Location("DOM", true, false, false, true, true, true, 100));
-		locations.add(new Location("Babcia", true, true, true, true, true, true, 100));
-		locations.add(new Location("Uczelnia", true, false, true, false, true, true, 100));
-		locations.add(new Location("Miasto", false, false, true, true, true, true, 100));
-		}
+		DatabaseHelper dbHelper = new DatabaseHelper(getActivity().getApplicationContext());
+		locations = dbHelper.getAllLocations(); // here put database connection! :D
 		
 		DragSortListView listView = (DragSortListView)v.findViewById(R.id.list_of_localizations);
 		LocationListAdapter adapter = new LocationListAdapter(getActivity(), locations);

@@ -143,12 +143,16 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 		    .show();
 	}
 	 
-	 private void showSecondEditFragment() {
+	private void showSecondEditFragment() {
+		location.setName(String.valueOf(((TextView) getView().findViewById(R.id.edit_location_name)).getText()));
+		location.setLocation(new android.location.Location("PLAY"));
+		((EditLocationActivity) getActivity()).currentlyEditedLocation = location;
+		// TODO: change it? 
 		FragmentTransaction ft = getFragmentManager().beginTransaction();
 		ft.setCustomAnimations(android.R.animator.fade_in,
 				android.R.animator.fade_out, android.R.animator.fade_in,
 				android.R.animator.fade_out);
-		ft.replace(getId(),	new LocationEditSecondFragment());
+		ft.replace(getId(), new LocationEditSecondFragment());
 		ft.addToBackStack(null);
 		ft.commit();
 	 }

@@ -38,29 +38,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 		if (c.moveToFirst()) {
 			do {
-				Location newLocation = new Location(c.getString(0));
-				android.location.Location GeoLocation = new android.location.Location(
-						"");
-				GeoLocation.setLongitude(c.getDouble(1));
-				GeoLocation.setLatitude(c.getDouble(2));
+				Location newLocation = new Location(c.getString(1));
+				android.location.Location GeoLocation = new android.location.Location("");
+				GeoLocation.setLongitude(c.getDouble(2));
+				GeoLocation.setLatitude(c.getDouble(3));
 				newLocation.setLocation(GeoLocation);
-				newLocation.setMon(c.getInt(3) == 0 ? false : true);
-				newLocation.setTue(c.getInt(4) == 0 ? false : true);
-				newLocation.setWed(c.getInt(5) == 0 ? false : true);
-				newLocation.setThu(c.getInt(6) == 0 ? false : true);
-				newLocation.setFri(c.getInt(7) == 0 ? false : true);
-				newLocation.setSat(c.getInt(8) == 0 ? false : true);
-				newLocation.setSun(c.getInt(9) == 0 ? false : true);
-				newLocation.setTimeFrom(new Time(c.getInt(10), c.getInt(11)));
-				newLocation.setTimeTo(new Time(c.getInt(12), c.getInt(13)));
-				newLocation.setRadius(c.getInt(14));
-				newLocation.setSoundOn(c.getInt(15) == 0 ? false : true);
-				newLocation.setVibrationOn(c.getInt(16) == 0 ? false : true);
-				newLocation.setWifiOn(c.getInt(17) == 0 ? false : true);
-				newLocation.setBluetoothOn(c.getInt(18) == 0 ? false : true);
-				newLocation.setNfcOn(c.getInt(19) == 0 ? false : true);
-				newLocation.setMobileData(c.getInt(20) == 0 ? false : true);
-				newLocation.setNfcOn(c.getInt(21) == 0 ? false : true);
+				newLocation.setMon(c.getInt(4) == 0 ? false : true);
+				newLocation.setTue(c.getInt(5) == 0 ? false : true);
+				newLocation.setWed(c.getInt(6) == 0 ? false : true);
+				newLocation.setThu(c.getInt(7) == 0 ? false : true);
+				newLocation.setFri(c.getInt(8) == 0 ? false : true);
+				newLocation.setSat(c.getInt(9) == 0 ? false : true);
+				newLocation.setSun(c.getInt(10) == 0 ? false : true);
+				newLocation.setTimeFrom(new Time(c.getInt(11), c.getInt(12)));
+				newLocation.setTimeTo(new Time(c.getInt(13), c.getInt(14)));
+				newLocation.setRadius(c.getInt(15));
+				newLocation.setSoundOn(c.getInt(16) == 0 ? false : true);
+				newLocation.setVibrationOn(c.getInt(17) == 0 ? false : true);
+				newLocation.setWifiOn(c.getInt(18) == 0 ? false : true);
+				newLocation.setBluetoothOn(c.getInt(19) == 0 ? false : true);
+				newLocation.setNfcOn(c.getInt(20) == 0 ? false : true);
+				newLocation.setMobileData(c.getInt(21) == 0 ? false : true);
+				newLocation.setNfcOn(c.getInt(22) == 0 ? false : true);
 
 				locationList.add(newLocation);
 			} while (c.moveToNext());

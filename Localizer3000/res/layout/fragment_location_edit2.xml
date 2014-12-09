@@ -40,7 +40,7 @@
             android:background="?android:attr/dividerVertical" />
 
         <Button
-            android:id="@+id/edit_location_cancel_button"
+            android:id="@+id/edit_location_back_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -48,10 +48,10 @@
             android:layout_alignParentTop="true"
             android:layout_toStartOf="@id/ViewColorPickerHelper"
             android:background="?android:attr/selectableItemBackground"
-            android:text="@string/cancel_text" />
+            android:text="@string/back_text" />
 
         <Button
-            android:id="@+id/edit_location_next_button"
+            android:id="@+id/edit_location_save_button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
@@ -59,7 +59,7 @@
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@id/ViewColorPickerHelper"
             android:background="?android:attr/selectableItemBackground"
-            android:text="@string/next_text" />
+            android:text="@string/save_text" />
     </RelativeLayout>
 
 </RelativeLayout>

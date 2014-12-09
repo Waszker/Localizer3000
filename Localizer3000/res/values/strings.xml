@@ -32,5 +32,7 @@
     <string name="edit_location_name_edittext_hint">Enter location name</string>
     <string name="next_text">Next</string>
     <string name="cancel_text">Cancel</string>
+    <string name="back_text">Back</string>
+    <string name="save_text">Save</string>
 
 </resources>

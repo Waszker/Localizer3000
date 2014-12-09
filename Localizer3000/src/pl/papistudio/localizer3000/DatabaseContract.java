@@ -31,7 +31,6 @@ public class DatabaseContract {
         public static final String COLUMN_NAME_ISMOBILEDATA = "isMobileData";
         public static final String COLUMN_NAME_ISSMS = "isSMS";
 
-        //public static final  String DATABASE_NAME = "database.db";
         private static final String TEXT_TYPE = " TEXT";
         private static final String INTEGER_TYPE = " INTEGER";
         private static final String REAL_TYPE = " REAL";
