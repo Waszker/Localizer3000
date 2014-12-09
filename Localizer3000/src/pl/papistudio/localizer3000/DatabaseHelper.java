@@ -27,10 +27,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 	}
 
-	public boolean DeleteLocationAt(Location locationToDelete) {
-		
+	public boolean deleteLocationAt(Location locationToDelete) {		
 		SQLiteDatabase db = this.getWritableDatabase();		
-		return db.delete(DatabaseContract.TableDefinition.TABLE_NAME, DatabaseContract.TableDefinition.COLUMN_NAME_LOCATION_NAME + "=" + locationToDelete.getName(), null)>0;
+		return db.delete(DatabaseContract.TableDefinition.TABLE_NAME, DatabaseContract.TableDefinition.COLUMN_NAME_LOCATION_NAME + "='" + locationToDelete.getName() + "'", null)>0;
 	}
 
 	public List<Location> getAllLocations() {
@@ -71,11 +70,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				locationList.add(newLocation);
 			} while (c.moveToNext());
 		}
+		c.close();
 
 		return locationList;
 	}
 
-	public Location GetLocationAt(String locationName) {
+	public Location getLocationAt(String locationName) {
 		SQLiteDatabase db = this.getReadableDatabase();
 
 		// Define a projection that specifies which columns from the database
@@ -151,7 +151,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return newLocation;
 	}
 
-	public long AddLocation(Location location) {
+	public long addLocation(Location location) {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		// Create a new map of values, where column names are the keys

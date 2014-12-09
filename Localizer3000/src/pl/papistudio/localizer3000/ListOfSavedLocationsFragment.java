@@ -1,6 +1,5 @@
 package pl.papistudio.localizer3000;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -33,6 +32,7 @@ public class ListOfSavedLocationsFragment extends Fragment {
 	/*   VARIABLES    */
 	/******************/
 	private List<Location> locations;
+	private LocationListAdapter adapter;
 	
 	/**
 	 * Internal list adapter class. 
@@ -40,7 +40,7 @@ public class ListOfSavedLocationsFragment extends Fragment {
 	 * @author PapiTeam
 	 *
 	 */
-	private static class LocationListAdapter extends BaseAdapter {
+	private class LocationListAdapter extends BaseAdapter {
 		/******************/
 		/*   VARIABLES    */
 		/******************/
@@ -98,7 +98,13 @@ public class ListOfSavedLocationsFragment extends Fragment {
 				
 				@Override
 				public void onClick(View v) {
+					// TODO: wrap it in a method?
 					Log.d("Item delete", "Deleted item number: " + position);
+					DatabaseHelper dbHelper = new DatabaseHelper(getActivity().getApplicationContext());
+					dbHelper.deleteLocationAt(list.get(position));
+					dbHelper.close();
+					list.remove(position);
+					adapter.notifyDataSetChanged();
 				}
 			});
 
@@ -126,9 +132,10 @@ public class ListOfSavedLocationsFragment extends Fragment {
 		// TODO: check: https://github.com/bauerca/drag-sort-listview/blob/master/demo/res/layout/checkable_main.xml
 		DatabaseHelper dbHelper = new DatabaseHelper(getActivity().getApplicationContext());
 		locations = dbHelper.getAllLocations(); // here put database connection! :D
+		dbHelper.close();
 		
 		DragSortListView listView = (DragSortListView)v.findViewById(R.id.list_of_localizations);
-		LocationListAdapter adapter = new LocationListAdapter(getActivity(), locations);
+		adapter = new LocationListAdapter(getActivity(), locations);
 		listView.setAdapter(adapter);		
 		addListViewClickListener(listView, adapter);
 	}

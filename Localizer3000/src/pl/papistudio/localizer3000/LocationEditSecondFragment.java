@@ -70,7 +70,8 @@ public class LocationEditSecondFragment extends Fragment implements OnClickListe
 		{
 			// TODO: enter here saving to database
 			DatabaseHelper dbHelper = new DatabaseHelper(getActivity().getApplicationContext());
-			dbHelper.AddLocation(((EditLocationActivity)getActivity()).currentlyEditedLocation);
+			dbHelper.addLocation(((EditLocationActivity)getActivity()).currentlyEditedLocation);
+			dbHelper.close();
 			Toast.makeText(getActivity(), "Location has been saved", Toast.LENGTH_SHORT).show();
 			getActivity().finish();
 		}
