@@ -27,6 +27,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 	}
 
+	public boolean DeleteLocationAt(Location locationToDelete) {
+		
+		SQLiteDatabase db = this.getWritableDatabase();		
+		return db.delete(DatabaseContract.TableDefinition.TABLE_NAME, DatabaseContract.TableDefinition.COLUMN_NAME_LOCATION_NAME + "=" + locationToDelete.getName(), null)>0;
+	}
+
 	public List<Location> getAllLocations() {
 
 		List<Location> locationList = new ArrayList<>();
@@ -39,7 +45,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		if (c.moveToFirst()) {
 			do {
 				Location newLocation = new Location(c.getString(1));
-				android.location.Location GeoLocation = new android.location.Location("");
+				android.location.Location GeoLocation = new android.location.Location(
+						"");
 				GeoLocation.setLongitude(c.getDouble(2));
 				GeoLocation.setLatitude(c.getDouble(3));
 				newLocation.setLocation(GeoLocation);
