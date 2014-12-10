@@ -7,6 +7,7 @@ The app will change phone settings and behaviour depending on current location.
 *===========*
 |  WARNING! |
 *===========*
+
 After pulling project from git to eclipse you need to create three files in the root of project filesystem with following content:
 
 --------------------------------------------------------------------------------
@@ -81,6 +82,3 @@ android.library.reference.2=../../../workspace/google-play-services_lib
 </projectDescription>
 
 --------------------------------------------------------------------------------
-
-
-
