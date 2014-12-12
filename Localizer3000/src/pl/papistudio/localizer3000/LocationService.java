@@ -5,6 +5,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -52,13 +54,15 @@ public class LocationService extends Service {
 				try {
 					Thread.sleep(interval);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					// TODO: change it!
 					e.printStackTrace();
 				}
 				
 				if(lastKnowLocation != location)
 				{
+					// TODO change!!!!
+					((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE))
+							.notify(1,createNotification(location.getLatitude()
+											+ " " + location.getLongitude()));
 					updateAndBroadcastNewLocation();
 					takeActions();
 				}
@@ -104,6 +108,7 @@ public class LocationService extends Service {
 	/******************/
 	@Override
     public void onCreate() {
+		bringServiceToForeground();
 		createLocationListener();
 		receivers = new ArrayList<>();
 		methods = new ArrayList<>();
@@ -163,6 +168,17 @@ public class LocationService extends Service {
     	receivers.remove(receiver);
     	methods.remove(method);
     }
+    
+    private void bringServiceToForeground() {
+    	startForeground(1/* change it! */, createNotification("Location: unknown")); // change id!!
+    }
+    
+	private Notification createNotification(String contentString) {
+		return new Notification.Builder(getApplicationContext())
+				.setContentTitle("Location service running")
+				.setContentText(contentString)
+				.setSmallIcon(R.drawable.powered_by_google_dark).build(); // TODO change!
+	}
     
     private void createWorkingThread() {
     	if(serviceThread == null)
