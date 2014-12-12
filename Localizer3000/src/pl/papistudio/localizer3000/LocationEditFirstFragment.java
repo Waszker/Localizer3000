@@ -52,12 +52,10 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 			showCancelConfirmationDialog();
 		if(v.getId() == R.id.edit_location_next_button)
 			showSecondEditFragment();
-		
-		// TODO: change that!!!
 		if(v.getId() == R.id.edit_location_time_from_button)
-			location.setTimeFrom(showTimePicker(location.getTimeFrom()));
+			location.setTimeFrom(showTimePicker(location.getTimeFrom(), "Select starting hour"));
 		if(v.getId() == R.id.edit_location_time_to_button)
-			location.setTimeTo(showTimePicker(location.getTimeTo()));
+			location.setTimeTo(showTimePicker(location.getTimeTo(), "Select ending hour"));
 	}
 	
 	/**
@@ -66,8 +64,6 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 	 * is shown that warns about possible loss of work.
 	 */
 	public void reactToUserLeavingEdition() {
-		// TODO: Distinguish between user leaving from newly created
-		//		 location or from editing existing one!
 		if(shouldRequestExitConfirmation)
 			showCancelConfirmationDialog();
 		else
@@ -164,8 +160,8 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 		ft.commit();
 	 }
 	 
-	 private Time showTimePicker(Time locationTime) {
-		final Time selectedTime = new Time();
+	 private Time showTimePicker(Time locationTime, String title) {
+		final Time selectedTime = new Time(locationTime.getHour(), locationTime.getMinute());
 
 		TimePickerDialog mTimePicker = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
 					@Override
@@ -175,7 +171,7 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 						setActiveTimeStrings(getView(), location.getTimeFrom(), location.getTimeTo());
 					}
 				}, locationTime.getHour(), locationTime.getMinute(), true /* 24 hour time */);
-		mTimePicker.setTitle("Select starting hour");
+		mTimePicker.setTitle(title);
 		mTimePicker.setCancelable(false);
 		mTimePicker.show();		
 		

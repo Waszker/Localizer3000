@@ -79,6 +79,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return locationList;
 	}
 
+	/**
+	 * Returns location with the chosen name.
+	 * @param locationName
+	 * @return location object found in database
+	 */
 	public Location getLocation(String locationName) {
 		SQLiteDatabase db = this.getReadableDatabase();
 
