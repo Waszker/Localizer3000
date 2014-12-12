@@ -13,20 +13,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	/******************/
 	/*   VARIABLES    */
 	/******************/
-	public static final int DATABASE_VERSION = 1;
-	public static final String DATABASE_NAME = "Locations.db";
+	private static DatabaseHelper dbInstance;
+	private static final int DATABASE_VERSION = 1;
+	private static final String DATABASE_NAME = "Locations.db";
 
 	/******************/
 	/*   VARIABLES    */
 	/******************/
 	/**
-	 * Creates a helper object to create, open, and/or manage a database.
+	 * Returns instance of DatabaseHelper class.
+	 * This class is a singleton.
+	 * 
+	 * @see http://stackoverflow.com/questions/6905524/using-singleton-design-pattern-for-sqlitedatabase
 	 * @param context
+	 * @return instance of class
 	 */
-	public DatabaseHelper(Context context) {
-		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+	public static DatabaseHelper getInstance(Context context) {	
+		if(dbInstance == null) {
+			dbInstance = new DatabaseHelper(context);
+		}
+		return dbInstance;
 	}
 
+	@Override
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(DatabaseContract.TableDefinition.SQL_CREATE_TABLE);
 	}
@@ -70,7 +79,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return locationList;
 	}
 
-	public Location getLocationAt(String locationName) {
+	public Location getLocation(String locationName) {
 		SQLiteDatabase db = this.getReadableDatabase();
 
 		// Define a projection that specifies which columns from the database
@@ -182,6 +191,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				null, values);
 
 		return newRowId;
+	}	
+	
+	private DatabaseHelper(Context context) {
+		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 	
 	private Location createLocationFromCursor(Cursor c) {

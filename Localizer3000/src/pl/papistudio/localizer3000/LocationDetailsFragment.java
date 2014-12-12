@@ -139,7 +139,7 @@ public class LocationDetailsFragment extends Fragment implements OnClickListener
 	    {
 	        @Override
 	        public void onClick(DialogInterface dialog, int which) {
-	        	/* Move to previous screen */
+	        	DatabaseHelper.getInstance(getActivity()).deleteLocationAt(location);
 	        	Toast.makeText(LocationDetailsFragment.this.getActivity(), 
 	        			"Location has been deleted", Toast.LENGTH_SHORT).show();
 	        	LocationDetailsFragment.this.getFragmentManager().popBackStack(); 

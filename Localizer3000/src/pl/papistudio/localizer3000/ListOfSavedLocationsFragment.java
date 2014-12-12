@@ -100,9 +100,8 @@ public class ListOfSavedLocationsFragment extends Fragment {
 				public void onClick(View v) {
 					// TODO: wrap it in a method?
 					Log.d("Item delete", "Deleted item number: " + position);
-					DatabaseHelper dbHelper = new DatabaseHelper(getActivity().getApplicationContext());
+					DatabaseHelper dbHelper = DatabaseHelper.getInstance(getActivity().getApplicationContext());
 					dbHelper.deleteLocationAt(list.get(position));
-					dbHelper.close();
 					list.remove(position);
 					adapter.notifyDataSetChanged();
 				}
@@ -127,12 +126,8 @@ public class ListOfSavedLocationsFragment extends Fragment {
 	}
 	
 	private void fillListWithLocations(View v) {
-		// TODO change way of declaring and filling list
-		// TODO: add reactions to deleting items by fling!
-		// TODO: check: https://github.com/bauerca/drag-sort-listview/blob/master/demo/res/layout/checkable_main.xml
-		DatabaseHelper dbHelper = new DatabaseHelper(getActivity().getApplicationContext());
-		locations = dbHelper.getAllLocations(); // here put database connection! :D
-		dbHelper.close();
+		DatabaseHelper dbHelper = DatabaseHelper.getInstance(getActivity().getApplicationContext());
+		locations = dbHelper.getAllLocations();
 		
 		DragSortListView listView = (DragSortListView)v.findViewById(R.id.list_of_localizations);
 		adapter = new LocationListAdapter(getActivity(), locations);

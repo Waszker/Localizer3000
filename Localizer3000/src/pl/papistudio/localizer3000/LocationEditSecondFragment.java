@@ -68,10 +68,8 @@ public class LocationEditSecondFragment extends Fragment implements OnClickListe
 			getFragmentManager().popBackStack();
 		if(v.getId() == R.id.edit_location_save_button)
 		{
-			// TODO: enter here saving to database
-			DatabaseHelper dbHelper = new DatabaseHelper(getActivity().getApplicationContext());
+			DatabaseHelper dbHelper = DatabaseHelper.getInstance(getActivity().getApplicationContext());
 			dbHelper.addLocation(((EditLocationActivity)getActivity()).currentlyEditedLocation);
-			dbHelper.close();
 			Toast.makeText(getActivity(), "Location has been saved", Toast.LENGTH_SHORT).show();
 			getActivity().finish();
 		}
