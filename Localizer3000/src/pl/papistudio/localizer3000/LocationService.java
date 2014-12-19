@@ -7,6 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.NetworkInfo.State;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -24,70 +27,14 @@ public class LocationService extends Service {
 		}
 	}
 	
+	private static int NOTIFICATION_ID = 1;
 	private final IBinder mBinder = new LocalBinder();
 	private android.location.Location location;
+	private LocationManager locationManager;
 	private LocationListener locationListener;
 	private int interval;
-	private int startMode = Service.START_NOT_STICKY; // TODO: change it!
+	private int startMode = Service.START_STICKY;
 	
-	private boolean shouldThreadWork;
-	private ServiceThread serviceThread;	
-	private class ServiceThread extends Thread implements Runnable {
-		/******************/
-		/*   VARIABLES    */
-		/******************/
-		private android.location.Location lastKnowLocation;
-
-		/******************/
-		/*   FUNCTIONS    */
-		/******************/
-		@Override
-		public void run() {
-			while(shouldThreadWork)
-			{
-				try {
-					Thread.sleep(interval);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				
-				if(lastKnowLocation != location)
-				{
-					// TODO change!!!!
-					((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE))
-							.notify(1,createNotification(location.getLatitude()
-											+ " " + location.getLongitude()));
-					updateAndBroadcastNewLocation();
-					takeActions();
-				}
-			}
-			LocationService.this.stopSelf();
-		}
-		
-		/**
-		 * After location has changed broadcast it to all registered clients.
-		 * This can be invoked when new client registers just to make it faster
-		 * to get location info.
-		 */
-		public void updateAndBroadcastNewLocation() {
-			// TODO: react to location changes!!!
-	        Log.d("Location Service", "Location updated");
-			lastKnowLocation = location;
-			
-			if(lastKnowLocation != null)
-				broadcastNewLocation(lastKnowLocation);			
-		}
-		
-		private void broadcastNewLocation(android.location.Location loc) {
-			EventBus.getDefault().post(loc);
-		}
-		
-		private void takeActions() {
-			// TODO: this function should do all the stuff with location change!
-		}
-	}
-
-
 	/******************/
 	/*   FUNCTIONS    */
 	/******************/
@@ -102,8 +49,7 @@ public class LocationService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Toast.makeText(this, "Location service starting", Toast.LENGTH_SHORT).show();
         Log.d("Location Service", "Started");
-    	interval = intent.getIntExtra("interval", 5*1000);
-    	createWorkingThread();   
+    	interval = intent.getIntExtra("interval", 5*1000);  
         return startMode;
     }
     
@@ -126,13 +72,13 @@ public class LocationService extends Service {
     
     @Override
     public void onDestroy() {
-    	shouldThreadWork = false;
+		locationManager.removeUpdates(locationListener);
         Toast.makeText(this, "Location service ending", Toast.LENGTH_SHORT).show();
 		Log.d("Location Service", "Location service ending");
     }
     
     private void bringServiceToForeground() {
-    	startForeground(1/* change it! */, createNotification("Location: unknown")); // change id!!
+    	startForeground(NOTIFICATION_ID, createNotification("Location: unknown"));
     }
     
 	private Notification createNotification(String contentString) {
@@ -141,20 +87,14 @@ public class LocationService extends Service {
 				.setContentText(contentString)
 				.setSmallIcon(R.drawable.powered_by_google_dark).build(); // TODO change!
 	}
-    
-    private void createWorkingThread() {
-    	if(serviceThread == null)
-    	{
-    		shouldThreadWork = true;
-    		serviceThread = new ServiceThread();
-    		serviceThread.start();
-    	}     	
-    }
         
     private void createLocationListener() {
 		locationListener = new LocationListener() {
 		    public void onLocationChanged(android.location.Location location) {
 		    	LocationService.this.location = location;
+		    	updateNotification();
+		    	broadcastNewLocation(location);
+		    	Log.d("Location Service", "Location updated");
 		    }
 
 		    public void onStatusChanged(String provider, int status, Bundle extras) {}
@@ -162,30 +102,58 @@ public class LocationService extends Service {
 		    public void onProviderEnabled(String provider) {}
 
 		    public void onProviderDisabled(String provider) {}
-		};
-		  
-		
+		    
+		    private void broadcastNewLocation(android.location.Location loc) {
+				EventBus.getDefault().post(loc);
+			}
+		    
+		    private void updateNotification() {
+		    	((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE))
+				.notify(NOTIFICATION_ID, createNotification(location.getLatitude()
+								+ " " + location.getLongitude()));
+		    }
+		};		  
     }
 
     private void registerForLocationUpdates() {
-		final LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-		
+		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 		locationManager.removeUpdates(locationListener);
-    	// TODO: location updates should have different accuracy settings
+
 		// TODO: Change interval here
-		try {
-			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, interval, 0, locationListener);
-		} catch(IllegalArgumentException e) {
-			Log.e("Location listener error: ", e.getMessage());			
-		}
+		if( !(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && isNetworkLocationProviderEnabled()) )
+			EventBus.getDefault().post("No network or GPS!");
 		
-		try {
+		if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, interval, 0, locationListener);
+
+		if(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
 			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, interval, 0, locationListener);
-		} catch(IllegalArgumentException e) {
-			Log.e("Location listener error: ", e.getMessage());			
-		}
     	
 		// TODO: provide quick location fix
-//		locationManager.getLastKnownLocation(provider); 
+//		location = locationManager.getLastKnownLocation(provider); 
+    }
+    
+    private boolean isNetworkLocationProviderEnabled() {
+		ConnectivityManager con = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		State mobile, wifi;
+		mobile = fillState(con, ConnectivityManager.TYPE_MOBILE);
+    	wifi = fillState(con, ConnectivityManager.TYPE_WIFI);
+    	
+    	return (mobile == NetworkInfo.State.CONNECTED 
+    			|| mobile == NetworkInfo.State.CONNECTING
+    			|| wifi == NetworkInfo.State.CONNECTING
+    			|| wifi == NetworkInfo.State.CONNECTING);
+    }
+    
+    private State fillState(ConnectivityManager manager, int networkType) {
+    	State state;
+    	try {
+    		state = manager.getNetworkInfo(networkType).getState();
+    	}
+    	catch(NullPointerException e) {
+    		state = NetworkInfo.State.UNKNOWN;
+    	}
+    	
+    	return state;
     }
 }

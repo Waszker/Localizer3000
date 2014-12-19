@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 import de.greenrobot.event.EventBus;
 
@@ -131,6 +132,10 @@ public class MainActivity extends Activity {
 		startActivity(intent);
 	}
 	
+	public void onEvent(String error) {
+        Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+	}
+	
 	/**
 	 * Method invoked by EventBus when location becomes updated.
 	 * @param location - updated location
@@ -144,10 +149,15 @@ public class MainActivity extends Activity {
 	 * @param location
 	 */
 	public void updateCurrentLocation(final android.location.Location location) {
-		((TextView) findViewById(R.id.current_location_textview))
-				.setText(location.getLatitude() + "\n"
-						+ location.getLongitude() + "\nwith accu: "
-						+ location.getAccuracy());
+		runOnUiThread(new Runnable() {			
+			@Override
+			public void run() {
+				((TextView) findViewById(R.id.current_location_textview))
+						.setText(location.getLatitude() + "\n"
+								+ location.getLongitude() + "\nwith accu: "
+								+ location.getAccuracy());				
+			}
+		});
 	}
 	
 	private void startLocationServiceAndBindToIt() {
