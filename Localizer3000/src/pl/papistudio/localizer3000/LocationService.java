@@ -1,10 +1,5 @@
 package pl.papistudio.localizer3000;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.Service;
@@ -17,6 +12,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
+import de.greenrobot.event.EventBus;
 
 public class LocationService extends Service {
 	/******************/
@@ -30,11 +26,9 @@ public class LocationService extends Service {
 	
 	private final IBinder mBinder = new LocalBinder();
 	private android.location.Location location;
+	private LocationListener locationListener;
 	private int interval;
 	private int startMode = Service.START_NOT_STICKY; // TODO: change it!
-	
-	private List<Object> receivers;
-	private List<Method> methods;
 	
 	private boolean shouldThreadWork;
 	private ServiceThread serviceThread;	
@@ -77,7 +71,7 @@ public class LocationService extends Service {
 		 */
 		public void updateAndBroadcastNewLocation() {
 			// TODO: react to location changes!!!
-	        Log.d("Location Service", "Location updated " + receivers.size());
+	        Log.d("Location Service", "Location updated");
 			lastKnowLocation = location;
 			
 			if(lastKnowLocation != null)
@@ -85,16 +79,7 @@ public class LocationService extends Service {
 		}
 		
 		private void broadcastNewLocation(android.location.Location loc) {
-			Object[] params = new Object[1];
-			params[0] = loc;
-			for(int i=0; i<receivers.size(); i++)
-				try {
-					methods.get(i).invoke(receivers.get(i), params);
-				} catch (IllegalAccessException | IllegalArgumentException
-						| InvocationTargetException | IndexOutOfBoundsException e) {
-					// TODO: Do something productive?
-					e.printStackTrace();
-				}
+			EventBus.getDefault().post(loc);
 		}
 		
 		private void takeActions() {
@@ -110,8 +95,7 @@ public class LocationService extends Service {
     public void onCreate() {
 		bringServiceToForeground();
 		createLocationListener();
-		receivers = new ArrayList<>();
-		methods = new ArrayList<>();
+		registerForLocationUpdates();
     }
 	
     @Override
@@ -119,7 +103,7 @@ public class LocationService extends Service {
         Toast.makeText(this, "Location service starting", Toast.LENGTH_SHORT).show();
         Log.d("Location Service", "Started");
     	interval = intent.getIntExtra("interval", 5*1000);
-    	createWorkingThread();   	
+    	createWorkingThread();   
         return startMode;
     }
     
@@ -147,28 +131,6 @@ public class LocationService extends Service {
 		Log.d("Location Service", "Location service ending");
     }
     
-    /**
-     * Function registering for location updates from service.
-     * @param receiver an object we should call method on
-     * @param method function that takes android.location.Location as the only argument
-     */
-    public void requestLocationUpdates(Object receiver, Method method) {
-    	receivers.add(receiver);
-    	methods.add(method);
-    	serviceThread.updateAndBroadcastNewLocation();
-    }
-    
-    /**
-     * Unregisters object from location updates.
-     * @See requestLocationUpdates method for more information.
-     * @param receiver
-     * @param method
-     */
-    public void unregisterFromLocationUpdates(Object receiver, Method method) {
-    	receivers.remove(receiver);
-    	methods.remove(method);
-    }
-    
     private void bringServiceToForeground() {
     	startForeground(1/* change it! */, createNotification("Location: unknown")); // change id!!
     }
@@ -188,10 +150,9 @@ public class LocationService extends Service {
     		serviceThread.start();
     	}     	
     }
-    
+        
     private void createLocationListener() {
-		final LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-		LocationListener locationListener = new LocationListener() {
+		locationListener = new LocationListener() {
 		    public void onLocationChanged(android.location.Location location) {
 		    	LocationService.this.location = location;
 		    }
@@ -203,13 +164,28 @@ public class LocationService extends Service {
 		    public void onProviderDisabled(String provider) {}
 		};
 		  
-		// TODO: location updates should have different accuracy settings
-		try {
-			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-		} catch(IllegalArgumentException e) {
-			Log.d("Location listener error: ", e.getMessage());
-			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);			
-		}
+		
     }
 
+    private void registerForLocationUpdates() {
+		final LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+		
+		locationManager.removeUpdates(locationListener);
+    	// TODO: location updates should have different accuracy settings
+		// TODO: Change interval here
+		try {
+			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, interval, 0, locationListener);
+		} catch(IllegalArgumentException e) {
+			Log.e("Location listener error: ", e.getMessage());			
+		}
+		
+		try {
+			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, interval, 0, locationListener);
+		} catch(IllegalArgumentException e) {
+			Log.e("Location listener error: ", e.getMessage());			
+		}
+    	
+		// TODO: provide quick location fix
+//		locationManager.getLastKnownLocation(provider); 
+    }
 }

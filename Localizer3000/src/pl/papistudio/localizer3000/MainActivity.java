@@ -1,6 +1,5 @@
 package pl.papistudio.localizer3000;
 
-import pl.papistudio.localizer3000.LocationService.LocalBinder;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
@@ -17,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+import de.greenrobot.event.EventBus;
 
 public class MainActivity extends Activity {
 	/******************/
@@ -24,44 +24,20 @@ public class MainActivity extends Activity {
 	/******************/
 	public static final String SHARED_PREFERENCES = "SHARED_PREFERENCES";
 	public static final String INTERVAL_PREFERENCE = "INTERVAL_PREFERENCE";
-	private LocationService locationService;
 	private boolean isServiceBinded;
 	private ServiceConnection serviceConnection = new ServiceConnection() {
 
 		@Override
 		public void onServiceConnected(ComponentName name, IBinder service) {
 			Log.d("MainActivity", "Binded to service!");
-			LocalBinder binder = (LocalBinder)service;
-			locationService = binder.getService();
-			registerOrUnregisterForLocationUpdates(true);
+//			LocalBinder binder = (LocalBinder)service;
+//			locationService = binder.getService();
 		}
 
 		@Override
 		public void onServiceDisconnected(ComponentName name) {
 			Log.d("MainActivity", "Lost bind to service!");
 			isServiceBinded = false;
-			registerOrUnregisterForLocationUpdates(false);
-		}
-
-		private void registerOrUnregisterForLocationUpdates(boolean shouldRegister) {			
-			@SuppressWarnings("rawtypes")
-			Class[] parameterTypes = new Class[1];
-			parameterTypes[0] = android.location.Location.class;
-			try {
-				if(shouldRegister)
-					locationService.requestLocationUpdates(MainActivity.this, 
-														   MainActivity.class.getMethod(
-																   "updateCurrentLocation", 
-																   parameterTypes));
-				else
-					locationService.unregisterFromLocationUpdates(MainActivity.this, 
-																  MainActivity.class.getMethod(
-																	"updateCurrentLocation", 
-																	parameterTypes));					
-			} catch (NoSuchMethodException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}			
 		}
 	};
 
@@ -98,11 +74,17 @@ public class MainActivity extends Activity {
 	}
 	
 	@Override
+	protected void onStart() {
+		super.onStart();
+        EventBus.getDefault().register(this);
+	}
+	
+	@Override
     protected void onStop() {
         super.onStop();
+        EventBus.getDefault().unregister(this);
         if (isServiceBinded) 
         {
-        	serviceConnection.onServiceDisconnected(null); // TODO: change!
             unbindService(serviceConnection);
             isServiceBinded = false;
         }
@@ -150,21 +132,22 @@ public class MainActivity extends Activity {
 	}
 	
 	/**
+	 * Method invoked by EventBus when location becomes updated.
+	 * @param location - updated location
+	 */
+	public void onEvent(android.location.Location location) {
+		updateCurrentLocation(location);
+	}
+	
+	/**
 	 * Updates textview by inserting current location details.
 	 * @param location
 	 */
 	public void updateCurrentLocation(final android.location.Location location) {
-		// TODO: change it somehow!
-		runOnUiThread(new Runnable() {
-			
-			@Override
-			public void run() {
-				((TextView) findViewById(R.id.current_location_textview))
-						.setText(location.getLatitude() + "\n"
-								+ location.getLongitude() + "\nwith accu: "
-								+ location.getAccuracy());
-			}
-		});
+		((TextView) findViewById(R.id.current_location_textview))
+				.setText(location.getLatitude() + "\n"
+						+ location.getLongitude() + "\nwith accu: "
+						+ location.getAccuracy());
 	}
 	
 	private void startLocationServiceAndBindToIt() {
