@@ -3,9 +3,12 @@ package pl.papistudio.localizer3000;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
+import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
@@ -25,14 +28,13 @@ public class MainActivity extends Activity {
 	/******************/
 	public static final String SHARED_PREFERENCES = "SHARED_PREFERENCES";
 	public static final String INTERVAL_PREFERENCE = "INTERVAL_PREFERENCE";
+	private AlertDialog alertDialog;
 	private boolean isServiceBinded;
 	private ServiceConnection serviceConnection = new ServiceConnection() {
 
 		@Override
 		public void onServiceConnected(ComponentName name, IBinder service) {
 			Log.d("MainActivity", "Binded to service!");
-//			LocalBinder binder = (LocalBinder)service;
-//			locationService = binder.getService();
 		}
 
 		@Override
@@ -132,8 +134,28 @@ public class MainActivity extends Activity {
 		startActivity(intent);
 	}
 	
-	public void onEvent(String error) {
-        Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+	/**
+	 * Sent via EventBus exception holds
+	 * important information to show to the user.
+	 * @param error
+	 */
+	public void onEvent(Exception error) {
+        Toast.makeText(this, error.getMessage(), Toast.LENGTH_SHORT).show();
+        
+        if(alertDialog == null || !(alertDialog.isShowing()) )
+        {
+	        alertDialog = new AlertDialog.Builder(this).create();
+	        alertDialog.setTitle(error.getMessage());
+	        alertDialog.setMessage("Please enable network or GPS connection.");
+	        alertDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "Ok", new OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.cancel();
+				}
+			});
+	        alertDialog.show();
+        }
 	}
 	
 	/**
@@ -161,16 +183,15 @@ public class MainActivity extends Activity {
 	}
 	
 	private void startLocationServiceAndBindToIt() {
-		Intent intent = new Intent(this, LocationService.class);
-		
-		if(isLocationServiceNotRunning())
-		{
-			// TODO: change interval sending!
-			intent.putExtra("interval", 1000*getSharedPreferences(MainActivity.SHARED_PREFERENCES, Context.MODE_PRIVATE).getInt(INTERVAL_PREFERENCE, 5));
-			startService(intent);			
-		}
-		
+		startLocationService();
 		bindIfLocationServiceRunning();
+	}
+	
+	private void startLocationService() {
+		Intent intent = new Intent(this, LocationService.class);
+		intent.putExtra("interval", 1000*getSharedPreferences(MainActivity.SHARED_PREFERENCES, 
+										Context.MODE_PRIVATE).getInt(INTERVAL_PREFERENCE, 5));
+		startService(intent);
 	}
 
 	private void setServiceButtonTextAccordingToServiceState() {

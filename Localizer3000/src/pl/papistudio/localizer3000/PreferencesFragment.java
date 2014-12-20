@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
+import de.greenrobot.event.EventBus;
 
 public class PreferencesFragment extends PreferenceFragment implements OnPreferenceClickListener {
 	/******************/
@@ -102,8 +102,7 @@ public class PreferencesFragment extends PreferenceFragment implements OnPrefere
 						interval = picker.getValue();
 						saveIntervalToSharedPreferences();
 						changeIntervalPreferenceText();
-						Toast.makeText(getActivity(), "Interval value changed.\n" +
-								"Please restart location service for changes to take effect.", Toast.LENGTH_LONG).show();
+						EventBus.getDefault().post(Integer.valueOf(interval*1000));
 						Log.d("Preference Fragment", "New interval value : " + picker.getValue());
 					}
 				})
