@@ -21,7 +21,7 @@ import android.widget.Toast;
  * 
  * LocationDetailsFragment displays detailed information
  * about currently selected location. It takes info from
- * main activity class where reference to location is stored. 
+ * SavedLocalizationsActivity class where reference to location is stored. 
  * 
  * @author PapiTeam
  *
@@ -98,10 +98,8 @@ public class LocationDetailsFragment extends Fragment implements OnClickListener
 	
 	private String createActiveHoursString() {
 		StringBuilder stringBuilderHours = new StringBuilder();
-		stringBuilderHours.append(location.getTimeFrom().getHour()+":");
-		stringBuilderHours.append(location.getTimeFrom().getMinute()+"  -  ");
-		stringBuilderHours.append(location.getTimeTo().getHour()+":");
-		stringBuilderHours.append(location.getTimeTo().getMinute()+"");
+		stringBuilderHours.append(location.getTimeFrom().toString()+"  -  ");
+		stringBuilderHours.append(location.getTimeTo().toString());
 		return stringBuilderHours.toString();
 	}
 	

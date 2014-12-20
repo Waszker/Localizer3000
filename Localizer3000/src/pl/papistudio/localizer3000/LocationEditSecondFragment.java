@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * Fragment displaying editable location details. User can set location on map.
+ * There is also option to change radius.
  * help with map fragment: http://ucla.jamesyxu.com/?p=287
  * 
  * @author PapiTeam
@@ -99,12 +100,7 @@ public class LocationEditSecondFragment extends Fragment implements OnClickListe
 	
 	@Override
 	public void onMapLongClick(LatLng point) {
-		final GoogleMap map = mapView.getMap();
 		final Location location = ((EditLocationActivity)getActivity()).currentlyEditedLocation;
-		map.clear();
-		map.addMarker(new MarkerOptions()
-				.position(point)
-				.title(location.getName()));
 		
 		android.location.Location loc = new android.location.Location("");
 		loc.setLatitude(point.latitude);

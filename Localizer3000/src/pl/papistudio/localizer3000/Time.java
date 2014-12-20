@@ -57,6 +57,19 @@ public class Time implements Parcelable {
 		return stringBuilder.toString();
 	}
 	
+	public int compareTo(Time refTime) {
+		int result;
+		if(hour == refTime.getHour() && minute == refTime.getMinute())
+			result = 0;
+		
+		if(hour > refTime.getHour() || (hour == refTime.getHour() && minute > refTime.minute))
+			result = 1;
+		else
+			result = -1;
+		
+		return result;
+	}
+	
 	/*
 	 * Parcelable part
 	 * @see http://stackoverflow.com/questions/7181526/how-can-i-make-my-custom-objects-be-parcelable

@@ -126,6 +126,7 @@ public class LocationService extends Service {
 		    	LocationService.this.location = location;
 		    	updateNotification(location.getLatitude() + " " + location.getLongitude());
 		    	broadcastNewLocation(location);
+		    	System.reactToLocationChange(location, LocationService.this.getApplicationContext(), LocationService.this);
 		    	Log.d(TAG, "Location updated");
 		    }
 

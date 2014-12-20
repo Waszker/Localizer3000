@@ -1,5 +1,7 @@
 package pl.papistudio.localizer3000;
 
+import java.util.Calendar;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -83,6 +85,58 @@ public class Location implements Parcelable {
 		this.isFri = Fri;
 		this.isSat = Sat;
 		this.isSun = Sun;
+	}
+	
+	/**
+	 * Checks if location is applicable during this day
+	 * of the week.
+	 * @param day of the week (taken from Calendar.get())
+	 * @return is location enabled
+	 */
+	public boolean isLocationEnabled(int day, Time time) {
+		boolean isEnabled = false;
+		
+		switch (day) {
+			case Calendar.MONDAY:
+				isEnabled = isMon;
+				break;
+				
+			case Calendar.TUESDAY:
+				isEnabled = isTue;
+				break;
+				
+			case Calendar.WEDNESDAY:
+				isEnabled = isWed;
+				break;
+				
+			case Calendar.THURSDAY:
+				isEnabled = isThu;
+				break;
+				
+			case Calendar.FRIDAY:
+				isEnabled = isFri;
+				break;
+				
+			case Calendar.SATURDAY:
+				isEnabled = isSat;
+				break;
+				
+			case Calendar.SUNDAY:
+				isEnabled = isSun;
+				break;
+	
+			default:
+				break;
+		}
+		
+		if(timeFrom.compareTo(timeTo) > 0)
+			if(time.compareTo(timeFrom) >= 0 && time.compareTo(timeTo) <= 0)
+				isEnabled = false;
+		else
+			if(time.compareTo(timeFrom) < 0 || time.compareTo(timeTo) > 0)
+				isEnabled = false;
+		
+		return isEnabled;
 	}
 
 	/************************/
