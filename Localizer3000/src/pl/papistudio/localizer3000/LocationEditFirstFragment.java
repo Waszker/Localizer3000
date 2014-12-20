@@ -30,14 +30,12 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 	/*   VARIABLES    */
 	/******************/
 	private Location location;
-	private boolean shouldRequestExitConfirmation;
 	
 	/******************/
 	/*   FUNCTIONS    */
 	/******************/	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {	
-		shouldRequestExitConfirmation = false;	
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_location_edit1, container, false);
 		getLocationReference();
 		fillNullLocation();
@@ -51,7 +49,7 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 		if(v.getId() == R.id.edit_location_cancel_button)
 			showCancelConfirmationDialog();
 		if(v.getId() == R.id.edit_location_next_button)
-			showSecondEditFragment();
+			checkLocationNameAndShowSecondFragment();
 		if(v.getId() == R.id.edit_location_time_from_button)
 			location.setTimeFrom(showTimePicker(location.getTimeFrom(), "Select starting hour"));
 		if(v.getId() == R.id.edit_location_time_to_button)
@@ -64,15 +62,9 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 	 * is shown that warns about possible loss of work.
 	 */
 	public void reactToUserLeavingEdition() {
-		if(shouldRequestExitConfirmation)
-			showCancelConfirmationDialog();
-		else
-			LocationEditFirstFragment.this.getActivity().finish();
+		showCancelConfirmationDialog();
 	}
 	
-	/**
-	 * Get location reference assigned to activity.
-	 */
 	private void getLocationReference() {
 		location = ((EditLocationActivity)getActivity()).currentlyEditedLocation;
 	}
@@ -84,10 +76,6 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 		((Button)v.findViewById(R.id.edit_location_time_to_button)).setOnClickListener(this);
 	}
 	
-	/**
-	 * Fills view with location settings.
-	 * @param view to fill
-	 */
 	private void fillLocationDetails(View v) {
 		((TextView)v.findViewById(R.id.edit_location_name)).setText(location.getName());
 		((Switch)v.findViewById(R.id.edit_location_wifi_switch)).setChecked(location.isWifiOn());
@@ -108,20 +96,12 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 		setActiveTimeStrings(v, location.getTimeFrom(), location.getTimeTo());
 	}
 	 
-	 /**
-	  * Creates new location object if none was assigned
-	  * to activity.
-	  * (it usually means that user wants to create new 
-	  * location).
-	  */
-	 private void fillNullLocation() {
-		 if(location == null)
-		 {
-			 location = new Location("", false, false, false, false, false, false, 100);
-			 ((EditLocationActivity)getActivity()).currentlyEditedLocation = location;
-			 shouldRequestExitConfirmation = true;
-		 }
-	 }
+	private void fillNullLocation() {
+		if (location == null) {
+			location = new Location("", false, false, false, false, false, false, 100);
+			((EditLocationActivity) getActivity()).currentlyEditedLocation = location;
+		}
+	}
 	 
 	 private void showCancelConfirmationDialog() {
 			new AlertDialog.Builder(getActivity())
@@ -149,6 +129,13 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 		    .show();
 	}
 	 
+	private void checkLocationNameAndShowSecondFragment() {
+		if(((TextView)getView().findViewById(R.id.edit_location_name)).getText().length() != 0)
+			showSecondEditFragment();
+		else
+			Toast.makeText(getActivity(), "Please provide location name at least", Toast.LENGTH_SHORT).show();		
+	}
+	 
 	private void showSecondEditFragment() {
 		fillEditedLocationDetails();
 		FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -156,7 +143,7 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 				android.R.animator.fade_out, android.R.animator.fade_in,
 				android.R.animator.fade_out);
 		ft.replace(getId(), new LocationEditSecondFragment());
-		ft.addToBackStack(null);
+		ft.addToBackStack("EditPart1");
 		ft.commit();
 	 }
 	 
@@ -191,7 +178,7 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 			location.setMobileData(((Switch)getView().findViewById(R.id.edit_location_mobile_data_switch)).isChecked());
 			location.setSoundOn(((Switch)getView().findViewById(R.id.edit_location_sound_switch)).isChecked());
 			location.setVibrationOn(((Switch)getView().findViewById(R.id.edit_location_vibration_switch)).isChecked());
-			location.setLocation(new android.location.Location("PLAY")); // TODO: get location!
+			location.setLocation(location.getLocation());
 
 			location.setMon(((ToggleButton)getView().findViewById(R.id.toggle_monday)).isChecked());
 			location.setTue(((ToggleButton)getView().findViewById(R.id.toggle_tuesday)).isChecked());

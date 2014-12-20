@@ -30,6 +30,10 @@
     <string name="fragment_location_edit_time_from">From: 00:00</string>
     <string name="fragment_location_edit_time_to">To:   23:59</string>
     <string name="edit_location_name_edittext_hint">Enter location name</string>
+    <string name="radius_plus_text">+1</string>
+    <string name="radius_minus_text">&#8212;1</string>
+    <string name="radius_plus_ten_text">+10</string>
+    <string name="radius_minus_ten_text">&#8212;10</string>
     <string name="next_text">Next</string>
     <string name="cancel_text">Cancel</string>
     <string name="back_text">Back</string>

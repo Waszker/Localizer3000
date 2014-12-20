@@ -160,12 +160,13 @@ public class Location implements Parcelable {
 		this.isSMSsendOn = isSMSsendOn;
 	}
 
-	public double getRadius() {
+	public int getRadius() {
 		return radius;
 	}
 
 	public void setRadius(int radius) {
-		this.radius = radius;
+		if(radius > 0)
+			this.radius = radius;
 	}
 
 	public Time getTimeFrom() {
