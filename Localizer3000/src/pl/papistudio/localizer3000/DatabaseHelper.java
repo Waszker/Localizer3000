@@ -116,12 +116,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return newRowId;
 	}
 	
-	public void updateLocation(Location location) {
+	/**
+	 * Updates database record. Original location name is needed because
+	 * it is also primary key.
+	 * @param location
+	 * @param originalName
+	 */
+	public void updateLocation(Location location, String originalName) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = createValuesFromLocation(location);
 		db.update(DatabaseContract.TableDefinition.TABLE_NAME, values, 
 				  DatabaseContract.TableDefinition.COLUMN_NAME_LOCATION_NAME + 
-				  "=\"" + location.getName() + "\"", null);
+				  "=\"" + originalName + "\"", null);
 	}
 	
 	private DatabaseHelper(Context context) {

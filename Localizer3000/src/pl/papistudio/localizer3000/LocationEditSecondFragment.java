@@ -1,6 +1,8 @@
 package pl.papistudio.localizer3000;
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -185,17 +187,22 @@ public class LocationEditSecondFragment extends Fragment implements OnClickListe
 	
 	private void saveLocation() {
 		final Location location = ((EditLocationActivity)getActivity()).currentlyEditedLocation;		
-		DatabaseHelper dbHelper = DatabaseHelper.getInstance(getActivity().getApplicationContext());
+		final DatabaseHelper dbHelper = DatabaseHelper.getInstance(getActivity().getApplicationContext());
+		final String originalName = ((EditLocationActivity)getActivity()).originalLocationName;
+		final String locationName = (originalName.contentEquals("") ? location.getName() : originalName);
 		
-		if(dbHelper.getLocation(location.getName()) == null)
+		if(dbHelper.getLocation(locationName) == null)
 		{
 			dbHelper.addLocation(location);
 			Toast.makeText(getActivity(), "Location has been saved", Toast.LENGTH_SHORT).show();
 		}
 		else
 		{
-			dbHelper.updateLocation(location);
+			dbHelper.updateLocation(location, originalName);
 			Toast.makeText(getActivity(), "Location has been updated", Toast.LENGTH_SHORT).show();
+			Intent data = new Intent();
+			data.putExtra("location", location);
+			getActivity().setResult(Activity.RESULT_OK, data);
 		}
 		
 		getActivity().finish();		

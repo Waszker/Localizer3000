@@ -13,6 +13,7 @@ public class EditLocationActivity extends Activity {
 	/*   VARIABLES    */
 	/******************/
 	public Location currentlyEditedLocation;
+	public String originalLocationName;
 	
 	/******************/
 	/*   FUNCTIONS    */
@@ -32,6 +33,7 @@ public class EditLocationActivity extends Activity {
 		else 
 		{
 			currentlyEditedLocation = (Location)savedInstanceState.getParcelable("location");
+			originalLocationName = savedInstanceState.getString("LocationName");
 		}
 	}
 	
@@ -39,6 +41,7 @@ public class EditLocationActivity extends Activity {
 	 public void onSaveInstanceState(Bundle outState) {
 	     super.onSaveInstanceState(outState);
 	     outState.putParcelable("location", currentlyEditedLocation);
+	     outState.putString("LocationName", originalLocationName);
 	 }
 
 	@Override

@@ -1,5 +1,6 @@
 package pl.papistudio.localizer3000;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
@@ -52,14 +53,23 @@ public class LocationDetailsFragment extends Fragment implements OnClickListener
 			showEditDetailsFragment(location);
 	}
 	
-
-	/**
-	 * Get location reference assigned to activity.
-	 * WARNING: location should not be null! Otherwise
-	 * it means that something went wrong!
-	 */
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+	  if (requestCode == MainActivity.EDIT_EXISTING_LOCATION && resultCode == Activity.RESULT_OK)
+	  {
+		  Location location = data.getParcelableExtra("location");
+		  if(location != null)
+		  {
+			  ((SavedLocalizationsActivity)getActivity()).setCurrentlyUsedLocation(location);
+			  getLocationReference();
+			  fillLocationDetails(getView());
+		  }
+	  }
+	}
+	
 	private void getLocationReference() {
-		location = ((SavedLocalizationsActivity)getActivity()).getCurrentlyUsedLocation();		
+		location = ((SavedLocalizationsActivity)getActivity()).getCurrentlyUsedLocation();
 	}
 	
 	private void fillLocationDetails(View v) {
@@ -124,7 +134,7 @@ public class LocationDetailsFragment extends Fragment implements OnClickListener
 	private void showEditDetailsFragment(Location location) {
 		Intent intent = new Intent(getActivity(), EditLocationActivity.class);
 		intent.putExtra("location", location);
-		startActivity(intent);
+		startActivityForResult(intent, MainActivity.EDIT_EXISTING_LOCATION);
 	}
 	
 	private void showDeleteConfirmationDialog() {

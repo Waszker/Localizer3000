@@ -1,5 +1,6 @@
 package pl.papistudio.localizer3000;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -39,6 +40,7 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 		View rootView = inflater.inflate(R.layout.fragment_location_edit1, container, false);
 		getLocationReference();
 		fillNullLocation();
+		saveLocationOriginalName();
 		addOnClickActionsToButtons(rootView);
 		fillLocationDetails(rootView);
 		return rootView;
@@ -97,13 +99,18 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 	}
 	 
 	private void fillNullLocation() {
-		if (location == null) {
+		if (location == null) 
+		{
 			location = new Location("", false, false, false, false, false, false, 100);
 			((EditLocationActivity) getActivity()).currentlyEditedLocation = location;
 		}
 	}
+	
+	private void saveLocationOriginalName() {
+		((EditLocationActivity)getActivity()).originalLocationName = location.getName();
+	}
 	 
-	 private void showCancelConfirmationDialog() {
+	private void showCancelConfirmationDialog() {
 			new AlertDialog.Builder(getActivity())
 	        .setIcon(android.R.drawable.ic_dialog_alert)
 	        .setTitle("Cancel location")
@@ -115,6 +122,7 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 		        	/* Move to previous screen */
 		        	Toast.makeText(LocationEditFirstFragment.this.getActivity(), 
 		        			"Location has not been saved", Toast.LENGTH_SHORT).show();
+		        	getActivity().setResult(Activity.RESULT_CANCELED, null);
 		        	LocationEditFirstFragment.this.getActivity().finish(); 
 		        }
 		

@@ -28,6 +28,7 @@ public class MainActivity extends Activity {
 	/******************/
 	public static final String SHARED_PREFERENCES = "SHARED_PREFERENCES";
 	public static final String INTERVAL_PREFERENCE = "INTERVAL_PREFERENCE";
+	public static final int EDIT_EXISTING_LOCATION = 0x1;
 	private AlertDialog alertDialog;
 	private boolean isServiceBinded;
 	private ServiceConnection serviceConnection = new ServiceConnection() {

@@ -59,7 +59,7 @@ public class SavedLocalizationsActivity extends Activity {
 	}
 
 	public Location getCurrentlyUsedLocation() {
-		return DatabaseHelper.getInstance(this).getLocation(currentlyUsedLocation.getName());
+		return currentlyUsedLocation;
 	}
 
 	public void setCurrentlyUsedLocation(Location currentlyUsedLocation) {
