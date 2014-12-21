@@ -9,8 +9,8 @@ public class DatabaseContract {
 	public static abstract class TableDefinition implements BaseColumns {
         public static final String TABLE_NAME = "LocationsTable";
         public static final String COLUMN_NAME_LOCATION_NAME = "Name";
-        public static final String COLUMN_NAME_LONGITUDE = "Longitude"; // D�UGO�� GEOGRAFICZNA
-        public static final String COLUMN_NAME_LATITUDE = "Latitude"; 	// SZEROKO�� GEOGRAFICZNA
+        public static final String COLUMN_NAME_LONGITUDE = "Longitude";
+        public static final String COLUMN_NAME_LATITUDE = "Latitude";
         public static final String COLUMN_NAME_ISMONDAY = "isMonday";
         public static final String COLUMN_NAME_ISTUESDAY = "isTuesday";
         public static final String COLUMN_NAME_ISWEDNESDAY = "isWednesday";
@@ -23,6 +23,7 @@ public class DatabaseContract {
         public static final String COLUMN_NAME_TIMETO_HOURS = "timeToHours";
         public static final String COLUMN_NAME_TIMETO_MINUTES = "timeToMinutes";
         public static final String COLUMN_NAME_RADIUS = "Radius";
+        public static final String COLUMN_NAME_PRIORITY = "Priority";
         public static final String COLUMN_NAME_ISSOUND = "isSound";
         public static final String COLUMN_NAME_ISVIBRATION = "isVibratiom";
         public static final String COLUMN_NAME_ISWIFI = "isWifi";
@@ -55,6 +56,7 @@ public class DatabaseContract {
 	        TableDefinition.COLUMN_NAME_TIMETO_HOURS + INTEGER_TYPE + COMMA_SEP +
 	        TableDefinition.COLUMN_NAME_TIMETO_MINUTES + INTEGER_TYPE + COMMA_SEP +
 	        TableDefinition.COLUMN_NAME_RADIUS + INTEGER_TYPE + COMMA_SEP +
+	        TableDefinition.COLUMN_NAME_PRIORITY + INTEGER_TYPE + COMMA_SEP +
 	        TableDefinition.COLUMN_NAME_ISSOUND + INTEGER_TYPE + COMMA_SEP +
 	        TableDefinition.COLUMN_NAME_ISVIBRATION + INTEGER_TYPE + COMMA_SEP +
 	        TableDefinition.COLUMN_NAME_ISWIFI + INTEGER_TYPE + COMMA_SEP +

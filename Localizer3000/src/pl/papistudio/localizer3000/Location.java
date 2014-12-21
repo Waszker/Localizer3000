@@ -5,13 +5,21 @@ import java.util.Calendar;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Location implements Parcelable {
+/**
+ * Location class represents object created by user
+ * containing all information about place and phone status there.
+ * 
+ * @author PapiTeam
+ *
+ */
+public class Location implements Parcelable, Comparable<Location> {
 	/******************/
 	/*   VARIABLES    */
 	/******************/
 	private String name;
 	private boolean isWifiOn, isBluetoothOn, isNfcOn, isMobileData, isSoundOn, isVibrationOn, isSMSsendOn;
 	private int radius; //in meters
+	private int priority;
 	private Time timeFrom, timeTo;
 	private boolean isMon, isTue, isWed, isThu, isFri, isSat, isSun;
 	private android.location.Location location;
@@ -138,6 +146,23 @@ public class Location implements Parcelable {
 		
 		return isEnabled;
 	}
+	
+	/**
+	 * Compares two location classes.
+	 * One class is bigger than the other when it has higher priority value.
+	 * @param location
+	 * @return 1 if first location has higher priority
+	 * 		   0 if two locations have the same priority
+	 * 		  -1 if second is bigger
+	 */
+	public int compareTo(Location location) {
+		int result = 0;
+		if(this.priority > location.priority)
+			result = 1;
+		if(this.priority < location.priority)
+			result = -1;
+		return result;
+	}
 
 	/************************/
 	/*   GETTERS&SETTERS    */
@@ -221,6 +246,14 @@ public class Location implements Parcelable {
 	public void setRadius(int radius) {
 		if(radius > 0)
 			this.radius = radius;
+	}
+
+	public int getPriority() {
+		return priority;
+	}
+
+	public void setPriority(int priority) {
+		this.priority = priority;
 	}
 
 	public Time getTimeFrom() {

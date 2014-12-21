@@ -1,5 +1,6 @@
 package pl.papistudio.localizer3000;
 
+import java.util.Collections;
 import java.util.List;
 
 import android.app.Activity;
@@ -20,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mobeta.android.dslv.DragSortListView;
+import com.mobeta.android.dslv.DragSortListView.DropListener;
 
 /**
  * Fragment displaying list of saved locations.
@@ -86,19 +88,21 @@ public class ListOfSavedLocationsFragment extends Fragment {
 		    locationName = (TextView)rowView.findViewById(R.id.list_item_location_name);
 		    locationName.setText(list.get(position).getName());
 		    
-		    /* Setting color */
-		    // TODO: change!
-		    if(position % 2 == 0)
-		    	((RelativeLayout)rowView.findViewById(R.id.list_item_location)).setBackgroundColor(activity.getResources().getColor(R.color.material_blue));
-		    else
-		    	((RelativeLayout)rowView.findViewById(R.id.list_item_location)).setBackgroundColor(activity.getResources().getColor(R.color.material_blue_lighter));
-		    
+			/* Setting color */
+			if (position % 2 == 0)
+				((RelativeLayout) rowView.findViewById(R.id.list_item_location))
+						.setBackgroundColor(activity.getResources()
+								.getColor(R.color.material_blue));
+			else
+				((RelativeLayout) rowView.findViewById(R.id.list_item_location))
+						.setBackgroundColor(activity.getResources()
+								.getColor(R.color.material_blue_lighter));
+
 		    /* Adding listener to onclick */
 		    ((ImageButton)rowView.findViewById(R.id.delete_item_button)).setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
-					// TODO: wrap it in a method?
 					Log.d("Item delete", "Deleted item number: " + position);
 					DatabaseHelper dbHelper = DatabaseHelper.getInstance(getActivity().getApplicationContext());
 					dbHelper.deleteLocationAt(list.get(position));
@@ -126,12 +130,14 @@ public class ListOfSavedLocationsFragment extends Fragment {
 	}
 	
 	private void fillListWithLocations(View v) {
-		DatabaseHelper dbHelper = DatabaseHelper.getInstance(getActivity().getApplicationContext());
-		locations = dbHelper.getAllLocations();
+		DatabaseHelper dbHelper = DatabaseHelper.getInstance(getActivity().getApplicationContext());	
+		DragSortListView listView = (DragSortListView)v.findViewById(R.id.list_of_localizations);		
 		
-		DragSortListView listView = (DragSortListView)v.findViewById(R.id.list_of_localizations);
+		locations = dbHelper.getAllLocations();	
+		Collections.sort(locations);
 		adapter = new LocationListAdapter(getActivity(), locations);
 		listView.setAdapter(adapter);		
+		addDropListener(listView);
 		addListViewClickListener(listView, adapter);
 	}
 	
@@ -142,7 +148,8 @@ public class ListOfSavedLocationsFragment extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 					Location i = (Location) adapter.getItem(position);
-					((SavedLocalizationsActivity)ListOfSavedLocationsFragment.this.getActivity()).setCurrentlyUsedLocation(i);
+					((SavedLocalizationsActivity)ListOfSavedLocationsFragment.this
+							.getActivity()).setCurrentlyUsedLocation(i);
 					showDetailsFragment();					
 			}
 			
@@ -155,5 +162,39 @@ public class ListOfSavedLocationsFragment extends Fragment {
 				ft.commit();
 			}
 		});
+	}
+	
+	private void addDropListener(DragSortListView listView) {
+		listView.setDropListener(new DropListener() {
+
+			@Override
+			public void drop(int from, int to) {
+				if(from > to)
+				{
+					Location l = locations.get(from);
+					locations.add(to, l);
+					locations.remove(from+1);					
+				}
+				if(from < to)
+				{
+					Location l = locations.get(from);
+					locations.add(to+1, l);
+					locations.remove(from);					
+				}
+				
+				adapter.notifyDataSetChanged();
+				updateLocationPriorities();
+			}
+		});
+
+	}
+	
+	private void updateLocationPriorities() {
+		int priority = 0;
+		for(Location l : locations)
+		{
+			l.setPriority(priority++);
+			DatabaseHelper.getInstance(getActivity()).updateLocation(l, l.getName());
+		}
 	}
 }

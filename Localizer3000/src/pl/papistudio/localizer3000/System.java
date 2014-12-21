@@ -1,5 +1,7 @@
 package pl.papistudio.localizer3000;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 
@@ -7,7 +9,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.media.AudioManager;
 import android.net.wifi.WifiManager;
-import android.os.Vibrator;
 import android.util.Log;
 
 /**
@@ -34,14 +35,9 @@ public class System {
 		{
 			setWifi(nearestLocation.isWifiOn());
 			setBluetooth(nearestLocation.isBluetoothOn());
-//			setMobileData(nearestLocation.isMobileData());
+			setMobileData(nearestLocation.isMobileData());
 			setSound(nearestLocation.isSoundOn(), nearestLocation.isVibrationOn());
 //			sendSMS();
-			
-			
-			// TODO: Delete this (it is only for debugging purposes!)
-			Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-			v.vibrate(500);
 		}
 		else {
 			Log.d("System Location", "There is no good location to apply...");			
@@ -61,9 +57,11 @@ public class System {
 			Time time = new Time(Calendar.getInstance().get(Calendar.HOUR_OF_DAY), 
 								 Calendar.getInstance().get(Calendar.MINUTE));
 			
-			if(l.isLocationEnabled(day, time) 						// checks if location is active during this time (day + hours)
-					&& minDistance > (loc.distanceTo(location))		// checks if newer location is better than prevoius one
-					&& isLocationValidToApplySettings(l, location))	// check if we are inside "location circle"
+			if(l.isLocationEnabled(day, time) 								// checks if location is active during this time (day + hours)
+					&& minDistance > (loc.distanceTo(location))				// checks if newer location is better than prevoius one
+					&& isLocationValidToApplySettings(l, location)			// check if we are inside "location circle"
+					&& (bestSuitedLocation == null 							// check if new location has lower priority
+						|| l.getPriority() < bestSuitedLocation.getPriority()))
 			{
 				Log.d("System Location", "Good location is: " + l.getName());
 				minDistance = (loc.distanceTo(location));
@@ -115,14 +113,39 @@ public class System {
 			aManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
 	}
 	
-//	private static void setMobileData(boolean isEnabled) {
-//		Intent intent=new Intent(Settings.ACTION_DATA_ROAMING_SETTINGS);
-//		ComponentName cn = new ComponentName("com.android.phone","com.android.phone.Settings");
-//		intent.setComponent(cn);
-//		service.getApplication().startActivity(intent);
-//	}
+	private static void setMobileData(boolean isEnabled) {
+		if(findBinary("su"))
+		{ // if we are here, problably we are rooted ;)
+			try {
+				if(isEnabled)
+					Runtime.getRuntime().exec("su -c svc data enable");
+				else
+					Runtime.getRuntime().exec("su -c svc data disable");
+			} catch (IOException e) {
+				Log.e(TAG, "Error getting root priviledges");
+			}
+		}
+		else
+			Log.e(TAG, "No root...");
+			
+	}
 	
 //	private static void sendSMS() {
 //		SmsManager.getDefault().sendTextMessage("506743135", null, "Yoł!", null, null);		
 //	}
+	
+	private static boolean findBinary(String binaryName) {
+	    boolean found = false;
+	    if (!found) {
+	        String[] places = {"/sbin/", "/system/bin/", "/system/xbin/", "/data/local/xbin/",
+	                "/data/local/bin/", "/system/sd/xbin/", "/system/bin/failsafe/", "/data/local/"};
+	        for (String where : places) {
+	            if ( new File( where + binaryName ).exists() ) {
+	                found = true;
+	                break;
+	            }
+	        }
+	    }
+	    return found;
+	}
 }

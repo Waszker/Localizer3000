@@ -141,7 +141,7 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 		if(((TextView)getView().findViewById(R.id.edit_location_name)).getText().length() != 0)
 			showSecondEditFragment();
 		else
-			Toast.makeText(getActivity(), "Please provide location name at least", Toast.LENGTH_SHORT).show();		
+			Toast.makeText(getActivity(), "Please provide at least location name", Toast.LENGTH_SHORT).show();		
 	}
 	 
 	private void showSecondEditFragment() {

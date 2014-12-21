@@ -16,6 +16,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private static DatabaseHelper dbInstance;
 	private static final int DATABASE_VERSION = 1;
 	private static final String DATABASE_NAME = "Locations.db";
+	private static int currentPriorityNumber;
 
 	/******************/
 	/*   VARIABLES    */
@@ -109,6 +110,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	 */
 	public long addLocation(Location location) {
 		SQLiteDatabase db = this.getWritableDatabase();
+		location.setPriority(currentPriorityNumber++);
 		ContentValues values = createValuesFromLocation(location);
 		long newRowId = db.insert(DatabaseContract.TableDefinition.TABLE_NAME,
 				null, values);
@@ -132,6 +134,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	
 	private DatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		getBiggestPriorityNumber();
+	}
+	
+	private void getBiggestPriorityNumber() {
+		currentPriorityNumber = getAllLocations().size();
 	}
 	
 	private Location createLocationFromCursor(Cursor c) {
@@ -150,13 +157,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		newLocation.setTimeFrom(new Time(c.getInt(11), c.getInt(12)));
 		newLocation.setTimeTo(new Time(c.getInt(13), c.getInt(14)));
 		newLocation.setRadius(c.getInt(15));
-		newLocation.setSoundOn(c.getInt(16) == 0 ? false : true);
-		newLocation.setVibrationOn(c.getInt(17) == 0 ? false : true);
-		newLocation.setWifiOn(c.getInt(18) == 0 ? false : true);
-		newLocation.setBluetoothOn(c.getInt(19) == 0 ? false : true);
-		newLocation.setNfcOn(c.getInt(20) == 0 ? false : true);
-		newLocation.setMobileData(c.getInt(21) == 0 ? false : true);
-		newLocation.setSMSsendOn(c.getInt(22) == 0 ? false : true);
+		newLocation.setPriority(c.getInt(16));
+		newLocation.setSoundOn(c.getInt(17) == 0 ? false : true);
+		newLocation.setVibrationOn(c.getInt(18) == 0 ? false : true);
+		newLocation.setWifiOn(c.getInt(19) == 0 ? false : true);
+		newLocation.setBluetoothOn(c.getInt(20) == 0 ? false : true);
+		newLocation.setNfcOn(c.getInt(21) == 0 ? false : true);
+		newLocation.setMobileData(c.getInt(22) == 0 ? false : true);
+		newLocation.setSMSsendOn(c.getInt(23) == 0 ? false : true);
 		
 		return newLocation;
 	}
@@ -195,6 +203,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				location.getTimeTo().getMinute());
 		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_RADIUS,
 				location.getRadius());
+		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_PRIORITY,
+				location.getPriority());
 		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_ISSOUND,
 				location.isSoundOn() == true ? 1 : 0);
 		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_ISVIBRATION,
