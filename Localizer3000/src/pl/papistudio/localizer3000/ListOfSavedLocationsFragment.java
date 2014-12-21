@@ -140,15 +140,13 @@ public class ListOfSavedLocationsFragment extends Fragment {
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 					Location i = (Location) adapter.getItem(position);
-					Log.d("Click", "Clicked "+i.getName());
-					((SavedLocalizationsActivity)ListOfSavedLocationsFragment.this.getActivity()).currentlyUsedLocation = i;
-					showDetailsFragment(i);					
+					((SavedLocalizationsActivity)ListOfSavedLocationsFragment.this.getActivity()).setCurrentlyUsedLocation(i);
+					showDetailsFragment();					
 			}
 			
-			private void showDetailsFragment(Location location) {
+			private void showDetailsFragment() {
 				FragmentTransaction ft = ListOfSavedLocationsFragment.this.getFragmentManager().beginTransaction();
 				ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out,
 							android.R.animator.fade_in, android.R.animator.fade_out);

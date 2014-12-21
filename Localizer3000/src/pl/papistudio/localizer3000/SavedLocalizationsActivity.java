@@ -10,7 +10,7 @@ public class SavedLocalizationsActivity extends Activity {
 	/******************/
 	/*   VARIABLES    */
 	/******************/
-	public Location currentlyUsedLocation;
+	private Location currentlyUsedLocation;
 
 	/******************/
 	/*   FUNCTIONS    */
@@ -56,5 +56,13 @@ public class SavedLocalizationsActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	public Location getCurrentlyUsedLocation() {
+		return DatabaseHelper.getInstance(this).getLocation(currentlyUsedLocation.getName());
+	}
+
+	public void setCurrentlyUsedLocation(Location currentlyUsedLocation) {
+		this.currentlyUsedLocation = currentlyUsedLocation;
 	}
 }

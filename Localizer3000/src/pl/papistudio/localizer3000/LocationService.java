@@ -53,7 +53,7 @@ public class LocationService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Toast.makeText(this, "Location service starting", Toast.LENGTH_SHORT).show();
         Log.d("Location Service", "Started");
-    	interval = intent.getIntExtra("interval", 5*1000);
+    	interval = intent.getIntExtra("interval", 5*60*1000);
     	registerForLocationUpdates();
     	registerForConnectivityChanges();
         return startMode;

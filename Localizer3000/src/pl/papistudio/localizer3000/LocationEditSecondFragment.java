@@ -184,9 +184,20 @@ public class LocationEditSecondFragment extends Fragment implements OnClickListe
 	}
 	
 	private void saveLocation() {
+		final Location location = ((EditLocationActivity)getActivity()).currentlyEditedLocation;		
 		DatabaseHelper dbHelper = DatabaseHelper.getInstance(getActivity().getApplicationContext());
-		dbHelper.addLocation(((EditLocationActivity)getActivity()).currentlyEditedLocation);
-		Toast.makeText(getActivity(), "Location has been saved", Toast.LENGTH_SHORT).show();
+		
+		if(dbHelper.getLocation(location.getName()) == null)
+		{
+			dbHelper.addLocation(location);
+			Toast.makeText(getActivity(), "Location has been saved", Toast.LENGTH_SHORT).show();
+		}
+		else
+		{
+			dbHelper.updateLocation(location);
+			Toast.makeText(getActivity(), "Location has been updated", Toast.LENGTH_SHORT).show();
+		}
+		
 		getActivity().finish();		
 	}
 }

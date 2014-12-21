@@ -59,7 +59,7 @@ public class LocationDetailsFragment extends Fragment implements OnClickListener
 	 * it means that something went wrong!
 	 */
 	private void getLocationReference() {
-		location = ((SavedLocalizationsActivity)getActivity()).currentlyUsedLocation;		
+		location = ((SavedLocalizationsActivity)getActivity()).getCurrentlyUsedLocation();		
 	}
 	
 	private void fillLocationDetails(View v) {
@@ -104,7 +104,6 @@ public class LocationDetailsFragment extends Fragment implements OnClickListener
 	}
 	
 	private void setTextAndColorForBooleanValues(TextView view, boolean booleanValue) {
-		//view.setText(String.valueOf(booleanValue));
 		if(booleanValue)
 		{
 			view.setText("ON");

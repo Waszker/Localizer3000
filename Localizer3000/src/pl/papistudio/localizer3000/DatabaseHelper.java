@@ -82,67 +82,80 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	/**
 	 * Returns location with the chosen name.
 	 * @param locationName
-	 * @return location object found in database
+	 * @return location object found in database or null if object was not found
 	 */
 	public Location getLocation(String locationName) {
+		String selectQuery = "SELECT  * FROM "
+				+ DatabaseContract.TableDefinition.TABLE_NAME
+				+ " WHERE " + DatabaseContract.TableDefinition.COLUMN_NAME_LOCATION_NAME 
+				+ "=\"" + locationName + "\"";
 		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor c = db.rawQuery(selectQuery, null);
 
-		// Define a projection that specifies which columns from the database
-		// you will actually use after this query.
-		String[] projection = {
-				DatabaseContract.TableDefinition.COLUMN_NAME_LOCATION_NAME,
-				DatabaseContract.TableDefinition.COLUMN_NAME_LONGITUDE,
-				DatabaseContract.TableDefinition.COLUMN_NAME_LATITUDE,
-				DatabaseContract.TableDefinition.COLUMN_NAME_ISMONDAY,
-				DatabaseContract.TableDefinition.COLUMN_NAME_ISTUESDAY,
-				DatabaseContract.TableDefinition.COLUMN_NAME_ISWEDNESDAY,
-				DatabaseContract.TableDefinition.COLUMN_NAME_ISTHURSDAY,
-				DatabaseContract.TableDefinition.COLUMN_NAME_ISFRIDAY,
-				DatabaseContract.TableDefinition.COLUMN_NAME_ISSATURDAY,
-				DatabaseContract.TableDefinition.COLUMN_NAME_ISSUNDAY,
-				DatabaseContract.TableDefinition.COLUMN_NAME_TIMEFROM_HOURS,
-				DatabaseContract.TableDefinition.COLUMN_NAME_TIMEFROM_MINUTES,
-				DatabaseContract.TableDefinition.COLUMN_NAME_TIMETO_HOURS,
-				DatabaseContract.TableDefinition.COLUMN_NAME_TIMETO_MINUTES,
-				DatabaseContract.TableDefinition.COLUMN_NAME_RADIUS,
-				DatabaseContract.TableDefinition.COLUMN_NAME_ISSOUND,
-				DatabaseContract.TableDefinition.COLUMN_NAME_ISVIBRATION,
-				DatabaseContract.TableDefinition.COLUMN_NAME_ISWIFI,
-				DatabaseContract.TableDefinition.COLUMN_NAME_ISBLUETOOTH,
-				DatabaseContract.TableDefinition.COLUMN_NAME_ISNFC,
-				DatabaseContract.TableDefinition.COLUMN_NAME_ISMOBILEDATA,
-				DatabaseContract.TableDefinition.COLUMN_NAME_ISSMS };
-
-		String selection = DatabaseContract.TableDefinition.COLUMN_NAME_LOCATION_NAME
-				+ "=?";
-
-		String[] selectionArgs = { locationName };
-
-		Cursor c = db.query(DatabaseContract.TableDefinition.TABLE_NAME, // The
-																			// table
-																			// to
-																			// query
-				projection, // The columns to return
-				selection, // The columns for the WHERE clause
-				selectionArgs, // The values for the WHERE clause
-				null, // don't group the rows
-				null, // don't filter by row groups
-				null // The sort order
-				);
-
-		if (c != null)
-			c.moveToFirst();
-
-		Location newLocation = createLocationFromCursor(c);
-		c.close();
+		Location newLocation = null;
+		if (c.moveToFirst())
+		{			
+			newLocation = createLocationFromCursor(c);
+			c.close();
+		}
 		
 		return newLocation;
 	}
 
+	/**
+	 * Adds location object to database
+	 * @param location
+	 * @return id of the put object
+	 */
 	public long addLocation(Location location) {
 		SQLiteDatabase db = this.getWritableDatabase();
+		ContentValues values = createValuesFromLocation(location);
+		long newRowId = db.insert(DatabaseContract.TableDefinition.TABLE_NAME,
+				null, values);
 
-		// Create a new map of values, where column names are the keys
+		return newRowId;
+	}
+	
+	public void updateLocation(Location location) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		ContentValues values = createValuesFromLocation(location);
+		db.update(DatabaseContract.TableDefinition.TABLE_NAME, values, 
+				  DatabaseContract.TableDefinition.COLUMN_NAME_LOCATION_NAME + 
+				  "=\"" + location.getName() + "\"", null);
+	}
+	
+	private DatabaseHelper(Context context) {
+		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+	}
+	
+	private Location createLocationFromCursor(Cursor c) {
+		Location newLocation = new Location(c.getString(1));
+		android.location.Location GeoLocation = new android.location.Location("");
+		GeoLocation.setLongitude(c.getDouble(2));
+		GeoLocation.setLatitude(c.getDouble(3));
+		newLocation.setLocation(GeoLocation);
+		newLocation.setMon(c.getInt(4) == 0 ? false : true);
+		newLocation.setTue(c.getInt(5) == 0 ? false : true);
+		newLocation.setWed(c.getInt(6) == 0 ? false : true);
+		newLocation.setThu(c.getInt(7) == 0 ? false : true);
+		newLocation.setFri(c.getInt(8) == 0 ? false : true);
+		newLocation.setSat(c.getInt(9) == 0 ? false : true);
+		newLocation.setSun(c.getInt(10) == 0 ? false : true);
+		newLocation.setTimeFrom(new Time(c.getInt(11), c.getInt(12)));
+		newLocation.setTimeTo(new Time(c.getInt(13), c.getInt(14)));
+		newLocation.setRadius(c.getInt(15));
+		newLocation.setSoundOn(c.getInt(16) == 0 ? false : true);
+		newLocation.setVibrationOn(c.getInt(17) == 0 ? false : true);
+		newLocation.setWifiOn(c.getInt(18) == 0 ? false : true);
+		newLocation.setBluetoothOn(c.getInt(19) == 0 ? false : true);
+		newLocation.setNfcOn(c.getInt(20) == 0 ? false : true);
+		newLocation.setMobileData(c.getInt(21) == 0 ? false : true);
+		newLocation.setSMSsendOn(c.getInt(22) == 0 ? false : true);
+		
+		return newLocation;
+	}
+	
+	private ContentValues createValuesFromLocation(Location location) {
 		ContentValues values = new ContentValues();
 
 		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_LOCATION_NAME,
@@ -190,42 +203,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				location.isMobileData() == true ? 1 : 0);
 		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_ISSMS,
 				location.isSMSsendOn() == true ? 1 : 0);
-
-		// Insert the new row, returning the primary key value of the new row
-		long newRowId = db.insert(DatabaseContract.TableDefinition.TABLE_NAME,
-				null, values);
-
-		return newRowId;
-	}	
-	
-	private DatabaseHelper(Context context) {
-		super(context, DATABASE_NAME, null, DATABASE_VERSION);
-	}
-	
-	private Location createLocationFromCursor(Cursor c) {
-		Location newLocation = new Location(c.getString(1));
-		android.location.Location GeoLocation = new android.location.Location("");
-		GeoLocation.setLongitude(c.getDouble(2));
-		GeoLocation.setLatitude(c.getDouble(3));
-		newLocation.setLocation(GeoLocation);
-		newLocation.setMon(c.getInt(4) == 0 ? false : true);
-		newLocation.setTue(c.getInt(5) == 0 ? false : true);
-		newLocation.setWed(c.getInt(6) == 0 ? false : true);
-		newLocation.setThu(c.getInt(7) == 0 ? false : true);
-		newLocation.setFri(c.getInt(8) == 0 ? false : true);
-		newLocation.setSat(c.getInt(9) == 0 ? false : true);
-		newLocation.setSun(c.getInt(10) == 0 ? false : true);
-		newLocation.setTimeFrom(new Time(c.getInt(11), c.getInt(12)));
-		newLocation.setTimeTo(new Time(c.getInt(13), c.getInt(14)));
-		newLocation.setRadius(c.getInt(15));
-		newLocation.setSoundOn(c.getInt(16) == 0 ? false : true);
-		newLocation.setVibrationOn(c.getInt(17) == 0 ? false : true);
-		newLocation.setWifiOn(c.getInt(18) == 0 ? false : true);
-		newLocation.setBluetoothOn(c.getInt(19) == 0 ? false : true);
-		newLocation.setNfcOn(c.getInt(20) == 0 ? false : true);
-		newLocation.setMobileData(c.getInt(21) == 0 ? false : true);
-		newLocation.setSMSsendOn(c.getInt(22) == 0 ? false : true);
 		
-		return newLocation;
+		return values;
 	}
 }

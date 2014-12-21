@@ -189,7 +189,7 @@ public class MainActivity extends Activity {
 	
 	private void startLocationService() {
 		Intent intent = new Intent(this, LocationService.class);
-		intent.putExtra("interval", 1000*getSharedPreferences(MainActivity.SHARED_PREFERENCES, 
+		intent.putExtra("interval", 60*1000*getSharedPreferences(MainActivity.SHARED_PREFERENCES, 
 										Context.MODE_PRIVATE).getInt(INTERVAL_PREFERENCE, 5));
 		startService(intent);
 	}
