@@ -84,15 +84,15 @@ public class Location implements Parcelable, Comparable<Location> {
 	 * @param Sat
 	 * @param Sun
 	 */
-	public void setDaysOfWeek(boolean Mon, boolean Tue, boolean Wed, boolean Thu,
-			boolean Fri, boolean Sat, boolean Sun) {
-		this.isMon = Mon;
-		this.isTue = Tue;
-		this.isWed = Wed;
-		this.isThu = Thu;
-		this.isFri = Fri;
-		this.isSat = Sat;
-		this.isSun = Sun;
+	public void setDaysOfWeek(boolean mon, boolean tue, boolean wed, boolean thu,
+			boolean fri, boolean sat, boolean sun) {
+		this.isMon = mon;
+		this.isTue = tue;
+		this.isWed = wed;
+		this.isThu = thu;
+		this.isFri = fri;
+		this.isSat = sat;
+		this.isSun = sun;
 	}
 	
 	/**
@@ -138,11 +138,15 @@ public class Location implements Parcelable, Comparable<Location> {
 		}
 		
 		if(timeFrom.compareTo(timeTo) > 0)
-			if(time.compareTo(timeFrom) >= 0 && time.compareTo(timeTo) <= 0)
+		{
+			if(time.compareTo(timeFrom) < 0 && time.compareTo(timeTo) > 0)
 				isEnabled = false;
+		}
 		else
+		{
 			if(time.compareTo(timeFrom) < 0 || time.compareTo(timeTo) > 0)
 				isEnabled = false;
+		}
 		
 		return isEnabled;
 	}

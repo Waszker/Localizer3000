@@ -57,15 +57,25 @@ public class Time implements Parcelable {
 		return stringBuilder.toString();
 	}
 	
+	/**
+	 * 
+	 * @param refTime
+	 * @return 1 if first time you compare to is smaller (before your time)
+	 * 		   0 if both are equal
+	 * 		  -1 if time you compare to is bigger
+	 */
 	public int compareTo(Time refTime) {
 		int result;
+		
 		if(hour == refTime.getHour() && minute == refTime.getMinute())
 			result = 0;
-		
-		if(hour > refTime.getHour() || (hour == refTime.getHour() && minute > refTime.minute))
-			result = 1;
 		else
-			result = -1;
+		{
+			if(hour > refTime.getHour() || (hour == refTime.getHour() && minute > refTime.minute))
+				result = 1;
+			else
+				result = -1;
+		}
 		
 		return result;
 	}

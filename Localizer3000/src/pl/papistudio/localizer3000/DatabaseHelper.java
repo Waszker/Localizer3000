@@ -9,7 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class DatabaseHelper extends SQLiteOpenHelper {
+public final class DatabaseHelper extends SQLiteOpenHelper {
 	/******************/
 	/*   VARIABLES    */
 	/******************/
@@ -143,10 +143,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	
 	private Location createLocationFromCursor(Cursor c) {
 		Location newLocation = new Location(c.getString(1));
-		android.location.Location GeoLocation = new android.location.Location("");
-		GeoLocation.setLongitude(c.getDouble(2));
-		GeoLocation.setLatitude(c.getDouble(3));
-		newLocation.setLocation(GeoLocation);
+		android.location.Location geoLocation = new android.location.Location("");
+		geoLocation.setLongitude(c.getDouble(2));
+		geoLocation.setLatitude(c.getDouble(3));
+		newLocation.setLocation(geoLocation);
 		newLocation.setMon(c.getInt(4) == 0 ? false : true);
 		newLocation.setTue(c.getInt(5) == 0 ? false : true);
 		newLocation.setWed(c.getInt(6) == 0 ? false : true);
