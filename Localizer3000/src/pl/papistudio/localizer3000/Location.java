@@ -151,6 +151,12 @@ public class Location implements Parcelable, Comparable<Location> {
 		return isEnabled;
 	}
 	
+
+	@Override
+	public String toString() {
+		return name;
+	}
+	
 	/**
 	 * Compares two location classes.
 	 * One class is bigger than the other when it has higher priority value.
@@ -248,7 +254,7 @@ public class Location implements Parcelable, Comparable<Location> {
 	}
 
 	public void setRadius(int radius) {
-		if(radius > 0)
+		if(radius > 0 && radius < Integer.MAX_VALUE)
 			this.radius = radius;
 	}
 

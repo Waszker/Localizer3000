@@ -1,0 +1,42 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="pl.papistudio.localizer3000.SMSActivity$SMSListFragment" >
+
+    <com.mobeta.android.dslv.DragSortListView
+        xmlns:dslv="http://schemas.android.com/apk/res/pl.papistudio.localizer3000"
+        android:id="@+id/list_of_sms"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:focusable="true"
+        dslv:drag_enabled="true"
+        dslv:drag_start_mode="onLongPress"
+        dslv:remove_enabled="false"
+        dslv:remove_mode="flingRemove" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom" >
+
+        <com.melnykov.fab.FloatingActionButton
+            xmlns:fab="http://schemas.android.com/apk/res/pl.papistudio.localizer3000"
+            android:id="@+id/sms_add_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:onClick="addNewLocationClick"
+            android:src="@drawable/add_location"
+            fab:fab_colorNormal="@color/material_blue"
+            fab:fab_colorPressed="@color/material_blue_lighter"
+            fab:fab_colorRipple="@color/material_blue" />
+    </RelativeLayout>
+
+</RelativeLayout>

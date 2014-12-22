@@ -2,15 +2,16 @@
 <resources>
 
     <string name="app_name">Localizer3000</string>
-    
-<!--     Location list and details -->
+
+    <!-- Location list and details -->
     <string name="edit_text">Edit</string>
     <string name="delete_text">Delete</string>
     <string name="main_activity_service_status_text">Service status:</string>
     <string name="main_activity_text1">Current coordinates:</string>
     <string name="main_activity_button1_text">Add location</string>
     <string name="main_activity_button2_text">My locations</string>
-    <string name="current_localization">Unknown</string>
+    <string name="sms_management_button_text">Manage SMS</string>
+    <string name="current_localization">\nUnknown\n</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_saved_localizations">Saved locations</string>
     <string name="fragment_location_details_text">Location details</string>
@@ -23,10 +24,10 @@
     <string name="fragment_location_details_bluetooth">Bluetooth:</string>
     <string name="fragment_location_details_nfc">NFC:</string>
     <string name="fragment_location_details_mobile_data">Mobile Data:</string>
-	<string name="fragment_location_details_SMS">SMS:</string>
+    <string name="fragment_location_details_SMS">SMS:</string>
     <string name="title_activity_edit_location">Edit location</string>
-    
-<!--     Location edit -->
+
+    <!-- Location edit -->
     <string name="fragment_location_edit_time_from">From: 00:00</string>
     <string name="fragment_location_edit_time_to">To:   23:59</string>
     <string name="edit_location_name_edittext_hint">Enter location name</string>
@@ -38,5 +39,13 @@
     <string name="cancel_text">Cancel</string>
     <string name="back_text">Back</string>
     <string name="save_text">Save</string>
+    <string name="title_activity_sms">SMS Edition</string>
+    <string name="hello_world">Hello world!</string>
+
+    <!-- SMS strings -->
+    <string name="message_receiver_hint">Receiver number</string>
+    <string name="message_text_hint">Enter message text</string>
+    <string name="message_location">Send when location: </string>
+    
 
 </resources>

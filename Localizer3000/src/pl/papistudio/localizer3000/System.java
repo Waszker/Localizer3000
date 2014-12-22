@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 
+import de.greenrobot.event.EventBus;
+
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.media.AudioManager;
@@ -32,17 +34,19 @@ public class System {
 		System.service = service;
 		Location nearestLocation = findNearestLocation(location, context);		
 		if(nearestLocation != null)
-		{
-			setWifi(nearestLocation.isWifiOn());
-			setBluetooth(nearestLocation.isBluetoothOn());
-			setMobileData(nearestLocation.isMobileData());
-			setSound(nearestLocation.isSoundOn(), nearestLocation.isVibrationOn());
-//			sendSMS();
-		}
-		else {
-			Log.d("System Location", "There is no good location to apply...");			
-		}
-	}	
+			updatePhoneStatusForFoundLocation(nearestLocation);
+		else
+			Log.d("System Location", "There is no good location to apply...");
+	}
+	
+	private static void updatePhoneStatusForFoundLocation(Location nearestLocation) {
+		EventBus.getDefault().post(nearestLocation);
+		setWifi(nearestLocation.isWifiOn());
+		setBluetooth(nearestLocation.isBluetoothOn());
+		setMobileData(nearestLocation.isMobileData());
+		setSound(nearestLocation.isSoundOn(), nearestLocation.isVibrationOn());
+//		sendSMS();
+	}
 	
 	private static Location findNearestLocation(android.location.Location location, Context context) {
 		DatabaseHelper dbHelper = DatabaseHelper.getInstance(context);
@@ -106,7 +110,7 @@ public class System {
 		if(!isVibrationEnabled && isSoundEnabled)
 		{
 			aManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-			aManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
+			aManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, // this doesn't work on newer API
 		            AudioManager.VIBRATE_SETTING_OFF);
 		}
 		if(isVibrationEnabled && isSoundEnabled)
@@ -136,16 +140,18 @@ public class System {
 	
 	private static boolean findBinary(String binaryName) {
 	    boolean found = false;
-	    if (!found) {
-	        String[] places = {"/sbin/", "/system/bin/", "/system/xbin/", "/data/local/xbin/",
-	                "/data/local/bin/", "/system/sd/xbin/", "/system/bin/failsafe/", "/data/local/"};
-	        for (String where : places) {
-	            if ( new File( where + binaryName ).exists() ) {
-	                found = true;
-	                break;
-	            }
-	        }
-	    }
+	    String[] places = {"/sbin/", "/system/bin/", "/system/xbin/", "/data/local/xbin/",
+                "/data/local/bin/", "/system/sd/xbin/", "/system/bin/failsafe/", "/data/local/"};
+	    
+        for (String where : places) 
+        {
+            if ( new File( where + binaryName ).exists() ) 
+            {
+                found = true;
+                break;
+            }
+        }
+	        
 	    return found;
 	}
 }

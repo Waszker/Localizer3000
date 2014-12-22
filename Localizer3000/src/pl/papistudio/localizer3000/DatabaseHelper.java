@@ -132,6 +132,11 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 				  "=\"" + originalName + "\"", null);
 	}
 	
+	// TODO: Change!
+	public List<SMS> getAllSMS() {
+		return new ArrayList<SMS>();
+	}
+	
 	private DatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		getBiggestPriorityNumber();

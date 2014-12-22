@@ -90,6 +90,10 @@ public class LocationService extends Service {
 			registerForLocationUpdates();
 		}
 	}
+	
+	public void onEvent(Location l) {
+		updateNotification("Currently active profile:\n"+l.getName());
+	}
     
     @Override
     public void onDestroy() {
@@ -124,7 +128,6 @@ public class LocationService extends Service {
 		locationListener = new LocationListener() {
 		    public void onLocationChanged(android.location.Location location) {
 		    	LocationService.this.location = location;
-		    	updateNotification(location.getLatitude() + " " + location.getLongitude());
 		    	broadcastNewLocation(location);
 		    	System.reactToLocationChange(location, LocationService.this.getApplicationContext(), LocationService.this);
 		    	Log.d(TAG, "Location updated");

@@ -136,6 +136,15 @@ public class MainActivity extends Activity {
 	}
 	
 	/**
+	 * Opens activity for managing SMS.
+	 * @param v
+	 */
+	public void manageSMS(View v) {
+		Intent intent = new Intent(this, SMSActivity.class);
+		startActivity(intent);
+	}
+	
+	/**
 	 * Sent via EventBus exception holds
 	 * important information to show to the user.
 	 * @param error
@@ -177,7 +186,7 @@ public class MainActivity extends Activity {
 			public void run() {
 				((TextView) findViewById(R.id.current_location_textview))
 						.setText(location.getLatitude() + "\n"
-								+ location.getLongitude() + "\nwith accu: "
+								+ location.getLongitude() + "\nwith accuracy: "
 								+ location.getAccuracy());				
 			}
 		});
