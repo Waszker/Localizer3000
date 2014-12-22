@@ -340,33 +340,6 @@
                 
             </TableLayout>
             
-            <!-- Radius -->
-
-			<View
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/darker_gray"
-                android:layout_margin="15dp" />
-			
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/fragment_location_details_radius"
-                android:textSize="@dimen/location_details_static_text" />
-
-            <NumberPicker
-			    android:id="@+id/RadiusPicker"
-			    android:layout_width="match_parent"
-			    android:layout_height="wrap_content"
-			    android:orientation="horizontal" />
-            
-<!--             <Button -->
-<!--                 android:id="@+id/edit_location_radius_button" -->
-<!--                 android:layout_width="match_parent" -->
-<!--                 android:layout_height="wrap_content" -->
-<!--                 android:layout_marginTop="10dp" -->
-<!--                 android:text="@string/fragment_location_edit_radius" />  -->
-            
         </LinearLayout>      
                 
     </ScrollView>   

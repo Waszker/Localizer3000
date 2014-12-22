@@ -1,6 +1,8 @@
 package pl.papistudio.localizer3000;
 
-import android.R.integer;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -13,7 +15,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.NumberPicker;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -40,21 +41,13 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_location_edit1, container, false);
+		checkForGooglePlayServicesAndExitIfNone();
 		getLocationReference();
 		fillNullLocation();
 		saveLocationOriginalName();
 		addOnClickActionsToButtons(rootView);
 		fillLocationDetails(rootView);
 		
-		
-		String[] values=new String[546];
-		for(int i=0;i<values.length;i++){
-		 values[i]=Integer.toString((i+5)*10);
-		}
-		NumberPicker np= (NumberPicker) rootView.findViewById(R.id.RadiusPicker);
-		np.setMaxValue(values.length-1);
-		np.setMinValue(Integer.parseInt(values[0]));
-		np.setDisplayedValues(values);
 		return rootView;
 	}
 
@@ -77,6 +70,16 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 	 */
 	public void reactToUserLeavingEdition() {
 		showCancelConfirmationDialog();
+	}
+	
+	private void checkForGooglePlayServicesAndExitIfNone() {
+		if(GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity()) != ConnectionResult.SUCCESS)
+		{
+			Toast.makeText(LocationEditFirstFragment.this.getActivity(), 
+        			"Problems with Google Services!", Toast.LENGTH_SHORT).show();
+        	getActivity().setResult(Activity.RESULT_CANCELED, null);
+        	LocationEditFirstFragment.this.getActivity().finish(); 
+		}
 	}
 	
 	private void getLocationReference() {
