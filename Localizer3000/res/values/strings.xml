@@ -17,6 +17,7 @@
     <string name="fragment_location_details_name">Location name:</string>
     <string name="fragment_location_details_active_days">Active on days:</string>
     <string name="fragment_location_details_active_time">Active time:</string>
+    <string name="fragment_location_details_radius">Radius:</string>
     <string name="fragment_location_details_sound">Sounds:</string>
     <string name="fragment_location_details_vibrations">Vibrations:</string>
     <string name="fragment_location_details_wifi">Wifi:</string>
@@ -29,6 +30,7 @@
 <!--     Location edit -->
     <string name="fragment_location_edit_time_from">From: 00:00</string>
     <string name="fragment_location_edit_time_to">To:   23:59</string>
+    <string name="fragment_location_edit_radius">100 meters</string>
     <string name="edit_location_name_edittext_hint">Enter location name</string>
     <string name="radius_plus_text">+1</string>
     <string name="radius_minus_text">&#8212;1</string>

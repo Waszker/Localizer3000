@@ -76,6 +76,7 @@ public class LocationDetailsFragment extends Fragment implements OnClickListener
 		((TextView)v.findViewById(R.id.details_location_name)).setText(location.getName());
 		((TextView)v.findViewById(R.id.details_location_days)).setText(createActiveDaysString());
 		((TextView)v.findViewById(R.id.details_location_hours)).setText(createActiveHoursString());
+		((TextView)v.findViewById(R.id.details_location_radius)).setText(location.getRadius());
 		
 		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_sounds), location.isSoundOn());
 		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_vibrations), location.isVibrationOn());
@@ -85,6 +86,7 @@ public class LocationDetailsFragment extends Fragment implements OnClickListener
 		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_mobile_data), location.isMobileData());
 		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_nfc), location.isNfcOn());
 		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_SMS), location.isSMSsendOn());
+		
 	}
 	
 	private String createActiveDaysString() {

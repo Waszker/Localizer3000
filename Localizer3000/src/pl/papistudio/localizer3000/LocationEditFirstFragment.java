@@ -1,5 +1,6 @@
 package pl.papistudio.localizer3000;
 
+import android.R.integer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.NumberPicker;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -43,6 +45,16 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 		saveLocationOriginalName();
 		addOnClickActionsToButtons(rootView);
 		fillLocationDetails(rootView);
+		
+		
+		String[] values=new String[546];
+		for(int i=0;i<values.length;i++){
+		 values[i]=Integer.toString((i+5)*10);
+		}
+		NumberPicker np= (NumberPicker) rootView.findViewById(R.id.RadiusPicker);
+		np.setMaxValue(values.length-1);
+		np.setMinValue(Integer.parseInt(values[0]));
+		np.setDisplayedValues(values);
 		return rootView;
 	}
 
@@ -94,7 +106,7 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 		((ToggleButton)v.findViewById(R.id.toggle_friday)).setChecked(location.isFri());
 		((ToggleButton)v.findViewById(R.id.toggle_saturday)).setChecked(location.isSat());
 		((ToggleButton)v.findViewById(R.id.toggle_sunday)).setChecked(location.isSun());
-		
+						
 		setActiveTimeStrings(v, location.getTimeFrom(), location.getTimeTo());
 	}
 	 
@@ -173,6 +185,7 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 		return selectedTime;
 	 }
 	 
+	 
 	 private void setActiveTimeStrings(View v, Time from, Time to) {
 		 ((Button)v.findViewById(R.id.edit_location_time_from_button)).setText("From: " + from.toString());
 		 ((Button)v.findViewById(R.id.edit_location_time_to_button)).setText("To: " + to.toString());		 
@@ -187,7 +200,6 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 			location.setSoundOn(((Switch)getView().findViewById(R.id.edit_location_sound_switch)).isChecked());
 			location.setVibrationOn(((Switch)getView().findViewById(R.id.edit_location_vibration_switch)).isChecked());
 			location.setLocation(location.getLocation());
-
 			location.setMon(((ToggleButton)getView().findViewById(R.id.toggle_monday)).isChecked());
 			location.setTue(((ToggleButton)getView().findViewById(R.id.toggle_tuesday)).isChecked());
 			location.setWed(((ToggleButton)getView().findViewById(R.id.toggle_wednesday)).isChecked());
