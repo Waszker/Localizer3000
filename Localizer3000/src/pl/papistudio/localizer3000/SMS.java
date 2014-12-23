@@ -15,8 +15,12 @@ public class SMS {
 	/******************/
 	/*   FUNCTIONS    */
 	/******************/
-	public SMS(int id, String name, int number, String text, Location location) {
-		uniqueIdNumber = id;
+	public SMS() {
+		
+	}
+	
+	public SMS(String name, int number, String text, Location location) {
+		uniqueIdNumber = -1;
 		receiverName = name;
 		receiverNumber = number;
 		messageText = text;
@@ -24,7 +28,7 @@ public class SMS {
 	}
 	
 	public String getName() {
-		return locationToSend.getName() + " : " + receiverName;
+		return locationToSend.getName() + " : " + receiverNumber;
 	}
 
 	public String getReceiverName() {

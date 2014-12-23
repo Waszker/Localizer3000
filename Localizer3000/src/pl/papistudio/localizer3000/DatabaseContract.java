@@ -70,6 +70,25 @@ public class DatabaseContract {
 //            "DROP TABLE IF EXISTS " + TableDefinition.TABLE_NAME;
                
     }
+	
+	public static abstract class TableSMSDefinition implements BaseColumns {
+        public static final String TABLE_NAME = "SMSTable";
+        public static final String COLUMN_NAME_RECEIVER_NUMBER = "Number";
+        public static final String COLUMN_NAME_MESSAGE_TEXT = "Text";
+        public static final String COLUMN_NAME_LOCATION_NAME = "Location";
+
+        private static final String TEXT_TYPE = " TEXT";
+        private static final String COMMA_SEP = ", ";
+        
+        public static final String SQL_CREATE_TABLE  =
+            "CREATE TABLE " 
+            + TableSMSDefinition.TABLE_NAME + "(" +
+            TableSMSDefinition._ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+            TableSMSDefinition.COLUMN_NAME_RECEIVER_NUMBER + TEXT_TYPE + COMMA_SEP + 
+            TableSMSDefinition.COLUMN_NAME_MESSAGE_TEXT + TEXT_TYPE + COMMA_SEP +
+	        TableSMSDefinition.COLUMN_NAME_LOCATION_NAME + TEXT_TYPE +           
+            ")";               
+    }
 }
 
 

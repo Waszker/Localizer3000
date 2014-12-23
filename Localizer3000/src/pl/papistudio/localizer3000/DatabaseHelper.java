@@ -39,6 +39,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(DatabaseContract.TableDefinition.SQL_CREATE_TABLE);
+		db.execSQL(DatabaseContract.TableSMSDefinition.SQL_CREATE_TABLE);
 	}
 
 	@Override
@@ -132,9 +133,32 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 				  "=\"" + originalName + "\"", null);
 	}
 	
+	public void addSMS(SMS sms) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		ContentValues values = createValuesFromSMS(sms);
+		db.insert(DatabaseContract.TableSMSDefinition.TABLE_NAME, null, values);	
+	}
+	
+//	public void updateSMS(SMS sms) {
+//		
+//	}
+	
 	// TODO: Change!
 	public List<SMS> getAllSMS() {
-		return new ArrayList<SMS>();
+		String selectQuery = "SELECT  * FROM "
+				+ DatabaseContract.TableSMSDefinition.TABLE_NAME;
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor c = db.rawQuery(selectQuery, null);
+
+		List<SMS> smsList = new ArrayList<>();
+		if (c.moveToFirst()) {
+			do {
+				smsList.add(createSMSFromCursor(c));
+			} while (c.moveToNext());
+		}
+		c.close();
+
+		return smsList;
 	}
 	
 	private DatabaseHelper(Context context) {
@@ -224,6 +248,30 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 				location.isMobileData() == true ? 1 : 0);
 		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_ISSMS,
 				location.isSMSsendOn() == true ? 1 : 0);
+		
+		return values;
+	}
+	
+	private SMS createSMSFromCursor(Cursor c) {
+		SMS newSMS = new SMS();
+		
+		newSMS.setUniqueIdNumber(c.getInt(0));
+		newSMS.setReceiverNumber(Integer.parseInt(c.getString(1)));
+		newSMS.setMessageText(c.getString(2));
+		newSMS.setLocationToSend(new Location(c.getString(3)));
+		
+		return newSMS;
+	}
+	
+	private ContentValues createValuesFromSMS(SMS sms) {
+		ContentValues values = new ContentValues();
+
+		values.put(DatabaseContract.TableSMSDefinition.COLUMN_NAME_RECEIVER_NUMBER,
+				String.valueOf(sms.getReceiverNumber()));
+		values.put(DatabaseContract.TableSMSDefinition.COLUMN_NAME_MESSAGE_TEXT,
+				sms.getMessageText());
+		values.put(DatabaseContract.TableSMSDefinition.COLUMN_NAME_LOCATION_NAME,
+				sms.getLocationToSend().getName());
 		
 		return values;
 	}

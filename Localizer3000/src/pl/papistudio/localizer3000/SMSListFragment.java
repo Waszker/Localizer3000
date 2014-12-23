@@ -39,7 +39,7 @@ public class SMSListFragment extends Fragment implements OnClickListener {
 		/******************/
 		private LayoutInflater inflater;
 		private List<SMS> list;
-		private TextView locationName;
+		private TextView smsName;
 		private Activity activity;
 
 		/******************/
@@ -76,8 +76,8 @@ public class SMSListFragment extends Fragment implements OnClickListener {
 		    {
 		        rowView = inflater.inflate(R.layout.saved_location_list_item, parent, false);
 		    }
-		    locationName = (TextView)rowView.findViewById(R.id.list_item_location_name);
-		    locationName.setText(list.get(position).getName());
+		    smsName = (TextView)rowView.findViewById(R.id.list_item_location_name);
+		    smsName.setText(list.get(position).getName());
 		    
 			/* Setting color */
 			if (position % 2 == 0)

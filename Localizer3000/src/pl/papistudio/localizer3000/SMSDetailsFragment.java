@@ -3,7 +3,9 @@ package pl.papistudio.localizer3000;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -18,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class SMSDetailsFragment extends Fragment implements OnClickListener {
 	/******************/
@@ -38,7 +41,7 @@ public class SMSDetailsFragment extends Fragment implements OnClickListener {
 			fillSMSDetails(sms, rootView);
 		else
 		{
-			sms = new SMS(0, "", 0, "", null);
+			sms = new SMS("", 0, "", null);
 			((SMSActivity)getActivity()).setCurrentlyUsedSMS(sms);
 		}			
 		setSpinnerItems(rootView);
@@ -55,19 +58,28 @@ public class SMSDetailsFragment extends Fragment implements OnClickListener {
 	        startActivityForResult(contactPickerIntent, REQUEST_CONTACT_NUMBER);
 		}
 		if(v.getId() == R.id.edit_sms_cancel_button)
-			getFragmentManager().popBackStack();
+		{
+			showCancelConfirmationDialog();
+		}
 		if(v.getId() == R.id.edit_sms_save_button)
 		{
-			sms.setLocationToSend((Location)((Spinner)getView().findViewById(R.id.sms_location_chooser)).getSelectedItem());
-			sms.setMessageText(((EditText)getView().findViewById(R.id.sms_message_text)).getText().toString());
-			getFragmentManager().popBackStack(); // TODO: change to save!
+			if(parseAndCheckSMSDataValidity())
+			{
+				sms.setReceiverNumber(Integer.valueOf(((EditText)getView().findViewById(R.id.sms_receiver_number)).getText().toString()));
+				sms.setLocationToSend((Location)((Spinner)getView().findViewById(R.id.sms_location_chooser)).getSelectedItem());
+				sms.setMessageText(((EditText)getView().findViewById(R.id.sms_message_text)).getText().toString());
+				DatabaseHelper.getInstance(getActivity()).addSMS(sms);
+				getFragmentManager().popBackStack();
+			}
+			else
+				Toast.makeText(getActivity(), "Fill all SMS details before saving.", Toast.LENGTH_SHORT).show();
 		}
 	}
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 	        if (resultCode == Activity.RESULT_OK) 
 	        {
-	            if(data != null && requestCode == REQUEST_CONTACT_NUMBER) 
+	            if(data != null && requestCode == REQUEST_CONTACT_NUMBER) // we just came back form contact picking 
 	            {  
 	                Uri uriOfPhoneNumberRecord = data.getData();
 	                String idOfPhoneRecord = uriOfPhoneNumberRecord.getLastPathSegment();
@@ -95,7 +107,7 @@ public class SMSDetailsFragment extends Fragment implements OnClickListener {
 	}
 	
 	private void fillSMSDetails(SMS sms, View v) {
-		((EditText)v.findViewById(R.id.sms_receiver_number)).setText(sms.getReceiverNumber());
+		((EditText)v.findViewById(R.id.sms_receiver_number)).setText(String.valueOf(sms.getReceiverNumber()));
 		((EditText)v.findViewById(R.id.sms_message_text)).setText(sms.getMessageText());
 	}
 	
@@ -112,5 +124,38 @@ public class SMSDetailsFragment extends Fragment implements OnClickListener {
 		((Button)v.findViewById(R.id.edit_sms_save_button)).setOnClickListener(this);
 		((Button)v.findViewById(R.id.edit_sms_cancel_button)).setOnClickListener(this);
 		((ImageButton)v.findViewById(R.id.add_sms_receiver_button)).setOnClickListener(this);
+	}
+	
+	private void showCancelConfirmationDialog() {
+		new AlertDialog.Builder(getActivity())
+        .setIcon(android.R.drawable.ic_dialog_alert)
+        .setTitle("Cancel SMS edition")
+        .setMessage("Are you sure you want to stop editing this sms?")
+        .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+	    {
+	        @Override
+	        public void onClick(DialogInterface dialog, int which) {
+	        	getActivity().setResult(Activity.RESULT_CANCELED, null);
+	        	SMSDetailsFragment.this.getActivity().finish(); 
+	        }
+	
+	    })
+	    .setNegativeButton("No", new DialogInterface.OnClickListener()
+	    {
+	        @Override
+	        public void onClick(DialogInterface dialog, int which) {
+	        }
+	
+	    })
+	    .show();
+	}
+	
+	private boolean parseAndCheckSMSDataValidity() {
+		boolean isValid = false;		
+		if(((EditText)getView().findViewById(R.id.sms_receiver_number)).getText().length() > 0 // validity is set by checking receiver number
+			&& (Location)((Spinner)getView().findViewById(R.id.sms_location_chooser)).getSelectedItem() != null)
+			isValid = true;
+		
+		return isValid;
 	}
 }
