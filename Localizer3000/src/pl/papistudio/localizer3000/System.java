@@ -5,13 +5,12 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 
-import de.greenrobot.event.EventBus;
-
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.media.AudioManager;
 import android.net.wifi.WifiManager;
 import android.util.Log;
+import de.greenrobot.event.EventBus;
 
 /**
  * Class reacting to entering new location area
@@ -51,24 +50,20 @@ public class System {
 	private static Location findNearestLocation(android.location.Location location, Context context) {
 		DatabaseHelper dbHelper = DatabaseHelper.getInstance(context);
 		List<Location> list = dbHelper.getAllLocations();
-		double minDistance = Double.MAX_VALUE;
 		Location bestSuitedLocation = null;
 		
 		for(Location l : list)
-		{
-			android.location.Location loc = l.getLocation();			
+		{		
 			int day = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
 			Time time = new Time(Calendar.getInstance().get(Calendar.HOUR_OF_DAY), 
 								 Calendar.getInstance().get(Calendar.MINUTE));
 			
 			if(l.isLocationEnabled(day, time) 								// checks if location is active during this time (day + hours)
-					&& minDistance > (loc.distanceTo(location))				// checks if newer location is better than prevoius one
 					&& isLocationValidToApplySettings(l, location)			// check if we are inside "location circle"
 					&& (bestSuitedLocation == null 							// check if new location has lower priority
 						|| l.getPriority() < bestSuitedLocation.getPriority()))
 			{
 				Log.d("System Location", "Good location is: " + l.getName());
-				minDistance = (loc.distanceTo(location));
 				bestSuitedLocation = l;
 			}
 		}

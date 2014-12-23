@@ -60,7 +60,7 @@ public class Time implements Parcelable {
 	/**
 	 * 
 	 * @param refTime
-	 * @return 1 if first time you compare to is smaller (before your time)
+	 * @return 1 if time you compare to is smaller (before your time)
 	 * 		   0 if both are equal
 	 * 		  -1 if time you compare to is bigger
 	 */
