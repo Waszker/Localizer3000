@@ -57,23 +57,12 @@ public class SMSDetailsFragment extends Fragment implements OnClickListener {
 			Intent contactPickerIntent = new Intent(Intent.ACTION_PICK, Phone.CONTENT_URI);
 	        startActivityForResult(contactPickerIntent, REQUEST_CONTACT_NUMBER);
 		}
+		
 		if(v.getId() == R.id.edit_sms_cancel_button)
-		{
 			showCancelConfirmationDialog();
-		}
+		
 		if(v.getId() == R.id.edit_sms_save_button)
-		{
-			if(parseAndCheckSMSDataValidity())
-			{
-				sms.setReceiverNumber(Integer.valueOf(((EditText)getView().findViewById(R.id.sms_receiver_number)).getText().toString()));
-				sms.setLocationToSend((Location)((Spinner)getView().findViewById(R.id.sms_location_chooser)).getSelectedItem());
-				sms.setMessageText(((EditText)getView().findViewById(R.id.sms_message_text)).getText().toString());
-				DatabaseHelper.getInstance(getActivity()).addSMS(sms);
-				getFragmentManager().popBackStack();
-			}
-			else
-				Toast.makeText(getActivity(), "Fill all SMS details before saving.", Toast.LENGTH_SHORT).show();
-		}
+			saveSMS();
 	}
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -106,6 +95,13 @@ public class SMSDetailsFragment extends Fragment implements OnClickListener {
 	        }
 	}
 	
+	/**
+	 * Shows exit confirmation dialog.
+	 */
+	public void reactToBackPress() {
+		showCancelConfirmationDialog();
+	}
+	
 	private void fillSMSDetails(SMS sms, View v) {
 		((EditText)v.findViewById(R.id.sms_receiver_number)).setText(String.valueOf(sms.getReceiverNumber()));
 		((EditText)v.findViewById(R.id.sms_message_text)).setText(sms.getMessageText());
@@ -136,7 +132,7 @@ public class SMSDetailsFragment extends Fragment implements OnClickListener {
 	        @Override
 	        public void onClick(DialogInterface dialog, int which) {
 	        	getActivity().setResult(Activity.RESULT_CANCELED, null);
-	        	SMSDetailsFragment.this.getActivity().finish(); 
+	        	SMSDetailsFragment.this.getFragmentManager().popBackStack();
 	        }
 	
 	    })
@@ -157,5 +153,29 @@ public class SMSDetailsFragment extends Fragment implements OnClickListener {
 			isValid = true;
 		
 		return isValid;
+	}
+	
+	private void saveSMS() {
+		if(parseAndCheckSMSDataValidity())
+		{
+			fillSMSBeforeSaving();
+			saveOrUpdateSMS();
+			getFragmentManager().popBackStack();
+		}
+		else
+			Toast.makeText(getActivity(), "Fill all SMS details before saving.", Toast.LENGTH_SHORT).show();
+	}
+	
+	private void fillSMSBeforeSaving() {
+		sms.setReceiverNumber(Integer.valueOf(((EditText)getView().findViewById(R.id.sms_receiver_number)).getText().toString()));
+		sms.setLocationToSend((Location)((Spinner)getView().findViewById(R.id.sms_location_chooser)).getSelectedItem());
+		sms.setMessageText(((EditText)getView().findViewById(R.id.sms_message_text)).getText().toString());
+	}
+	
+	private void saveOrUpdateSMS() {
+		if(sms.getUniqueIdNumber() == -1)
+			DatabaseHelper.getInstance(getActivity()).addSMS(sms);
+		else
+			DatabaseHelper.getInstance(getActivity()).updateSMS(sms);
 	}
 }

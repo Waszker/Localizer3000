@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -90,6 +92,17 @@ public class SMSListFragment extends Fragment implements OnClickListener {
 								.getColor(R.color.material_blue_lighter));
 
 
+			((ImageButton)rowView.findViewById(R.id.delete_item_button)).setOnClickListener(new OnClickListener() {				
+				@Override
+				public void onClick(View v) {
+					Log.d("Item delete", "Deleted item number: " + position);
+					DatabaseHelper dbHelper = DatabaseHelper.getInstance(getActivity());
+					dbHelper.deleteSMSAt(list.get(position));
+					list.remove(position);
+					adapter.notifyDataSetChanged();
+				}
+			});
+			
 		    return rowView;
 		}
 		
@@ -150,7 +163,7 @@ public class SMSListFragment extends Fragment implements OnClickListener {
 		FragmentTransaction ft = SMSListFragment.this.getFragmentManager().beginTransaction();
 		ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out,
 					android.R.animator.fade_in, android.R.animator.fade_out);
-		ft.replace(SMSListFragment.this.getId(), new SMSDetailsFragment());
+		ft.replace(SMSListFragment.this.getId(), new SMSDetailsFragment(), "SMSDetails");
 		ft.addToBackStack(null);
 		ft.commit();
 	}

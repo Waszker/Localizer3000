@@ -133,17 +133,45 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 				  "=\"" + originalName + "\"", null);
 	}
 	
+	/**
+	 * Adds SMS to database. When adding database
+	 * assigns unique id to SMS.
+	 * @param sms
+	 */
 	public void addSMS(SMS sms) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = createValuesFromSMS(sms);
 		db.insert(DatabaseContract.TableSMSDefinition.TABLE_NAME, null, values);	
 	}
 	
-//	public void updateSMS(SMS sms) {
-//		
-//	}
+	/**
+	 * Updating SMS with specific unique id.
+	 * @param sms
+	 */
+	public void updateSMS(SMS sms) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		ContentValues values = createValuesFromSMS(sms);
+		db.update(DatabaseContract.TableSMSDefinition.TABLE_NAME, values, 
+				  DatabaseContract.TableSMSDefinition._ID + 
+				  "=\"" + sms.getUniqueIdNumber() + "\"", null);
+	}
 	
-	// TODO: Change!
+	/**
+	 * Deletes SMS with specific unique id.
+	 * @param smsToDelete
+	 * @return has SMS been deleted.
+	 */
+	public boolean deleteSMSAt(SMS smsToDelete) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		return db.delete(DatabaseContract.TableSMSDefinition.TABLE_NAME,
+		DatabaseContract.TableSMSDefinition._ID
+		+ "=" + smsToDelete.getUniqueIdNumber() , null) > 0;
+	}
+	
+	/**
+	 * Returns list of all SMS objects in database.
+	 * @return list of SMS
+	 */
 	public List<SMS> getAllSMS() {
 		String selectQuery = "SELECT  * FROM "
 				+ DatabaseContract.TableSMSDefinition.TABLE_NAME;

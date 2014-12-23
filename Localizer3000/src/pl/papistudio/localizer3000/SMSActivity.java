@@ -1,6 +1,7 @@
 package pl.papistudio.localizer3000;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.os.Bundle;
 import android.view.Menu;
 
@@ -35,4 +36,18 @@ public class SMSActivity extends Activity {
 	public void setCurrentlyUsedSMS(SMS currentlyUsedSMS) {
 		this.currentlyUsedSMS = currentlyUsedSMS;
 	}	
+	
+	@Override
+	public void onBackPressed() {
+    	Fragment fragment;
+	    if ((fragment = getFragmentManager().findFragmentByTag("SMSDetails")) != null)
+	    {
+	    	if(((SMSDetailsFragment)fragment).isVisible())
+	    		((SMSDetailsFragment)fragment).reactToBackPress();
+	    	else
+	    		super.onBackPressed();
+	    }
+	    else
+	    	super.onBackPressed();
+	}
 }

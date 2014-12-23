@@ -9,6 +9,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.media.AudioManager;
 import android.net.wifi.WifiManager;
+import android.telephony.SmsManager;
 import android.util.Log;
 import de.greenrobot.event.EventBus;
 
@@ -25,13 +26,15 @@ public class System {
 	/******************/
 	private static LocationService service;
 	private static String TAG = "Location Service System module";
+	private static Location currentlyActiveLocation;
 	
 	/******************/
 	/*   FUNCTIONS    */
 	/******************/
 	public static void reactToLocationChange(android.location.Location location, Context context, LocationService service) {
 		System.service = service;
-		Location nearestLocation = findNearestLocation(location, context);		
+		Location nearestLocation = findNearestLocation(location, context);
+		currentlyActiveLocation = nearestLocation;
 		if(nearestLocation != null)
 			updatePhoneStatusForFoundLocation(nearestLocation);
 		else
@@ -44,7 +47,7 @@ public class System {
 		setBluetooth(nearestLocation.isBluetoothOn());
 		setMobileData(nearestLocation.isMobileData());
 		setSound(nearestLocation.isSoundOn(), nearestLocation.isVibrationOn());
-//		sendSMS();
+		sendSMS();
 	}
 	
 	private static Location findNearestLocation(android.location.Location location, Context context) {
@@ -129,9 +132,20 @@ public class System {
 			
 	}
 	
-//	private static void sendSMS() {
-//		SmsManager.getDefault().sendTextMessage("506743135", null, "Yoł!", null, null);		
-//	}
+	private static void sendSMS() {
+		List<SMS> smsList = DatabaseHelper.getInstance(service).getAllSMS();
+		
+		for(SMS s : smsList)
+		{
+			if(currentlyActiveLocation != null
+			   && s.getLocationToSend().getName().contentEquals(currentlyActiveLocation.getName()))
+			{
+				SmsManager.getDefault().sendTextMessage(String.valueOf(s.getReceiverNumber()), null, 
+														s.getMessageText(), null, null);
+//				DatabaseHelper.getInstance(service).deleteSMS(s);
+			}
+		}	
+	}
 	
 	private static boolean findBinary(String binaryName) {
 	    boolean found = false;
