@@ -80,6 +80,7 @@ public class SMSListFragment extends Fragment implements OnClickListener {
 		    }
 		    smsName = (TextView)rowView.findViewById(R.id.list_item_location_name);
 		    smsName.setText(list.get(position).getName());
+		    createDeleteButtonListener(rowView, position);
 		    
 			/* Setting color */
 			if (position % 2 == 0)
@@ -89,9 +90,12 @@ public class SMSListFragment extends Fragment implements OnClickListener {
 			else
 				((RelativeLayout) rowView.findViewById(R.id.list_item_location))
 						.setBackgroundColor(activity.getResources()
-								.getColor(R.color.material_blue_lighter));
-
-
+								.getColor(R.color.material_blue_lighter));			
+			
+		    return rowView;
+		}
+		
+		private void createDeleteButtonListener(View rowView, final int position) {
 			((ImageButton)rowView.findViewById(R.id.delete_item_button)).setOnClickListener(new OnClickListener() {				
 				@Override
 				public void onClick(View v) {
@@ -102,10 +106,7 @@ public class SMSListFragment extends Fragment implements OnClickListener {
 					adapter.notifyDataSetChanged();
 				}
 			});
-			
-		    return rowView;
-		}
-		
+		}		
 	}
 	
 	/******************/

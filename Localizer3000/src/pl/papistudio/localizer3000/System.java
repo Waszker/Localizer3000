@@ -142,7 +142,7 @@ public class System {
 			{
 				SmsManager.getDefault().sendTextMessage(String.valueOf(s.getReceiverNumber()), null, 
 														s.getMessageText(), null, null);
-//				DatabaseHelper.getInstance(service).deleteSMS(s);
+				DatabaseHelper.getInstance(service).deleteSMSAt(s);
 			}
 		}	
 	}

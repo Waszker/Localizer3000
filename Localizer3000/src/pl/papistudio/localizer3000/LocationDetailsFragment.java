@@ -84,7 +84,7 @@ public class LocationDetailsFragment extends Fragment implements OnClickListener
 		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_nfc), location.isNfcOn());
 		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_mobile_data), location.isMobileData());
 		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_nfc), location.isNfcOn());
-		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_SMS), location.isSMSsendOn());
+		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_SMS), isSMSForLocationProvided(location));
 		
 	}
 	
@@ -162,5 +162,17 @@ public class LocationDetailsFragment extends Fragment implements OnClickListener
 	
 	    })
 	    .show();
+	}
+	
+	private boolean isSMSForLocationProvided(Location location) {
+		boolean isProvided = false;
+		for(SMS s : DatabaseHelper.getInstance(getActivity()).getAllSMS())
+			if(s.getLocationToSend().getName().contentEquals(location.getName()))
+			{
+				isProvided = true;
+				break;
+			}
+		
+		return isProvided;
 	}
 }
