@@ -31,9 +31,19 @@ public class System {
 	/******************/
 	/*   FUNCTIONS    */
 	/******************/
+	/**
+	 * Function searches for saved location that can be applied to current user location.
+	 * It selects saved location that covers current user position.
+	 * Date and hours are also taken into account.
+	 * If there are multiple such locations, the one with lowest priority is taken.
+	 *  
+	 * @param location
+	 * @param context
+	 * @param service asking for reaction
+	 */
 	public static void reactToLocationChange(android.location.Location location, Context context, LocationService service) {
 		System.service = service;
-		Location nearestLocation = findNearestLocation(location, context);
+		Location nearestLocation = findBestSuitedLocation(location, context);
 		currentlyActiveLocation = nearestLocation;
 		if(nearestLocation != null)
 			updatePhoneStatusForFoundLocation(nearestLocation);
@@ -50,7 +60,7 @@ public class System {
 		sendSMS();
 	}
 	
-	private static Location findNearestLocation(android.location.Location location, Context context) {
+	private static Location findBestSuitedLocation(android.location.Location location, Context context) {
 		DatabaseHelper dbHelper = DatabaseHelper.getInstance(context);
 		List<Location> list = dbHelper.getAllLocations();
 		Location bestSuitedLocation = null;

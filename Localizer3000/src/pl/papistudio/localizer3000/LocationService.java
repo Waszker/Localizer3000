@@ -37,7 +37,7 @@ public class LocationService extends Service {
 	private LocationManager locationManager;
 	private LocationListener locationListener;
 	private int interval;
-	private int startMode = Service.START_STICKY;
+	final private int startMode = Service.START_STICKY;
 	
 	/******************/
 	/*   FUNCTIONS    */
@@ -154,8 +154,9 @@ public class LocationService extends Service {
 		    
 		    private void reactToPoorLocationAccuracy() {
     			locationManager = (LocationManager)LocationService.this.getSystemService(Context.LOCATION_SERVICE);
+    			
     			if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
-    			locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, null);		    	
+    				locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, null);		    	
 		    }
 		    
 		    private void broadcastNewLocation(android.location.Location loc) {
@@ -210,7 +211,7 @@ public class LocationService extends Service {
     }
     
     private boolean isNetworkConnectionEnabled() {
-		ConnectivityManager con = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		final ConnectivityManager con = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
 		State mobile, wifi;
 		mobile = fillState(con, ConnectivityManager.TYPE_MOBILE);
     	wifi = fillState(con, ConnectivityManager.TYPE_WIFI);
@@ -221,7 +222,7 @@ public class LocationService extends Service {
     			|| wifi == NetworkInfo.State.CONNECTING);
     }
     
-    private State fillState(ConnectivityManager manager, int networkType) {
+    private State fillState(final ConnectivityManager manager, final int networkType) {
     	State state;
     	try {
     		state = manager.getNetworkInfo(networkType).getState();

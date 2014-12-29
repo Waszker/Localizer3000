@@ -191,13 +191,14 @@ public class LocationEditSecondFragment extends Fragment implements OnClickListe
 		final DatabaseHelper dbHelper = DatabaseHelper.getInstance(getActivity().getApplicationContext());
 		final String originalName = ((EditLocationActivity)getActivity()).originalLocationName;
 		final String locationName = (originalName.contentEquals("") ? location.getName() : originalName);
+		boolean shouldFinish = true;
 		
 		if(dbHelper.getLocation(locationName) == null)
 		{
 			dbHelper.addLocation(location);
 			Toast.makeText(getActivity(), "Location has been saved", Toast.LENGTH_SHORT).show();
 		}
-		else
+		else if(!originalName.contentEquals(""))
 		{
 			dbHelper.updateLocation(location, originalName);
 			Toast.makeText(getActivity(), "Location has been updated", Toast.LENGTH_SHORT).show();
@@ -205,7 +206,13 @@ public class LocationEditSecondFragment extends Fragment implements OnClickListe
 			data.putExtra("location", location);
 			getActivity().setResult(Activity.RESULT_OK, data);
 		}
+		else
+		{
+			Toast.makeText(getActivity(), "Location with such name already exists!", Toast.LENGTH_SHORT).show();	
+			shouldFinish = false;
+		}
 		
-		getActivity().finish();		
+		if(shouldFinish)
+			getActivity().finish();		
 	}
 }
