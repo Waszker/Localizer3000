@@ -127,10 +127,16 @@ public class LocationService extends Service {
     private void createLocationListener() {
 		locationListener = new LocationListener() {
 		    public void onLocationChanged(android.location.Location location) {
-		    	LocationService.this.location = location;
-		    	broadcastNewLocation(location);
-		    	System.reactToLocationChange(location, LocationService.this.getApplicationContext(), LocationService.this);
-		    	Log.d(TAG, "Location updated");
+		    	if(isNewLocationBetter(location))
+		    	{
+			    	LocationService.this.location = location;
+			    	broadcastNewLocation(location);
+			    	System.reactToLocationChange(location, LocationService.this.getApplicationContext(), LocationService.this);
+			    	Log.d(TAG, "Location updated");
+		    	}
+		    	
+	    		if(location.getAccuracy() > 150.0)
+	    			reactToPoorLocationAccuracy();
 		    }
 
 		    public void onStatusChanged(String provider, int status, Bundle extras) {}
@@ -138,6 +144,19 @@ public class LocationService extends Service {
 		    public void onProviderEnabled(String provider) {}
 
 		    public void onProviderDisabled(String provider) {}
+		    
+		    private boolean isNewLocationBetter(android.location.Location location) {
+		    	android.location.Location oldLocation = LocationService.this.location;
+		    	
+		    	return (oldLocation.distanceTo(location) > location.getAccuracy() + oldLocation.getAccuracy()
+		    			|| oldLocation.getAccuracy() <= location.getAccuracy());
+		    }
+		    
+		    private void reactToPoorLocationAccuracy() {
+    			locationManager = (LocationManager)LocationService.this.getSystemService(Context.LOCATION_SERVICE);
+    			if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+    			locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, null);		    	
+		    }
 		    
 		    private void broadcastNewLocation(android.location.Location loc) {
 				EventBus.getDefault().post(loc);

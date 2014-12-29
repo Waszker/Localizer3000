@@ -364,6 +364,7 @@ public class Location implements Parcelable, Comparable<Location> {
 		timeFrom=(in.readParcelable(Time.class.getClassLoader()));
 		timeTo=(in.readParcelable(Time.class.getClassLoader()));
 		location = (in.readParcelable(null));
+		priority = (in.readInt());
 	}
 	
 	@Override
@@ -392,7 +393,7 @@ public class Location implements Parcelable, Comparable<Location> {
 		dest.writeParcelable(timeFrom, flags);
 		dest.writeParcelable(timeTo, flags);
 		dest.writeParcelable(location, flags);
-
+		dest.writeInt(priority);
 	}
 	
 	@SuppressWarnings("rawtypes")

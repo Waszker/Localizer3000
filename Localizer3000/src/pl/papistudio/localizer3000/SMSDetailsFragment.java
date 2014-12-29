@@ -28,6 +28,7 @@ public class SMSDetailsFragment extends Fragment implements OnClickListener {
 	/******************/
 	private static final int REQUEST_CONTACT_NUMBER = 123456789;
 	private SMS sms;
+	List<Location> listOfLocations;
 	
 	/******************/
 	/*   FUNCTIONS    */
@@ -35,17 +36,12 @@ public class SMSDetailsFragment extends Fragment implements OnClickListener {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_sms_details, container, false);
+		listOfLocations = DatabaseHelper.getInstance(getActivity()).getAllLocations();
 		sms = ((SMSActivity)getActivity()).getCurrentlyUsedSMS();
 		
-		if(sms != null)
-			fillSMSDetails(sms, rootView);
-		else
-		{
-			sms = new SMS("", 0, "", null);
-			((SMSActivity)getActivity()).setCurrentlyUsedSMS(sms);
-		}			
 		setSpinnerItems(rootView);
 		addListenersToButtons(rootView);
+		fillSMSDetails(sms, rootView);				
 		
 		return rootView;
 	}
@@ -102,16 +98,10 @@ public class SMSDetailsFragment extends Fragment implements OnClickListener {
 		showCancelConfirmationDialog();
 	}
 	
-	private void fillSMSDetails(SMS sms, View v) {
-		((EditText)v.findViewById(R.id.sms_receiver_number)).setText(String.valueOf(sms.getReceiverNumber()));
-		((EditText)v.findViewById(R.id.sms_message_text)).setText(sms.getMessageText());
-	}
-	
 	private void setSpinnerItems(View v) {
 		Spinner spinner = (Spinner)v.findViewById(R.id.sms_location_chooser);
-		List<Location> list = DatabaseHelper.getInstance(getActivity()).getAllLocations();
 		ArrayAdapter<Location> spinnerArrayAdapter = new ArrayAdapter<Location>(getActivity(), 
-															android.R.layout.simple_spinner_item, list);
+															android.R.layout.simple_spinner_item, listOfLocations);
 		spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner.setAdapter(spinnerArrayAdapter);
 	}
@@ -120,6 +110,31 @@ public class SMSDetailsFragment extends Fragment implements OnClickListener {
 		((Button)v.findViewById(R.id.edit_sms_save_button)).setOnClickListener(this);
 		((Button)v.findViewById(R.id.edit_sms_cancel_button)).setOnClickListener(this);
 		((ImageButton)v.findViewById(R.id.add_sms_receiver_button)).setOnClickListener(this);
+	}
+	
+	private void fillSMSDetails(SMS sms, View v) {
+		if(sms != null)
+		{
+			((EditText)v.findViewById(R.id.sms_receiver_number)).setText(String.valueOf(sms.getReceiverNumber()));
+			((EditText)v.findViewById(R.id.sms_message_text)).setText(sms.getMessageText());
+			setSpinnerSelectedLocation(((Spinner)v.findViewById(R.id.sms_location_chooser)), sms);			
+		}
+		else
+		{
+			sms = new SMS("", 0, "", null);
+			((SMSActivity)getActivity()).setCurrentlyUsedSMS(sms);
+		}	
+	}
+	
+	private void setSpinnerSelectedLocation(Spinner spinner, SMS sms) {
+		for(int i=0; i<listOfLocations.size(); i++)
+		{
+			if(listOfLocations.get(i).getName().contentEquals(sms.getLocationToSend().getName()))
+			{
+				spinner.setSelection(i);
+				break;
+			}
+		}
 	}
 	
 	private void showCancelConfirmationDialog() {
