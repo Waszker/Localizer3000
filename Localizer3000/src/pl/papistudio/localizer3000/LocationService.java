@@ -149,7 +149,7 @@ public class LocationService extends Service {
 		    	android.location.Location oldLocation = LocationService.this.location;
 		    	
 		    	return (oldLocation.distanceTo(location) > location.getAccuracy() + oldLocation.getAccuracy()
-		    			|| oldLocation.getAccuracy() <= location.getAccuracy());
+		    			|| oldLocation.getAccuracy() >= location.getAccuracy());
 		    }
 		    
 		    private void reactToPoorLocationAccuracy() {
@@ -193,6 +193,7 @@ public class LocationService extends Service {
 		{
 			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, interval, 0, locationListener);
 			location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+	    	System.reactToLocationChange(location, LocationService.this.getApplicationContext(), LocationService.this);
 			Log.d(TAG, "Network obtained");
 		}
 		else // we prefer NETWORK OVER GPS
@@ -202,6 +203,7 @@ public class LocationService extends Service {
 			{
 				locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, interval, 0, locationListener);
 				location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		    	System.reactToLocationChange(location, LocationService.this.getApplicationContext(), LocationService.this);
 				Log.d(TAG, "GPS obtained");
 			}
 		}
