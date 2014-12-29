@@ -81,7 +81,7 @@ public class SMSDetailsFragment extends Fragment implements OnClickListener {
 	                            String formattedPhoneNumber = cursor.getString( cursor.getColumnIndex(Phone.NUMBER) );
 	                            formattedPhoneNumber = formattedPhoneNumber.replaceAll("\\+..|\\s", "");
 	                            try {
-		                            sms.setReceiverNumber(Integer.parseInt(formattedPhoneNumber));
+	                            	Integer.parseInt(formattedPhoneNumber);
 		                    		((EditText)getView().findViewById(R.id.sms_receiver_number)).setText(formattedPhoneNumber);
 	                            } catch(NumberFormatException e) {}
 	                        }
@@ -119,11 +119,6 @@ public class SMSDetailsFragment extends Fragment implements OnClickListener {
 			((EditText)v.findViewById(R.id.sms_message_text)).setText(sms.getMessageText());
 			setSpinnerSelectedLocation(((Spinner)v.findViewById(R.id.sms_location_chooser)), sms);			
 		}
-		else
-		{
-			sms = new SMS("", 0, "", null);
-			((SMSActivity)getActivity()).setCurrentlyUsedSMS(sms);
-		}	
 	}
 	
 	private void setSpinnerSelectedLocation(Spinner spinner, SMS sms) {
@@ -182,6 +177,8 @@ public class SMSDetailsFragment extends Fragment implements OnClickListener {
 	}
 	
 	private void fillSMSBeforeSaving() {
+		if(sms == null)
+			sms = new SMS("", 0, "", null);
 		sms.setReceiverNumber(Integer.valueOf(((EditText)getView().findViewById(R.id.sms_receiver_number)).getText().toString()));
 		sms.setLocationToSend((Location)((Spinner)getView().findViewById(R.id.sms_location_chooser)).getSelectedItem());
 		sms.setMessageText(((EditText)getView().findViewById(R.id.sms_message_text)).getText().toString());
