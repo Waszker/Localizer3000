@@ -85,7 +85,7 @@ public class System {
 	}
 	
 	private static boolean isLocationValidToApplySettings(Location nearestLocation, android.location.Location location) {
-		return nearestLocation != null
+		return nearestLocation != null && location != null
 				&& nearestLocation.getLocation().distanceTo(location) <= nearestLocation.getRadius();
 	}
 	
