@@ -127,7 +127,7 @@ public class LocationService extends Service {
     private void createLocationListener() {
 		locationListener = new LocationListener() {
 		    public void onLocationChanged(android.location.Location location) {
-		    	if(isNewLocationBetter(location))
+		    	if(location != null && isNewLocationBetter(location))
 		    	{
 			    	LocationService.this.location = location;
 			    	broadcastNewLocation(location);
@@ -135,7 +135,7 @@ public class LocationService extends Service {
 			    	Log.d(TAG, "Location updated");
 		    	}
 		    	
-	    		if(location.getAccuracy() > 150.0)
+	    		if(location != null && location.getAccuracy() > 150.0)
 	    			reactToPoorLocationAccuracy();
 		    }
 
@@ -148,8 +148,10 @@ public class LocationService extends Service {
 		    private boolean isNewLocationBetter(android.location.Location location) {
 		    	android.location.Location oldLocation = LocationService.this.location;
 		    	
-		    	return (oldLocation.distanceTo(location) > location.getAccuracy() + oldLocation.getAccuracy()
-		    			|| oldLocation.getAccuracy() >= location.getAccuracy());
+		    	return ((oldLocation.distanceTo(location) > location.getAccuracy() + oldLocation.getAccuracy() 	// we want new location when it points to definately new position
+		    			|| oldLocation.getAccuracy() >= location.getAccuracy())									// we want new location always if it provides better accuracy
+		    			&& oldLocation.getElapsedRealtimeNanos() <= location.getElapsedRealtimeNanos());		// we reject new location if it is "older" one than we have right now
+		    																									// (for example GPS last known location compared to network location)
 		    }
 		    
 		    private void reactToPoorLocationAccuracy() {
@@ -190,21 +192,21 @@ public class LocationService extends Service {
 			updateNotification("No network or GPS connection! Location cannot be obtained!");
 		}
 
-		if(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) && isNetworkConnectionEnabled())
+		if(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) && isNetworkConnectionEnabled()) // we prefer NETWORK OVER GPS
 		{
 			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, interval, 0, locationListener);
 			location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-	    	System.reactToLocationChange(location, LocationService.this.getApplicationContext(), LocationService.this);
+			locationListener.onLocationChanged(location);
 			Log.d(TAG, "Network obtained");
 		}
-		else // we prefer NETWORK OVER GPS
+		else
 		{
 			
 			if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
 			{
 				locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, interval, 0, locationListener);
 				location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		    	System.reactToLocationChange(location, LocationService.this.getApplicationContext(), LocationService.this);
+				locationListener.onLocationChanged(location);
 				Log.d(TAG, "GPS obtained");
 			}
 		}
