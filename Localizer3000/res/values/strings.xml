@@ -46,6 +46,7 @@
     <string name="message_receiver_hint">Receiver number</string>
     <string name="message_text_hint">Enter message text</string>
     <string name="message_location">Send when location: </string>
+    <string name="one_time_message_text">Delete sms after sending: </string>
     
 
 </resources>

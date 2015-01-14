@@ -76,8 +76,10 @@ public class DatabaseContract {
         public static final String COLUMN_NAME_RECEIVER_NUMBER = "Number";
         public static final String COLUMN_NAME_MESSAGE_TEXT = "Text";
         public static final String COLUMN_NAME_LOCATION_NAME = "Location";
+        public static final String COLUMN_NAME_IS_ONE_TIME = "IsOneTime";
 
         private static final String TEXT_TYPE = " TEXT";
+        private static final String INTEGER_TYPE = " INTEGER";
         private static final String COMMA_SEP = ", ";
         
         public static final String SQL_CREATE_TABLE  =
@@ -86,7 +88,8 @@ public class DatabaseContract {
             TableSMSDefinition._ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
             TableSMSDefinition.COLUMN_NAME_RECEIVER_NUMBER + TEXT_TYPE + COMMA_SEP + 
             TableSMSDefinition.COLUMN_NAME_MESSAGE_TEXT + TEXT_TYPE + COMMA_SEP +
-	        TableSMSDefinition.COLUMN_NAME_LOCATION_NAME + TEXT_TYPE +           
+	        TableSMSDefinition.COLUMN_NAME_LOCATION_NAME + TEXT_TYPE + COMMA_SEP +
+	        TableSMSDefinition.COLUMN_NAME_IS_ONE_TIME + INTEGER_TYPE +           
             ")";               
     }
 }

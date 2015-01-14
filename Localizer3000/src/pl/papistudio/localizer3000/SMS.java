@@ -6,11 +6,12 @@ public class SMS {
 	/******************/
 	/*   VARIABLES    */
 	/******************/
-	private int uniqueIdNumber;
-	private String receiverName;
-	private int receiverNumber;
-	private String messageText;
-	private Location locationToSend;
+	private int mUniqueIdNumber;
+	private String mReceiverName;
+	private int mReceiverNumber;
+	private String mMessageText;
+	private Location mLocationToSend;
+	private boolean mIsOneTimeUse;
 	
 	/******************/
 	/*   FUNCTIONS    */
@@ -19,56 +20,64 @@ public class SMS {
 		
 	}
 	
-	public SMS(String name, int number, String text, Location location) {
-		uniqueIdNumber = -1;
-		receiverName = name;
-		receiverNumber = number;
-		messageText = text;
-		locationToSend = location;
+	public SMS(String name, int number, String text, Location location, boolean isOneTimeUse) {
+		this.mUniqueIdNumber = -1;
+		this.mReceiverName = name;
+		this.mReceiverNumber = number;
+		this.mMessageText = text;
+		this.mLocationToSend = location;
+		this.mIsOneTimeUse = isOneTimeUse; 
 	}
 	
 	public String getName() {
-		return locationToSend.getName() + " : " + receiverNumber;
+		return mLocationToSend.getName() + " : " + mReceiverNumber;
 	}
 
 	public String getReceiverName() {
-		return receiverName;
+		return mReceiverName;
 	}
 
 	public void setReceiverName(String receiverName) {
-		this.receiverName = receiverName;
+		this.mReceiverName = receiverName;
 	}
 
 	public int getReceiverNumber() {
-		return receiverNumber;
+		return mReceiverNumber;
 	}
 
 	public void setReceiverNumber(int receiverNumber) {
-		this.receiverNumber = receiverNumber;
+		this.mReceiverNumber = receiverNumber;
 	}
 
 	public String getMessageText() {
-		return messageText;
+		return mMessageText;
 	}
 
 	public void setMessageText(String messageText) {
-		this.messageText = messageText;
+		this.mMessageText = messageText;
 	}
 
 	public Location getLocationToSend() {
-		return locationToSend;
+		return mLocationToSend;
 	}
 
 	public void setLocationToSend(Location locationToSend) {
-		this.locationToSend = locationToSend;
+		this.mLocationToSend = locationToSend;
 	}
 
 	public int getUniqueIdNumber() {
-		return uniqueIdNumber;
+		return mUniqueIdNumber;
 	}
 
 	public void setUniqueIdNumber(int uniqueIdNumber) {
-		this.uniqueIdNumber = uniqueIdNumber;
+		this.mUniqueIdNumber = uniqueIdNumber;
 	}
 
+	public boolean isOneTimeUse() {
+		return mIsOneTimeUse;
+	}
+
+	public void setIsOneTimeUse(boolean mIsOneTimeUse) {
+		this.mIsOneTimeUse = mIsOneTimeUse;
+	}
 }

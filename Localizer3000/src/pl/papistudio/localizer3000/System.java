@@ -44,20 +44,24 @@ public class System {
 	public static void reactToLocationChange(android.location.Location location, Context context, LocationService service) {
 		System.service = service;
 		Location nearestLocation = findBestSuitedLocation(location, context);
-		currentlyActiveLocation = nearestLocation;
 		if(nearestLocation != null)
-			updatePhoneStatusForFoundLocation(nearestLocation);
+		{
+			updatePhoneStatusForFoundLocation(nearestLocation);			
+			currentlyActiveLocation = nearestLocation;
+		}
 		else
 			Log.d("System Location", "There is no good location to apply...");
 	}
 	
 	private static void updatePhoneStatusForFoundLocation(Location nearestLocation) {
 		EventBus.getDefault().post(nearestLocation);
+		boolean hasLocationChanged = !(currentlyActiveLocation.equals(nearestLocation));
+		
 		setWifi(nearestLocation.isWifiOn());
 		setBluetooth(nearestLocation.isBluetoothOn());
 		setMobileData(nearestLocation.isMobileData());
 		setSound(nearestLocation.isSoundOn(), nearestLocation.isVibrationOn());
-		sendSMS();
+		sendSMSes(hasLocationChanged);
 	}
 	
 	private static Location findBestSuitedLocation(android.location.Location location, Context context) {
@@ -142,7 +146,7 @@ public class System {
 			
 	}
 	
-	private static void sendSMS() {
+	private static void sendSMSes(boolean hasLocationChanged) {
 		List<SMS> smsList = DatabaseHelper.getInstance(service).getAllSMS();
 		
 		for(SMS s : smsList)
@@ -150,9 +154,16 @@ public class System {
 			if(currentlyActiveLocation != null
 			   && s.getLocationToSend().getName().contentEquals(currentlyActiveLocation.getName()))
 			{
-				SmsManager.getDefault().sendTextMessage(String.valueOf(s.getReceiverNumber()), null, 
-														s.getMessageText(), null, null);
-				DatabaseHelper.getInstance(service).deleteSMSAt(s);
+				if(hasLocationChanged)
+				{
+					SmsManager.getDefault().sendTextMessage(
+													String.valueOf(s.getReceiverNumber()), 
+													null, s.getMessageText(), null, null
+													);
+
+					if(s.isOneTimeUse())
+						DatabaseHelper.getInstance(service).deleteSMSAt(s);
+				}
 			}
 		}	
 	}

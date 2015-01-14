@@ -178,7 +178,7 @@ public class SMSDetailsFragment extends Fragment implements OnClickListener {
 	
 	private void fillSMSBeforeSaving() {
 		if(sms == null)
-			sms = new SMS("", 0, "", null);
+			sms = new SMS("", 0, "", null, true);
 		sms.setReceiverNumber(Integer.valueOf(((EditText)getView().findViewById(R.id.sms_receiver_number)).getText().toString()));
 		sms.setLocationToSend((Location)((Spinner)getView().findViewById(R.id.sms_location_chooser)).getSelectedItem());
 		sms.setMessageText(((EditText)getView().findViewById(R.id.sms_message_text)).getText().toString());

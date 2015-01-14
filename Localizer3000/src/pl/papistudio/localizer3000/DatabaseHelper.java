@@ -13,9 +13,9 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	/******************/
 	/*   VARIABLES    */
 	/******************/
-	private static DatabaseHelper dbInstance;
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 	private static final String DATABASE_NAME = "Locations.db";
+	private static DatabaseHelper dbInstance;
 	private static int currentPriorityNumber;
 
 	/******************/
@@ -44,6 +44,27 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		// load all object from database to lists
+		// drop old tables
+		// create new tables and fill 'em with updated values
+		List<Location> locations = getAllLocations();
+		List<SMS> smses = getAllSMS();
+		
+		if(oldVersion == 1)
+		{
+			for(SMS s : smses)
+				s.setIsOneTimeUse(true);
+		}
+		
+		// DROP everything
+		// CREATE new database
+		// onCreate(db);
+		
+		for(Location l : locations)
+			addLocation(l);
+		
+		for(SMS s : smses)
+			addSMS(s);
 	}
 
 	/**
@@ -236,19 +257,19 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_LONGITUDE,
 				location.getLocation().getLongitude());
 		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_ISMONDAY,
-				location.isMon() == true ? 1 : 0);
+				location.isMon() ? 1 : 0);
 		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_ISTUESDAY,
-				location.isTue() == true ? 1 : 0);
+				location.isTue() ? 1 : 0);
 		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_ISWEDNESDAY,
-				location.isWed() == true ? 1 : 0);
+				location.isWed() ? 1 : 0);
 		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_ISTHURSDAY,
-				location.isThu() == true ? 1 : 0);
+				location.isThu() ? 1 : 0);
 		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_ISFRIDAY,
-				location.isFri() == true ? 1 : 0);
+				location.isFri() ? 1 : 0);
 		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_ISSATURDAY,
-				location.isSat() == true ? 1 : 0);
+				location.isSat() ? 1 : 0);
 		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_ISSUNDAY,
-				location.isSun() == true ? 1 : 0);
+				location.isSun() ? 1 : 0);
 		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_TIMEFROM_HOURS,
 				location.getTimeFrom().getHour());
 		values.put(
@@ -263,19 +284,19 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_PRIORITY,
 				location.getPriority());
 		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_ISSOUND,
-				location.isSoundOn() == true ? 1 : 0);
+				location.isSoundOn() ? 1 : 0);
 		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_ISVIBRATION,
-				location.isVibrationOn() == true ? 1 : 0);
+				location.isVibrationOn() ? 1 : 0);
 		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_ISWIFI,
-				location.isWifiOn() == true ? 1 : 0);
+				location.isWifiOn() ? 1 : 0);
 		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_ISBLUETOOTH,
-				location.isBluetoothOn() == true ? 1 : 0);
+				location.isBluetoothOn() ? 1 : 0);
 		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_ISNFC,
-				location.isNfcOn() == true ? 1 : 0);
+				location.isNfcOn() ? 1 : 0);
 		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_ISMOBILEDATA,
-				location.isMobileData() == true ? 1 : 0);
+				location.isMobileData() ? 1 : 0);
 		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_ISSMS,
-				location.isSMSsendOn() == true ? 1 : 0);
+				location.isSMSsendOn() ? 1 : 0);
 		
 		return values;
 	}
@@ -300,6 +321,8 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 				sms.getMessageText());
 		values.put(DatabaseContract.TableSMSDefinition.COLUMN_NAME_LOCATION_NAME,
 				sms.getLocationToSend().getName());
+		values.put(DatabaseContract.TableSMSDefinition.COLUMN_NAME_IS_ONE_TIME,
+				(sms.isOneTimeUse() ? 1 : 0));
 		
 		return values;
 	}

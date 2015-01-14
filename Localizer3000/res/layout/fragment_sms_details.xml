@@ -40,7 +40,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:hint="@string/message_location"
             android:enabled="false" />
 
@@ -51,6 +51,26 @@
 	        android:layout_height="wrap_content" 
 	        android:layout_marginStart="5dp" 
 	        android:gravity="center"/>
+    </LinearLayout>
+    
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="center_vertical"
+            android:hint="@string/one_time_message_text"
+            android:enabled="false" />
+	    
+	    <Switch 
+	        android:id="@+id/sms_one_time_checkbox"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginStart="5dp"  />
     </LinearLayout>
 
     <EditText
