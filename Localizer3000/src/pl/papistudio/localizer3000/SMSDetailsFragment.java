@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.Toast;
 
 public class SMSDetailsFragment extends Fragment implements OnClickListener {
@@ -117,7 +118,8 @@ public class SMSDetailsFragment extends Fragment implements OnClickListener {
 		{
 			((EditText)v.findViewById(R.id.sms_receiver_number)).setText(String.valueOf(sms.getReceiverNumber()));
 			((EditText)v.findViewById(R.id.sms_message_text)).setText(sms.getMessageText());
-			setSpinnerSelectedLocation(((Spinner)v.findViewById(R.id.sms_location_chooser)), sms);			
+			setSpinnerSelectedLocation(((Spinner)v.findViewById(R.id.sms_location_chooser)), sms);	
+			((Switch)v.findViewById(R.id.sms_one_time_checkbox)).setChecked(sms.isOneTimeUse());
 		}
 	}
 	
@@ -182,6 +184,7 @@ public class SMSDetailsFragment extends Fragment implements OnClickListener {
 		sms.setReceiverNumber(Integer.valueOf(((EditText)getView().findViewById(R.id.sms_receiver_number)).getText().toString()));
 		sms.setLocationToSend((Location)((Spinner)getView().findViewById(R.id.sms_location_chooser)).getSelectedItem());
 		sms.setMessageText(((EditText)getView().findViewById(R.id.sms_message_text)).getText().toString());
+		sms.setIsOneTimeUse(((Switch)getView().findViewById(R.id.sms_one_time_checkbox)).isChecked());
 	}
 	
 	private void saveOrUpdateSMS() {

@@ -16,12 +16,12 @@ public class Location implements Parcelable, Comparable<Location> {
 	/******************/
 	/*   VARIABLES    */
 	/******************/
-	private String name;
-	private boolean isWifiOn, isBluetoothOn, isNfcOn, isMobileData, isSoundOn, isVibrationOn, isSMSsendOn;
-	private int radius; //in meters
-	private int priority;
-	private Time timeFrom, timeTo;
-	private boolean isMon, isTue, isWed, isThu, isFri, isSat, isSun;
+	private String mName;
+	private boolean mIsWifiOn, mIsBluetoothOn, mIsNfcOn, mIsMobileData, mIsSoundOn, mIsVibrationOn, mIsSMSsendOn;
+	private int mRadius;
+	private int mPriority;
+	private Time mTimeFrom, mTimeTo;
+	private boolean mIsMon, mIsTue, mIsWed, mIsThu, mIsFri, mIsSat, mIsSun;
 	private android.location.Location location;
 	
 	
@@ -36,10 +36,10 @@ public class Location implements Parcelable, Comparable<Location> {
 	 * @param name
 	 */
 	public Location(String name) {
-		this.name = name;
-		this.isWifiOn = this.isBluetoothOn = this.isNfcOn = this.isMobileData = this.isSoundOn = this.isVibrationOn =true;
-		this.isSMSsendOn=false;
-		this.radius=100;
+		this.mName = name;
+		this.mIsWifiOn = this.mIsBluetoothOn = this.mIsNfcOn = this.mIsMobileData = this.mIsSoundOn = this.mIsVibrationOn =true;
+		this.mIsSMSsendOn=false;
+		this.mRadius=100;
 		setTimeFrom(new Time(0,0));
 		setTimeTo(new Time(23,59));
 		setDaysOfWeek(true, true, true, true, true, true, true);
@@ -60,15 +60,15 @@ public class Location implements Parcelable, Comparable<Location> {
 	public Location(String name, boolean isWifiOn, boolean isBluetoothOn,
 			boolean isNfcOn, boolean isMobData, boolean isSoundOn,
 			boolean isVibrationOn, int radius) {
-		this.name = name;
-		this.isWifiOn = isWifiOn;
-		this.isBluetoothOn = isBluetoothOn;
-		this.isNfcOn = isNfcOn;
-		this.isMobileData = isMobData;
-		this.isSoundOn = isSoundOn;
-		this.isVibrationOn = isVibrationOn;
-		this.isSMSsendOn = false;
-		this.radius = radius;
+		this.mName = name;
+		this.mIsWifiOn = isWifiOn;
+		this.mIsBluetoothOn = isBluetoothOn;
+		this.mIsNfcOn = isNfcOn;
+		this.mIsMobileData = isMobData;
+		this.mIsSoundOn = isSoundOn;
+		this.mIsVibrationOn = isVibrationOn;
+		this.mIsSMSsendOn = false;
+		this.mRadius = radius;
 		setTimeFrom(new Time(0, 0));
 		setTimeTo(new Time(23, 59));
 		setDaysOfWeek(true, true, true, true, true, true, true);
@@ -86,18 +86,18 @@ public class Location implements Parcelable, Comparable<Location> {
 	 */
 	public void setDaysOfWeek(boolean mon, boolean tue, boolean wed, boolean thu,
 			boolean fri, boolean sat, boolean sun) {
-		this.isMon = mon;
-		this.isTue = tue;
-		this.isWed = wed;
-		this.isThu = thu;
-		this.isFri = fri;
-		this.isSat = sat;
-		this.isSun = sun;
+		this.mIsMon = mon;
+		this.mIsTue = tue;
+		this.mIsWed = wed;
+		this.mIsThu = thu;
+		this.mIsFri = fri;
+		this.mIsSat = sat;
+		this.mIsSun = sun;
 	}
 	
 	/**
 	 * Checks if location is applicable during this day
-	 * of the week.
+	 * of the week and within given hours limit.
 	 * @param day of the week (taken from Calendar.get())
 	 * @return is location enabled
 	 */
@@ -106,45 +106,45 @@ public class Location implements Parcelable, Comparable<Location> {
 		
 		switch (day) {
 			case Calendar.MONDAY:
-				isEnabled = isMon;
+				isEnabled = mIsMon;
 				break;
 				
 			case Calendar.TUESDAY:
-				isEnabled = isTue;
+				isEnabled = mIsTue;
 				break;
 				
 			case Calendar.WEDNESDAY:
-				isEnabled = isWed;
+				isEnabled = mIsWed;
 				break;
 				
 			case Calendar.THURSDAY:
-				isEnabled = isThu;
+				isEnabled = mIsThu;
 				break;
 				
 			case Calendar.FRIDAY:
-				isEnabled = isFri;
+				isEnabled = mIsFri;
 				break;
 				
 			case Calendar.SATURDAY:
-				isEnabled = isSat;
+				isEnabled = mIsSat;
 				break;
 				
 			case Calendar.SUNDAY:
-				isEnabled = isSun;
+				isEnabled = mIsSun;
 				break;
 	
 			default:
 				break;
 		}
 		
-		if(timeFrom.compareTo(timeTo) > 0)
+		if(mTimeFrom.compareTo(mTimeTo) > 0)
 		{
-			if(time.compareTo(timeFrom) < 0 && time.compareTo(timeTo) > 0)
+			if(time.compareTo(mTimeFrom) < 0 && time.compareTo(mTimeTo) > 0)
 				isEnabled = false;
 		}
 		else
 		{
-			if(time.compareTo(timeFrom) < 0 || time.compareTo(timeTo) > 0)
+			if(time.compareTo(mTimeFrom) < 0 || time.compareTo(mTimeTo) > 0)
 				isEnabled = false;
 		}
 		
@@ -154,7 +154,7 @@ public class Location implements Parcelable, Comparable<Location> {
 
 	@Override
 	public String toString() {
-		return name;
+		return mName;
 	}
 	
 	/**
@@ -167,9 +167,9 @@ public class Location implements Parcelable, Comparable<Location> {
 	 */
 	public int compareTo(Location location) {
 		int result = 0;
-		if(this.priority > location.priority)
+		if(this.mPriority > location.mPriority)
 			result = 1;
-		if(this.priority < location.priority)
+		if(this.mPriority < location.mPriority)
 			result = -1;
 		return result;
 	}
@@ -178,11 +178,11 @@ public class Location implements Parcelable, Comparable<Location> {
 	/*   GETTERS&SETTERS    */
 	/************************/
 	public String getName() {
-		return name;
+		return mName;
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.mName = name;
 	}
 
 	public android.location.Location getLocation() {
@@ -194,148 +194,148 @@ public class Location implements Parcelable, Comparable<Location> {
 	}
 	
 	public boolean isWifiOn() {
-		return isWifiOn;
+		return mIsWifiOn;
 	}
 
 	public void setWifiOn(boolean isWifiOn) {
-		this.isWifiOn = isWifiOn;
+		this.mIsWifiOn = isWifiOn;
 	}
 
 	public boolean isBluetoothOn() {
-		return isBluetoothOn;
+		return mIsBluetoothOn;
 	}
 
 	public void setBluetoothOn(boolean isBluetoothOn) {
-		this.isBluetoothOn = isBluetoothOn;
+		this.mIsBluetoothOn = isBluetoothOn;
 	}
 
 	public boolean isNfcOn() {
-		return isNfcOn;
+		return mIsNfcOn;
 	}
 
 	public void setNfcOn(boolean isNfcOn) {
-		this.isNfcOn = isNfcOn;
+		this.mIsNfcOn = isNfcOn;
 	}
 
 	public boolean isMobileData() {
-		return isMobileData;
+		return mIsMobileData;
 	}
 
 	public void setMobileData(boolean isMobData) {
-		this.isMobileData = isMobData;
+		this.mIsMobileData = isMobData;
 	}
 	
 	public boolean isSoundOn() {
-		return isSoundOn;
+		return mIsSoundOn;
 	}
 
 	public void setSoundOn(boolean isSoundOn) {
-		this.isSoundOn = isSoundOn;
+		this.mIsSoundOn = isSoundOn;
 	}
 
 	public boolean isVibrationOn() {
-		return isVibrationOn;
+		return mIsVibrationOn;
 	}
 
 	public void setVibrationOn(boolean isVibrationOn) {
-		this.isVibrationOn = isVibrationOn;
+		this.mIsVibrationOn = isVibrationOn;
 	}
 
 	public boolean isSMSsendOn() {
-		return isSMSsendOn;
+		return mIsSMSsendOn;
 	}
 
 	public void setSMSsendOn(boolean isSMSsendOn) {
-		this.isSMSsendOn = isSMSsendOn;
+		this.mIsSMSsendOn = isSMSsendOn;
 	}
 
 	public int getRadius() {
-		return radius;
+		return mRadius;
 	}
 
 	public void setRadius(int radius) {
 		if(radius > 0 && radius < Integer.MAX_VALUE)
-			this.radius = radius;
+			this.mRadius = radius;
 	}
 
 	public int getPriority() {
-		return priority;
+		return mPriority;
 	}
 
 	public void setPriority(int priority) {
-		this.priority = priority;
+		this.mPriority = priority;
 	}
 
 	public Time getTimeFrom() {
-		return timeFrom;
+		return mTimeFrom;
 	}
 
 	public void setTimeFrom(Time timeFrom) {
-		this.timeFrom = timeFrom;
+		this.mTimeFrom = timeFrom;
 	}
 
 	public Time getTimeTo() {
-		return timeTo;
+		return mTimeTo;
 	}
 
 	public void setTimeTo(Time timeTo) {
-		this.timeTo = timeTo;
+		this.mTimeTo = timeTo;
 	}
 
 	public boolean isMon() {
-		return isMon;
+		return mIsMon;
 	}
 
 	public void setMon(boolean isMon) {
-		this.isMon = isMon;
+		this.mIsMon = isMon;
 	}
 
 	public boolean isTue() {
-		return isTue;
+		return mIsTue;
 	}
 
 	public void setTue(boolean isTue) {
-		this.isTue = isTue;
+		this.mIsTue = isTue;
 	}
 
 	public boolean isWed() {
-		return isWed;
+		return mIsWed;
 	}
 
 	public void setWed(boolean isWed) {
-		this.isWed = isWed;
+		this.mIsWed = isWed;
 	}
 
 	public boolean isThu() {
-		return isThu;
+		return mIsThu;
 	}
 
 	public void setThu(boolean isThu) {
-		this.isThu = isThu;
+		this.mIsThu = isThu;
 	}
 
 	public boolean isFri() {
-		return isFri;
+		return mIsFri;
 	}
 
 	public void setFri(boolean isFri) {
-		this.isFri = isFri;
+		this.mIsFri = isFri;
 	}
 
 	public boolean isSat() {
-		return isSat;
+		return mIsSat;
 	}
 
 	public void setSat(boolean isSat) {
-		this.isSat = isSat;
+		this.mIsSat = isSat;
 	}
 
 	public boolean isSun() {
-		return isSun;
+		return mIsSun;
 	}
 
 	public void setSun(boolean isSun) {
-		this.isSun = isSun;
+		this.mIsSun = isSun;
 	}
 
 	/*
@@ -345,26 +345,26 @@ public class Location implements Parcelable, Comparable<Location> {
 	 * @see http://blog.logicexception.com/2012/09/a-parcelable-tutorial-for-android.html
 	 */
 	public Location(Parcel in) {
-		name = in.readString();
-		isMon = (in.readByte() != 0 ? true : false);
-		isTue = (in.readByte() != 0 ? true : false);
-		isWed = (in.readByte() != 0 ? true : false);
-		isThu = (in.readByte() != 0 ? true : false);
-		isFri = (in.readByte() != 0 ? true : false);
-		isSat = (in.readByte() != 0 ? true : false);
-		isSun = (in.readByte() != 0 ? true : false);
-		isWifiOn = (in.readByte() != 0 ? true : false);
-		isBluetoothOn = (in.readByte() != 0 ? true : false);
-		isNfcOn = (in.readByte() != 0 ? true : false);
-		isMobileData = (in.readByte() != 0 ? true : false);
-		isSoundOn= (in.readByte() != 0 ? true : false);
-		isVibrationOn = (in.readByte() != 0 ? true : false);
-		isSMSsendOn = (in.readByte() != 0 ? true : false);
-		radius = (in.readInt());
-		timeFrom=(in.readParcelable(Time.class.getClassLoader()));
-		timeTo=(in.readParcelable(Time.class.getClassLoader()));
+		mName = in.readString();
+		mIsMon = (in.readByte() != 0 ? true : false);
+		mIsTue = (in.readByte() != 0 ? true : false);
+		mIsWed = (in.readByte() != 0 ? true : false);
+		mIsThu = (in.readByte() != 0 ? true : false);
+		mIsFri = (in.readByte() != 0 ? true : false);
+		mIsSat = (in.readByte() != 0 ? true : false);
+		mIsSun = (in.readByte() != 0 ? true : false);
+		mIsWifiOn = (in.readByte() != 0 ? true : false);
+		mIsBluetoothOn = (in.readByte() != 0 ? true : false);
+		mIsNfcOn = (in.readByte() != 0 ? true : false);
+		mIsMobileData = (in.readByte() != 0 ? true : false);
+		mIsSoundOn= (in.readByte() != 0 ? true : false);
+		mIsVibrationOn = (in.readByte() != 0 ? true : false);
+		mIsSMSsendOn = (in.readByte() != 0 ? true : false);
+		mRadius = (in.readInt());
+		mTimeFrom=(in.readParcelable(Time.class.getClassLoader()));
+		mTimeTo=(in.readParcelable(Time.class.getClassLoader()));
 		location = (in.readParcelable(null));
-		priority = (in.readInt());
+		mPriority = (in.readInt());
 	}
 	
 	@Override
@@ -374,26 +374,26 @@ public class Location implements Parcelable, Comparable<Location> {
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeString(name);
-		dest.writeByte((byte)(isMon ? 1 : 0));
-		dest.writeByte((byte)(isTue ? 1 : 0));
-		dest.writeByte((byte)(isWed ? 1 : 0));
-		dest.writeByte((byte)(isThu ? 1 : 0));
-		dest.writeByte((byte)(isFri ? 1 : 0));
-		dest.writeByte((byte)(isSat ? 1 : 0));
-		dest.writeByte((byte)(isSun ? 1 : 0));
-		dest.writeByte((byte)(isWifiOn ? 1 : 0));
-		dest.writeByte((byte)(isBluetoothOn ? 1 : 0));
-		dest.writeByte((byte)(isNfcOn ? 1 : 0));
-		dest.writeByte((byte)(isMobileData ? 1 : 0));
-		dest.writeByte((byte)(isSoundOn ? 1 : 0));
-		dest.writeByte((byte)(isVibrationOn ? 1 : 0));
-		dest.writeByte((byte)(isSMSsendOn ? 1 : 0));
-		dest.writeInt(radius);
-		dest.writeParcelable(timeFrom, flags);
-		dest.writeParcelable(timeTo, flags);
+		dest.writeString(mName);
+		dest.writeByte((byte)(mIsMon ? 1 : 0));
+		dest.writeByte((byte)(mIsTue ? 1 : 0));
+		dest.writeByte((byte)(mIsWed ? 1 : 0));
+		dest.writeByte((byte)(mIsThu ? 1 : 0));
+		dest.writeByte((byte)(mIsFri ? 1 : 0));
+		dest.writeByte((byte)(mIsSat ? 1 : 0));
+		dest.writeByte((byte)(mIsSun ? 1 : 0));
+		dest.writeByte((byte)(mIsWifiOn ? 1 : 0));
+		dest.writeByte((byte)(mIsBluetoothOn ? 1 : 0));
+		dest.writeByte((byte)(mIsNfcOn ? 1 : 0));
+		dest.writeByte((byte)(mIsMobileData ? 1 : 0));
+		dest.writeByte((byte)(mIsSoundOn ? 1 : 0));
+		dest.writeByte((byte)(mIsVibrationOn ? 1 : 0));
+		dest.writeByte((byte)(mIsSMSsendOn ? 1 : 0));
+		dest.writeInt(mRadius);
+		dest.writeParcelable(mTimeFrom, flags);
+		dest.writeParcelable(mTimeTo, flags);
 		dest.writeParcelable(location, flags);
-		dest.writeInt(priority);
+		dest.writeInt(mPriority);
 	}
 	
 	@SuppressWarnings("rawtypes")

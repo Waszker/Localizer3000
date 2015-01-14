@@ -30,7 +30,8 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	 * @return instance of class
 	 */
 	public static DatabaseHelper getInstance(Context context) {	
-		if(dbInstance == null) {
+		if(dbInstance == null)
+		{
 			dbInstance = new DatabaseHelper(context);
 		}
 		return dbInstance;
@@ -38,7 +39,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		db.execSQL(DatabaseContract.TableDefinition.SQL_CREATE_TABLE);
+		db.execSQL(DatabaseContract.TableLocationDefinition.SQL_CREATE_TABLE);
 		db.execSQL(DatabaseContract.TableSMSDefinition.SQL_CREATE_TABLE);
 	}
 
@@ -47,8 +48,8 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 		// load all object from database to lists
 		// drop old tables
 		// create new tables and fill 'em with updated values
-		List<Location> locations = getAllLocations();
-		List<SMS> smses = getAllSMS();
+		List<Location> locations = getAllLocations(db);
+		List<SMS> smses = getAllSMS(db);
 		
 		if(oldVersion == 1)
 		{
@@ -56,15 +57,24 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 				s.setIsOneTimeUse(true);
 		}
 		
-		// DROP everything
-		// CREATE new database
-		// onCreate(db);
+		db.execSQL(DatabaseContract.TableLocationDefinition.SQL_DELETE_LOCATION_ENTRIES);
+		db.execSQL(DatabaseContract.TableSMSDefinition.SQL_DELETE_SMS_ENTRIES);
+		db.execSQL(DatabaseContract.TableLocationDefinition.SQL_CREATE_TABLE);
+		db.execSQL(DatabaseContract.TableSMSDefinition.SQL_CREATE_TABLE);
 		
+		// fill new tables
 		for(Location l : locations)
-			addLocation(l);
-		
+		{
+			ContentValues values = createValuesFromLocation(l);
+			db.insert(DatabaseContract.TableLocationDefinition.TABLE_NAME,
+					null, values);
+		}
 		for(SMS s : smses)
-			addSMS(s);
+		{
+			ContentValues values = createValuesFromSMS(s);
+			db.insert(DatabaseContract.TableSMSDefinition.TABLE_NAME,
+					null, values);
+		}
 	}
 
 	/**
@@ -75,8 +85,8 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	 */
 	public boolean deleteLocationAt(Location locationToDelete) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		return db.delete(DatabaseContract.TableDefinition.TABLE_NAME,
-				DatabaseContract.TableDefinition.COLUMN_NAME_LOCATION_NAME
+		return db.delete(DatabaseContract.TableLocationDefinition.TABLE_NAME,
+				DatabaseContract.TableLocationDefinition.COLUMN_NAME_LOCATION_NAME
 						+ "='" + locationToDelete.getName() + "'", null) > 0;
 	}
 
@@ -87,7 +97,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	 */
 	public List<Location> getAllLocations() {
 		String selectQuery = "SELECT  * FROM "
-				+ DatabaseContract.TableDefinition.TABLE_NAME;
+				+ DatabaseContract.TableLocationDefinition.TABLE_NAME;
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor c = db.rawQuery(selectQuery, null);
 
@@ -109,8 +119,8 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	 */
 	public Location getLocation(String locationName) {
 		String selectQuery = "SELECT  * FROM "
-				+ DatabaseContract.TableDefinition.TABLE_NAME
-				+ " WHERE " + DatabaseContract.TableDefinition.COLUMN_NAME_LOCATION_NAME 
+				+ DatabaseContract.TableLocationDefinition.TABLE_NAME
+				+ " WHERE " + DatabaseContract.TableLocationDefinition.COLUMN_NAME_LOCATION_NAME 
 				+ "=\"" + locationName + "\"";
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor c = db.rawQuery(selectQuery, null);
@@ -134,7 +144,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 		location.setPriority(currentPriorityNumber++);
 		ContentValues values = createValuesFromLocation(location);
-		long newRowId = db.insert(DatabaseContract.TableDefinition.TABLE_NAME,
+		long newRowId = db.insert(DatabaseContract.TableLocationDefinition.TABLE_NAME,
 				null, values);
 
 		return newRowId;
@@ -149,8 +159,8 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	public void updateLocation(Location location, String originalName) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = createValuesFromLocation(location);
-		db.update(DatabaseContract.TableDefinition.TABLE_NAME, values, 
-				  DatabaseContract.TableDefinition.COLUMN_NAME_LOCATION_NAME + 
+		db.update(DatabaseContract.TableLocationDefinition.TABLE_NAME, values, 
+				  DatabaseContract.TableLocationDefinition.COLUMN_NAME_LOCATION_NAME + 
 				  "=\"" + originalName + "\"", null);
 	}
 	
@@ -250,52 +260,52 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	private ContentValues createValuesFromLocation(Location location) {
 		ContentValues values = new ContentValues();
 
-		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_LOCATION_NAME,
+		values.put(DatabaseContract.TableLocationDefinition.COLUMN_NAME_LOCATION_NAME,
 				location.getName());
-		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_LATITUDE,
+		values.put(DatabaseContract.TableLocationDefinition.COLUMN_NAME_LATITUDE,
 				location.getLocation().getLatitude());
-		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_LONGITUDE,
+		values.put(DatabaseContract.TableLocationDefinition.COLUMN_NAME_LONGITUDE,
 				location.getLocation().getLongitude());
-		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_ISMONDAY,
+		values.put(DatabaseContract.TableLocationDefinition.COLUMN_NAME_ISMONDAY,
 				location.isMon() ? 1 : 0);
-		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_ISTUESDAY,
+		values.put(DatabaseContract.TableLocationDefinition.COLUMN_NAME_ISTUESDAY,
 				location.isTue() ? 1 : 0);
-		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_ISWEDNESDAY,
+		values.put(DatabaseContract.TableLocationDefinition.COLUMN_NAME_ISWEDNESDAY,
 				location.isWed() ? 1 : 0);
-		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_ISTHURSDAY,
+		values.put(DatabaseContract.TableLocationDefinition.COLUMN_NAME_ISTHURSDAY,
 				location.isThu() ? 1 : 0);
-		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_ISFRIDAY,
+		values.put(DatabaseContract.TableLocationDefinition.COLUMN_NAME_ISFRIDAY,
 				location.isFri() ? 1 : 0);
-		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_ISSATURDAY,
+		values.put(DatabaseContract.TableLocationDefinition.COLUMN_NAME_ISSATURDAY,
 				location.isSat() ? 1 : 0);
-		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_ISSUNDAY,
+		values.put(DatabaseContract.TableLocationDefinition.COLUMN_NAME_ISSUNDAY,
 				location.isSun() ? 1 : 0);
-		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_TIMEFROM_HOURS,
+		values.put(DatabaseContract.TableLocationDefinition.COLUMN_NAME_TIMEFROM_HOURS,
 				location.getTimeFrom().getHour());
 		values.put(
-				DatabaseContract.TableDefinition.COLUMN_NAME_TIMEFROM_MINUTES,
+				DatabaseContract.TableLocationDefinition.COLUMN_NAME_TIMEFROM_MINUTES,
 				location.getTimeFrom().getMinute());
-		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_TIMETO_HOURS,
+		values.put(DatabaseContract.TableLocationDefinition.COLUMN_NAME_TIMETO_HOURS,
 				location.getTimeTo().getHour());
-		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_TIMETO_MINUTES,
+		values.put(DatabaseContract.TableLocationDefinition.COLUMN_NAME_TIMETO_MINUTES,
 				location.getTimeTo().getMinute());
-		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_RADIUS,
+		values.put(DatabaseContract.TableLocationDefinition.COLUMN_NAME_RADIUS,
 				location.getRadius());
-		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_PRIORITY,
+		values.put(DatabaseContract.TableLocationDefinition.COLUMN_NAME_PRIORITY,
 				location.getPriority());
-		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_ISSOUND,
+		values.put(DatabaseContract.TableLocationDefinition.COLUMN_NAME_ISSOUND,
 				location.isSoundOn() ? 1 : 0);
-		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_ISVIBRATION,
+		values.put(DatabaseContract.TableLocationDefinition.COLUMN_NAME_ISVIBRATION,
 				location.isVibrationOn() ? 1 : 0);
-		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_ISWIFI,
+		values.put(DatabaseContract.TableLocationDefinition.COLUMN_NAME_ISWIFI,
 				location.isWifiOn() ? 1 : 0);
-		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_ISBLUETOOTH,
+		values.put(DatabaseContract.TableLocationDefinition.COLUMN_NAME_ISBLUETOOTH,
 				location.isBluetoothOn() ? 1 : 0);
-		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_ISNFC,
+		values.put(DatabaseContract.TableLocationDefinition.COLUMN_NAME_ISNFC,
 				location.isNfcOn() ? 1 : 0);
-		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_ISMOBILEDATA,
+		values.put(DatabaseContract.TableLocationDefinition.COLUMN_NAME_ISMOBILEDATA,
 				location.isMobileData() ? 1 : 0);
-		values.put(DatabaseContract.TableDefinition.COLUMN_NAME_ISSMS,
+		values.put(DatabaseContract.TableLocationDefinition.COLUMN_NAME_ISSMS,
 				location.isSMSsendOn() ? 1 : 0);
 		
 		return values;
@@ -308,6 +318,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 		newSMS.setReceiverNumber(Integer.parseInt(c.getString(1)));
 		newSMS.setMessageText(c.getString(2));
 		newSMS.setLocationToSend(new Location(c.getString(3)));
+		newSMS.setIsOneTimeUse((c.getInt(4)) == 1);
 		
 		return newSMS;
 	}
@@ -325,5 +336,41 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 				(sms.isOneTimeUse() ? 1 : 0));
 		
 		return values;
+	}
+	
+	private List<Location> getAllLocations(SQLiteDatabase db) {
+		// This function is used only during database upgrades
+		// as it uses previous database reference
+		String selectQuery = "SELECT  * FROM "
+				+ DatabaseContract.TableLocationDefinition.TABLE_NAME;
+		Cursor c = db.rawQuery(selectQuery, null);
+
+		List<Location> locationList = new ArrayList<>();
+		if (c.moveToFirst()) {
+			do {
+				locationList.add(createLocationFromCursor(c));
+			} while (c.moveToNext());
+		}
+		c.close();
+
+		return locationList;
+	}
+	
+	private List<SMS> getAllSMS(SQLiteDatabase db) {
+		// This function is used only during database upgrades
+		// as it uses previous database reference
+		String selectQuery = "SELECT  * FROM "
+				+ DatabaseContract.TableSMSDefinition.TABLE_NAME;
+		Cursor c = db.rawQuery(selectQuery, null);
+
+		List<SMS> smsList = new ArrayList<>();
+		if (c.moveToFirst()) {
+			do {
+				smsList.add(createSMSFromCursor(c));
+			} while (c.moveToNext());
+		}
+		c.close();
+
+		return smsList;
 	}
 }

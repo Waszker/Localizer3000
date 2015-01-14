@@ -3,7 +3,6 @@ package pl.papistudio.localizer3000;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.view.Menu;
 
 public class SMSActivity extends Activity {
 	/******************/
@@ -22,11 +21,6 @@ public class SMSActivity extends Activity {
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, new SMSListFragment()).commit();
 		}
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		return true;
 	}
 
 	public SMS getCurrentlyUsedSMS() {

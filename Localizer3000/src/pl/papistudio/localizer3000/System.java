@@ -55,13 +55,14 @@ public class System {
 	
 	private static void updatePhoneStatusForFoundLocation(Location nearestLocation) {
 		EventBus.getDefault().post(nearestLocation);
-		boolean hasLocationChanged = !(currentlyActiveLocation.equals(nearestLocation));
+		boolean hasLocationChanged = currentlyActiveLocation == null || 
+									 !(currentlyActiveLocation.getName().contentEquals(nearestLocation.getName()));
 		
 		setWifi(nearestLocation.isWifiOn());
 		setBluetooth(nearestLocation.isBluetoothOn());
 		setMobileData(nearestLocation.isMobileData());
 		setSound(nearestLocation.isSoundOn(), nearestLocation.isVibrationOn());
-		sendSMSes(hasLocationChanged);
+		sendSMSes(nearestLocation, hasLocationChanged);
 	}
 	
 	private static Location findBestSuitedLocation(android.location.Location location, Context context) {
@@ -146,13 +147,12 @@ public class System {
 			
 	}
 	
-	private static void sendSMSes(boolean hasLocationChanged) {
+	private static void sendSMSes(Location location, boolean hasLocationChanged) {
 		List<SMS> smsList = DatabaseHelper.getInstance(service).getAllSMS();
 		
 		for(SMS s : smsList)
 		{
-			if(currentlyActiveLocation != null
-			   && s.getLocationToSend().getName().contentEquals(currentlyActiveLocation.getName()))
+			if(s.getLocationToSend().getName().contentEquals(location.getName()))
 			{
 				if(hasLocationChanged)
 				{
