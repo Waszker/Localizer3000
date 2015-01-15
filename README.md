@@ -28,7 +28,8 @@ These parts are licensed as follows:
 <ul>
 <li>baucera/drag-sort-listview under Apache License v.2.0 (<a href="https://github.com/bauerca/drag-sort-listview">HERE</a>)</li>
 <li>traex/RippleEffect under MIT License (<a href="https://github.com/traex/RippleEffect">HERE</a>)</li>
-<li>makovkastar/FloatingActionButton under MIT License (<a href="https://github.com/makovkastar/FloatingActionButton">HERE</a></li>
+<li>makovkastar/FloatingActionButton under MIT License (<a href="https://github.com/makovkastar/FloatingActionButton">HERE)</a></li>
 <li>greenrobot/EventBus under Apache License v.2.0 (<a href="https://github.com/greenrobot/EventBus">HERE</a>)</li>
 <li>ApmeM/android-flowlayout under Apache License v.2.0 (<a href="https://github.com/ApmeM/android-flowlayout">HERE</a>)</li>
+<li>jlhonora/multistatetogglebutton under ??? License (<a href="https://github.com/jlhonora/multistatetogglebutton">HERE</a>)</li>
 </ul>
