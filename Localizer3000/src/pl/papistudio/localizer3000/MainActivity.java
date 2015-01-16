@@ -28,6 +28,7 @@ public class MainActivity extends Activity {
 	/******************/
 	public static final String SHARED_PREFERENCES = "SHARED_PREFERENCES";
 	public static final String INTERVAL_PREFERENCE = "INTERVAL_PREFERENCE";
+	public static final String CHECK_FOR_MODULES_PREFERENCE = "MODULES_PREFERENCE";
 	public static final int EDIT_EXISTING_LOCATION = 0x1;
 	private AlertDialog alertDialog;
 	private boolean isServiceBinded;
@@ -53,7 +54,8 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		setServiceButtonTextAccordingToServiceState();
-		bindIfLocationServiceRunning();		
+		bindIfLocationServiceRunning();
+		checkForModulesAvailability();
 	}
 
 	@Override
@@ -65,15 +67,19 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		final int id = item.getItemId();
-		if (id == R.id.action_settings) {
+		
+		if (id == R.id.action_settings && 
+		    getFragmentManager().findFragmentByTag("Preferences") == null) 
+		{
 			FragmentTransaction ft = getFragmentManager().beginTransaction();
 			ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out,
 					android.R.animator.fade_in, android.R.animator.fade_out);
-            ft.replace(android.R.id.content, new PreferencesFragment());
+            ft.replace(android.R.id.content, new PreferencesFragment(), "Preferences");
 			ft.addToBackStack(null);
             ft.commit();
 			return true;
 		}
+		
 		return super.onOptionsItemSelected(item);
 	}
 	
@@ -239,5 +245,13 @@ public class MainActivity extends Activity {
 	private void bindIfLocationServiceRunning() {
 		if(!isLocationServiceNotRunning())
 			isServiceBinded = bindService(new Intent(this, LocationService.class), serviceConnection, BIND_AUTO_CREATE);
+	}
+	
+	private void checkForModulesAvailability() {
+		if(getSharedPreferences(MainActivity.SHARED_PREFERENCES, 
+				Context.MODE_PRIVATE).getBoolean(CHECK_FOR_MODULES_PREFERENCE, true))
+		{
+			ModuleDialog.showModuleDialog(this);
+		}
 	}
 }

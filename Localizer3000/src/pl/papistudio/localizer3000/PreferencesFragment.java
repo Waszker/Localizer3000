@@ -47,12 +47,15 @@ public class PreferencesFragment extends PreferenceFragment implements OnPrefere
 	public boolean onPreferenceClick(Preference preference) {
 		if(preference.getKey().contentEquals("interval"))
 			showPickerDialog();
+		else if(preference.getKey().contentEquals("modules"))
+			ModuleDialog.showModuleDialog(getActivity());
 		
 		return false;
 	}
 	
 	private void addOnClickListeners() {
-        ((Preference)findPreference("interval")).setOnPreferenceClickListener(this);		
+        ((Preference)findPreference("interval")).setOnPreferenceClickListener(this);
+        ((Preference)findPreference("modules")).setOnPreferenceClickListener(this);		
 	}
 	
 	private void initializePreferenceVariables() {

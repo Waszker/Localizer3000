@@ -6,6 +6,8 @@
     <!-- Location list and details -->
     <string name="edit_text">Edit</string>
     <string name="delete_text">Delete</string>
+    <string name="ok_text">OK</string>
+    <string name="never_again_text">Don\'t show again</string>
     <string name="main_activity_service_status_text">Service status:</string>
     <string name="main_activity_text1">Current coordinates:</string>
     <string name="current_localization">\nUnknown\n</string>
@@ -15,6 +17,8 @@
     <string name="fragment_location_details_name">Location name:</string>
     <string name="fragment_location_details_active_days">Active on days:</string>
     <string name="fragment_location_details_active_time">Active time:</string>
+    <string name="fragment_location_details_location">Location:</string>
+    <string name="fragment_location_details_gps">GPS:</string>
     <string name="fragment_location_details_sound">Sounds:</string>
     <string name="fragment_location_details_vibrations">Vibrations:</string>
     <string name="fragment_location_details_wifi">Wifi:</string>
@@ -23,6 +27,7 @@
     <string name="fragment_location_details_mobile_data">Mobile Data:</string>
     <string name="fragment_location_details_SMS">SMS:</string>
     <string name="title_activity_edit_location">Edit location</string>
+    <string name="dialog_modules_main_text">Following functionality is supported by this device:</string>
 
     <!-- Location edit -->
     <string name="fragment_location_edit_time_from">From: 00:00</string>

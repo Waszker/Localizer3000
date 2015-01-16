@@ -131,7 +131,7 @@ public class LocationService extends Service {
 		    	{
 			    	LocationService.this.location = location;
 			    	broadcastNewLocation(location);
-			    	System.reactToLocationChange(location, LocationService.this.getApplicationContext(), LocationService.this);
+			    	System.reactToLocationChange(location, LocationService.this.getApplicationContext());
 			    	Log.d(TAG, "Location updated");
 		    	}
 		    	
@@ -206,7 +206,7 @@ public class LocationService extends Service {
 			{
 				locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, interval, 0, locationListener);
 				location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-				locationListener.onLocationChanged(location);
+//				locationListener.onLocationChanged(location);
 				Log.d(TAG, "GPS obtained");
 			}
 		}

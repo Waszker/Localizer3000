@@ -9,8 +9,10 @@ import org.honorato.multistatetogglebutton.MultiStateToggleButton.ToggleStates;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.net.wifi.WifiManager;
+import android.os.Vibrator;
 import android.telephony.SmsManager;
 import android.util.Log;
 import de.greenrobot.event.EventBus;
@@ -26,7 +28,7 @@ public class System {
 	/******************/
 	/*   VARIABLES    */
 	/******************/
-	private static LocationService service;
+	private static Context context;
 	private static String TAG = "Location Service System module";
 	private static Location currentlyActiveLocation;
 	
@@ -40,11 +42,10 @@ public class System {
 	 * If there are multiple such locations, the one with lowest priority is taken.
 	 *  
 	 * @param location
-	 * @param context
-	 * @param service asking for reaction
+	 * @param context asking for reaction
 	 */
-	public static void reactToLocationChange(android.location.Location location, Context context, LocationService service) {
-		System.service = service;
+	public static void reactToLocationChange(android.location.Location location, Context context) {
+		System.context = context;
 		Location nearestLocation = findBestSuitedLocation(location, context);
 		if(nearestLocation != null)
 		{
@@ -53,6 +54,22 @@ public class System {
 		}
 		else
 			Log.d("System Location", "There is no good location to apply...");
+	}
+	
+	public static boolean[] checkPhoneModules(Context context) {
+//		StringBuilder response = new StringBuilder("Device has support for following modules:\n");
+		boolean[] availability = new boolean[5];
+
+		availability[0] = context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_LOCATION);
+		availability[1] = context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS);
+		availability[2] = context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_WIFI);
+		availability[3] = context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH);
+		availability[4] = (((Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE)).hasVibrator());
+		
+		return availability;
+	}
+	
+	private System() {
 	}
 	
 	private static void updatePhoneStatusForFoundLocation(Location nearestLocation) {
@@ -97,28 +114,26 @@ public class System {
 	}
 	
 	private static void setWifi(ToggleStates state) {
-		try {
+		if(context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_WIFI))
+		{
 			if(state == ToggleStates.On || state == ToggleStates.Off)
-			((WifiManager)service.getSystemService(Context.WIFI_SERVICE)).setWifiEnabled(state == ToggleStates.On);
-		} catch(Exception e) {
-			Log.e(TAG, "Probably no WiFi module\n" + e.getLocalizedMessage());
+			((WifiManager)context.getSystemService(Context.WIFI_SERVICE)).setWifiEnabled(state == ToggleStates.On);
 		}
 	}
 	
 	private static void setBluetooth(ToggleStates state) {
-		try {
+		if(BluetoothAdapter.getDefaultAdapter() != null)
+		{
 			if(state == ToggleStates.On)
 				 BluetoothAdapter.getDefaultAdapter().enable();
 			else if(state == ToggleStates.Off)
 				BluetoothAdapter.getDefaultAdapter().disable();
-		} catch (Exception e) {
-			Log.e(TAG, "Probably no bluetooth module\n" + e.getLocalizedMessage());
 		}
 	}
 	
 	@SuppressWarnings("deprecation")
 	private static void setSound(ToggleStates stateSound, ToggleStates stateVibration) {
-		AudioManager aManager=(AudioManager)service.getSystemService(Context.AUDIO_SERVICE);
+		AudioManager aManager=(AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
 		if(stateSound == ToggleStates.Off && stateVibration == ToggleStates.Off) 
 			aManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
 		if(stateSound == ToggleStates.Off && stateVibration == ToggleStates.On)
@@ -151,7 +166,7 @@ public class System {
 	}
 	
 	private static void sendSMSes(Location location, boolean hasLocationChanged) {
-		List<SMS> smsList = DatabaseHelper.getInstance(service).getAllSMS();
+		List<SMS> smsList = DatabaseHelper.getInstance(context).getAllSMS();
 		
 		for(SMS s : smsList)
 		{
@@ -165,7 +180,7 @@ public class System {
 													);
 
 					if(s.isOneTimeUse())
-						DatabaseHelper.getInstance(service).deleteSMSAt(s);
+						DatabaseHelper.getInstance(context).deleteSMSAt(s);
 				}
 			}
 		}	
