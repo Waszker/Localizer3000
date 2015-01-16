@@ -57,13 +57,21 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 	@Override
 	public void onClick(View v) {
 		if(v.getId() == R.id.edit_location_cancel_button)
+		{
 			showCancelConfirmationDialog();
+		}
 		if(v.getId() == R.id.edit_location_next_button)
+		{
 			checkLocationNameAndShowSecondFragment();
+		}
 		if(v.getId() == R.id.edit_location_time_from_button)
+		{
 			mLocation.setTimeFrom(showTimePicker(mLocation.getTimeFrom(), "Select starting hour"));
+		}
 		if(v.getId() == R.id.edit_location_time_to_button)
+		{
 			mLocation.setTimeTo(showTimePicker(mLocation.getTimeTo(), "Select ending hour"));
+		}
 	}
 	
 	/**
@@ -164,9 +172,13 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 	 
 	private void checkLocationNameAndShowSecondFragment() {
 		if(((TextView)getView().findViewById(R.id.edit_location_name)).getText().length() != 0)
+		{
 			showSecondEditFragment();
+		}
 		else
-			Toast.makeText(getActivity(), "Please provide at least location name", Toast.LENGTH_SHORT).show();		
+		{
+			Toast.makeText(getActivity(), "Please provide at least location name", Toast.LENGTH_SHORT).show();	
+		}
 	}
 	 
 	private void showSecondEditFragment() {

@@ -30,9 +30,9 @@ public class MainActivity extends Activity {
 	public static final String INTERVAL_PREFERENCE = "INTERVAL_PREFERENCE";
 	public static final String CHECK_FOR_MODULES_PREFERENCE = "MODULES_PREFERENCE";
 	public static final int EDIT_EXISTING_LOCATION = 0x1;
-	private AlertDialog alertDialog;
-	private boolean isServiceBinded;
-	private ServiceConnection serviceConnection = new ServiceConnection() {
+	private AlertDialog mAlertDialog;
+	private boolean mIsServiceBinded;
+	private ServiceConnection mServiceConnection = new ServiceConnection() {
 
 		@Override
 		public void onServiceConnected(ComponentName name, IBinder service) {
@@ -42,7 +42,7 @@ public class MainActivity extends Activity {
 		@Override
 		public void onServiceDisconnected(ComponentName name) {
 			Log.d("MainActivity", "Lost bind to service!");
-			isServiceBinded = false;
+			mIsServiceBinded = false;
 		}
 	};
 
@@ -93,10 +93,10 @@ public class MainActivity extends Activity {
     protected void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
-        if (isServiceBinded) 
+        if (mIsServiceBinded) 
         {
-            unbindService(serviceConnection);
-            isServiceBinded = false;
+            unbindService(mServiceConnection);
+            mIsServiceBinded = false;
         }
     }
 	
@@ -112,12 +112,16 @@ public class MainActivity extends Activity {
 	 */
 	public void startStopServiceOnClick(View v) {
 		if(((ToggleButton)v).isChecked())
+		{
 			startLocationServiceAndBindToIt();
+		}
 		else
 		{
-			if(isServiceBinded)
-				unbindService(serviceConnection);
-            isServiceBinded = false;
+			if(mIsServiceBinded)
+			{
+				unbindService(mServiceConnection);
+			}
+            mIsServiceBinded = false;
             stopService(new Intent(this, LocationService.class));
 		}
 
@@ -159,19 +163,19 @@ public class MainActivity extends Activity {
 	public void onEvent(Exception error) {
         Toast.makeText(this, error.getMessage(), Toast.LENGTH_SHORT).show();
         
-        if(alertDialog == null || !(alertDialog.isShowing()) )
+        if(mAlertDialog == null || !(mAlertDialog.isShowing()) )
         {
-	        alertDialog = new AlertDialog.Builder(this).create();
-	        alertDialog.setTitle(error.getMessage());
-	        alertDialog.setMessage("Please enable network or GPS connection.");
-	        alertDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "Ok", new OnClickListener() {
+	        mAlertDialog = new AlertDialog.Builder(this).create();
+	        mAlertDialog.setTitle(error.getMessage());
+	        mAlertDialog.setMessage("Please enable network or GPS connection.");
+	        mAlertDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "Ok", new OnClickListener() {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					dialog.cancel();
 				}
 			});
-	        alertDialog.show();
+	        mAlertDialog.show();
         }
 	}
 	
@@ -245,7 +249,9 @@ public class MainActivity extends Activity {
 	
 	private void bindIfLocationServiceRunning() {
 		if(!isLocationServiceNotRunning())
-			isServiceBinded = bindService(new Intent(this, LocationService.class), serviceConnection, BIND_AUTO_CREATE);
+		{
+			mIsServiceBinded = bindService(new Intent(this, LocationService.class), mServiceConnection, BIND_AUTO_CREATE);
+		}
 	}
 	
 	private void checkForModulesAvailability() {

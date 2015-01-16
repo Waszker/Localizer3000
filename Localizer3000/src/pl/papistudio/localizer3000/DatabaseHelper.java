@@ -24,8 +24,8 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	/******************/
 	private static final int DATABASE_VERSION = 3;
 	private static final String DATABASE_NAME = "Locations.db";
-	private static DatabaseHelper dbInstance;
-	private static int mCurrentPriorityNumber;
+	private static DatabaseHelper sDbInstance;
+	private static int sCurrentPriorityNumber;
 
 	/******************/
 	/*   VARIABLES    */
@@ -39,11 +39,11 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	 * @return instance of class
 	 */
 	public static DatabaseHelper getInstance(Context context) {	
-		if(dbInstance == null)
+		if(sDbInstance == null)
 		{
-			dbInstance = new DatabaseHelper(context);
+			sDbInstance = new DatabaseHelper(context);
 		}
-		return dbInstance;
+		return sDbInstance;
 	}
 
 	@Override
@@ -134,7 +134,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	 */
 	public long addLocation(Location location) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		location.setPriority(mCurrentPriorityNumber++);
+		location.setPriority(sCurrentPriorityNumber++);
 		ContentValues values = createValuesFromLocation(location);
 		long newRowId = db.insert(DatabaseContract.TableLocationDefinition.TABLE_NAME,
 				null, values);
@@ -218,7 +218,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	}
 	
 	private void getBiggestPriorityNumber() {
-		mCurrentPriorityNumber = getAllLocations().size();
+		sCurrentPriorityNumber = getAllLocations().size();
 	}
 	
 	private Location createLocationFromCursor(Cursor c) {

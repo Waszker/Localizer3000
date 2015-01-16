@@ -7,7 +7,7 @@ public class SavedLocalizationsActivity extends Activity {
 	/******************/
 	/*   VARIABLES    */
 	/******************/
-	private Location currentlyUsedLocation;
+	private Location mCurrentlyUsedLocation;
 
 	/******************/
 	/*   FUNCTIONS    */
@@ -23,21 +23,21 @@ public class SavedLocalizationsActivity extends Activity {
 		}
 		else
 		{
-			currentlyUsedLocation = (Location)savedInstanceState.getParcelable("location");
+			mCurrentlyUsedLocation = (Location)savedInstanceState.getParcelable("location");
 		}
 	}
 	
 	@Override
 	 public void onSaveInstanceState(Bundle outState) {
 	     super.onSaveInstanceState(outState);
-	     outState.putParcelable("location", currentlyUsedLocation);
+	     outState.putParcelable("location", mCurrentlyUsedLocation);
 	 }
 
 	public Location getCurrentlyUsedLocation() {
-		return currentlyUsedLocation;
+		return mCurrentlyUsedLocation;
 	}
 
 	public void setCurrentlyUsedLocation(Location currentlyUsedLocation) {
-		this.currentlyUsedLocation = currentlyUsedLocation;
+		this.mCurrentlyUsedLocation = currentlyUsedLocation;
 	}
 }

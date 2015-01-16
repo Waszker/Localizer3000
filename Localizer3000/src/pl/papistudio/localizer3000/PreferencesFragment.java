@@ -20,8 +20,8 @@ public class PreferencesFragment extends PreferenceFragment implements OnPrefere
 	/******************/
 	/*   VARIABLES    */
 	/******************/
-	private int interval;
-	private SharedPreferences sharedPref;
+	private int mInterval;
+	private SharedPreferences mSharedPref;
 	
 	/******************/
 	/*   FUNCTIONS    */
@@ -46,9 +46,13 @@ public class PreferencesFragment extends PreferenceFragment implements OnPrefere
 	@Override
 	public boolean onPreferenceClick(Preference preference) {
 		if(preference.getKey().contentEquals("interval"))
+		{
 			showPickerDialog();
+		}
 		else if(preference.getKey().contentEquals("modules"))
+		{
 			ModuleDialog.showModuleDialog(getActivity());
+		}
 		
 		return false;
 	}
@@ -59,9 +63,9 @@ public class PreferencesFragment extends PreferenceFragment implements OnPrefere
 	}
 	
 	private void initializePreferenceVariables() {
-		sharedPref = getActivity().getSharedPreferences(MainActivity.SHARED_PREFERENCES, 
+		mSharedPref = getActivity().getSharedPreferences(MainActivity.SHARED_PREFERENCES, 
 													 	Context.MODE_PRIVATE);
-        interval = sharedPref.getInt(MainActivity.INTERVAL_PREFERENCE, 5);
+        mInterval = mSharedPref.getInt(MainActivity.INTERVAL_PREFERENCE, 5);
         changeIntervalPreferenceText();
 	}
 	
@@ -77,7 +81,7 @@ public class PreferencesFragment extends PreferenceFragment implements OnPrefere
 	private void prepareNumberPicker(NumberPicker picker) {
 		picker.setMaxValue(60);
 		picker.setMinValue(1);
-		picker.setValue(interval);		
+		picker.setValue(mInterval);		
 	}
 	
 	private RelativeLayout getNumberPickerLayout(NumberPicker picker) {
@@ -102,10 +106,10 @@ public class PreferencesFragment extends PreferenceFragment implements OnPrefere
 				.setCancelable(false)
 				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {						
-						interval = picker.getValue();
+						mInterval = picker.getValue();
 						saveIntervalToSharedPreferences();
 						changeIntervalPreferenceText();
-						EventBus.getDefault().post(Integer.valueOf(interval*1000));
+						EventBus.getDefault().post(Integer.valueOf(mInterval*1000));
 						Log.d("Preference Fragment", "New interval value : " + picker.getValue());
 					}
 				})
@@ -119,12 +123,12 @@ public class PreferencesFragment extends PreferenceFragment implements OnPrefere
 	}
 	
 	private void saveIntervalToSharedPreferences() {
-		SharedPreferences.Editor editor = sharedPref.edit();
-		editor.putInt(MainActivity.INTERVAL_PREFERENCE, interval);
+		SharedPreferences.Editor editor = mSharedPref.edit();
+		editor.putInt(MainActivity.INTERVAL_PREFERENCE, mInterval);
 		editor.commit();
 	}
 	
 	private void changeIntervalPreferenceText() {
-		((Preference)findPreference("interval")).setSummary(interval + " min.");
+		((Preference)findPreference("interval")).setSummary(mInterval + " min.");
 	}
 }
