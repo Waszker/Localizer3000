@@ -10,8 +10,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-
 /**
  * <p>Singleton class responsible for all database-related
  * queries.</p>
@@ -55,7 +53,6 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		Log.e("Databse", "Old ver" + oldVersion);
 		if(oldVersion == 1)
 		{
 			db.execSQL("ALTER TABLE " + DatabaseContract.TableSMSDefinition.TABLE_NAME +
