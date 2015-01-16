@@ -29,15 +29,15 @@ public class LocationService extends Service {
 		}
 	}
 	
-	private static String TAG = "Location Service";
-	private static int NOTIFICATION_ID = 1;
+	private static final String TAG = "Location Service";
+	private static final int NOTIFICATION_ID = 1;
 	private final IBinder mBinder = new LocalBinder();
 	private android.location.Location mLocation;
 	private BroadcastReceiver mNetworkChangeReceiver;
 	private LocationManager mLocationManager;
 	private LocationListener mLocationListener;
 	private int interval;
-	final private int startMode = Service.START_STICKY;
+	final private int mStartMode = Service.START_STICKY;
 	
 	/******************/
 	/*   FUNCTIONS    */
@@ -56,7 +56,7 @@ public class LocationService extends Service {
     	interval = intent.getIntExtra("interval", 5*60*1000);
     	registerForLocationUpdates();
     	registerForConnectivityChanges();
-        return startMode;
+        return mStartMode;
     }
     
     @Override
@@ -114,7 +114,9 @@ public class LocationService extends Service {
     
     private void sendLocationInfo() {
     	if(mLocation != null)
+    	{
     		EventBus.getDefault().post(mLocation);
+    	}
     }
     
 	private Notification createNotification(String contentString) {
@@ -136,7 +138,9 @@ public class LocationService extends Service {
 		    	}
 		    	
 	    		if(location != null && location.getAccuracy() > 150.0)
+	    		{
 	    			reactToPoorLocationAccuracy();
+	    		}
 		    }
 
 		    public void onStatusChanged(String provider, int status, Bundle extras) {}
@@ -158,7 +162,9 @@ public class LocationService extends Service {
     			mLocationManager = (LocationManager)LocationService.this.getSystemService(Context.LOCATION_SERVICE);
     			
     			if(mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
-    				mLocationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, null);		    	
+    			{
+    				mLocationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, null);	
+    			}
 		    }
 		    
 		    private void broadcastNewLocation(android.location.Location loc) {
@@ -187,7 +193,8 @@ public class LocationService extends Service {
 		mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 		mLocationManager.removeUpdates(mLocationListener);
 
-		if( !(mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || isNetworkConnectionEnabled()) ) {
+		if( !(mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || isNetworkConnectionEnabled()) ) 
+		{
 			EventBus.getDefault().post(new Exception("No network or GPS!"));
 			updateNotification("No network or GPS connection! Location cannot be obtained!");
 		}

@@ -10,6 +10,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * <p>Singleton class responsible for all database-related
@@ -24,8 +25,8 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	/******************/
 	private static final int DATABASE_VERSION = 3;
 	private static final String DATABASE_NAME = "Locations.db";
-	private static DatabaseHelper dbInstance;
-	private static int mCurrentPriorityNumber;
+	private static DatabaseHelper sDbInstance;
+	private static int sCurrentPriorityNumber;
 
 	/******************/
 	/*   VARIABLES    */
@@ -39,11 +40,11 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	 * @return instance of class
 	 */
 	public static DatabaseHelper getInstance(Context context) {	
-		if(dbInstance == null)
+		if(sDbInstance == null)
 		{
-			dbInstance = new DatabaseHelper(context);
+			sDbInstance = new DatabaseHelper(context);
 		}
-		return dbInstance;
+		return sDbInstance;
 	}
 
 	@Override
@@ -53,11 +54,15 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	}
 
 	@Override
-	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {		
+	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		Log.e("Databse", "Old ver" + oldVersion);
 		if(oldVersion == 1)
 		{
 			db.execSQL("ALTER TABLE " + DatabaseContract.TableSMSDefinition.TABLE_NAME +
 					   " ADD " + DatabaseContract.TableSMSDefinition.COLUMN_NAME_IS_ONE_TIME +
+					   " INTEGER");
+			db.execSQL("ALTER TABLE " + DatabaseContract.TableLocationDefinition.TABLE_NAME +
+					   " ADD " + DatabaseContract.TableLocationDefinition.COLUMN_NAME_SHOULD_TURN_OFF +
 					   " INTEGER");
 		}
 		
@@ -134,7 +139,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	 */
 	public long addLocation(Location location) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		location.setPriority(mCurrentPriorityNumber++);
+		location.setPriority(sCurrentPriorityNumber++);
 		ContentValues values = createValuesFromLocation(location);
 		long newRowId = db.insert(DatabaseContract.TableLocationDefinition.TABLE_NAME,
 				null, values);
@@ -218,7 +223,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	}
 	
 	private void getBiggestPriorityNumber() {
-		mCurrentPriorityNumber = getAllLocations().size();
+		sCurrentPriorityNumber = getAllLocations().size();
 	}
 	
 	private Location createLocationFromCursor(Cursor c) {

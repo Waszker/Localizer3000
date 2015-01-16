@@ -46,30 +46,29 @@ public class ListOfSavedLocationsFragment extends Fragment {
 		/******************/
 		/*   VARIABLES    */
 		/******************/
-		private LayoutInflater inflater;
-		private List<Location> list;
-		private TextView locationName;
-		private Activity activity;
+		private LayoutInflater mInflater;
+		private List<Location> mList;
+		private TextView mLocationName;
+		private Activity mActivity;
 
 		/******************/
 		/*   FUNCTIONS    */
 		/******************/
-		public LocationListAdapter(Activity context, List<Location> list)
-		{
+		public LocationListAdapter(Activity context, List<Location> list) {
 			super();
-			activity = context;
-			this.inflater = LayoutInflater.from(context);
-			this.list = list;
+			mActivity = context;
+			this.mInflater = LayoutInflater.from(context);
+			this.mList = list;
 		}
 
 		@Override
 		public int getCount() {
-			return list.size();
+			return mList.size();
 		}
 
 		@Override
 		public Object getItem(int position) {
-			return list.get(position);
+			return mList.get(position);
 		}
 
 		@Override
@@ -83,20 +82,24 @@ public class ListOfSavedLocationsFragment extends Fragment {
 
 		    if(rowView == null)
 		    {
-		        rowView = inflater.inflate(R.layout.saved_location_list_item, parent, false);
+		        rowView = mInflater.inflate(R.layout.saved_location_list_item, parent, false);
 		    }
-		    locationName = (TextView)rowView.findViewById(R.id.list_item_location_name);
-		    locationName.setText(list.get(position).getName());
+		    mLocationName = (TextView)rowView.findViewById(R.id.list_item_location_name);
+		    mLocationName.setText(mList.get(position).getName());
 		    
 			/* Setting color */
 			if (position % 2 == 0)
+			{
 				((RelativeLayout) rowView.findViewById(R.id.list_item_location))
-						.setBackgroundColor(activity.getResources()
+						.setBackgroundColor(mActivity.getResources()
 								.getColor(R.color.material_blue));
+			}
 			else
+			{
 				((RelativeLayout) rowView.findViewById(R.id.list_item_location))
-						.setBackgroundColor(activity.getResources()
+						.setBackgroundColor(mActivity.getResources()
 								.getColor(R.color.material_blue_lighter));
+			}
 
 		    /* Adding listener to onclick */
 		    ((ImageButton)rowView.findViewById(R.id.delete_item_button)).setOnClickListener(new OnClickListener() {
@@ -105,8 +108,8 @@ public class ListOfSavedLocationsFragment extends Fragment {
 				public void onClick(View v) {
 					Log.d("Item delete", "Deleted item number: " + position);
 					DatabaseHelper dbHelper = DatabaseHelper.getInstance(getActivity().getApplicationContext());
-					dbHelper.deleteLocationAt(list.get(position));
-					list.remove(position);
+					dbHelper.deleteLocationAt(mList.get(position));
+					mList.remove(position);
 					mAdapter.notifyDataSetChanged();
 				}
 			});

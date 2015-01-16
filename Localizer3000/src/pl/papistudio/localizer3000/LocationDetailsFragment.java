@@ -50,9 +50,13 @@ public class LocationDetailsFragment extends Fragment implements OnClickListener
 	@Override
 	public void onClick(View v) {
 		if(v.getId() == R.id.details_delete_location_button)
+		{
 			showDeleteConfirmationDialog();
+		}
 		if(v.getId() == R.id.details_edit_location_button)
+		{
 			showEditDetailsFragment(mLocation);
+		}
 	}
 	
 	@Override
@@ -108,19 +112,33 @@ public class LocationDetailsFragment extends Fragment implements OnClickListener
 	private String createActiveDaysString() {
 		StringBuilder stringBuilder = new StringBuilder();
 		if(mLocation.isMon()==true)
+		{
 			stringBuilder.append("Mon ");
+		}
 		if(mLocation.isTue()==true)
+		{
 			stringBuilder.append("Tue ");
+		}
 		if(mLocation.isWed()==true)
+		{
 			stringBuilder.append("Wed ");
+		}
 		if(mLocation.isThu()==true)
+		{
 			stringBuilder.append("Thu ");
+		}
 		if(mLocation.isFri()==true)
+		{
 			stringBuilder.append("Fri ");
+		}
 		if(mLocation.isSat()==true)
+		{
 			stringBuilder.append("Sat ");
+		}
 		if(mLocation.isSun()==true)
+		{
 			stringBuilder.append("Sun ");
+		}
 		return stringBuilder.toString();
 	}
 	

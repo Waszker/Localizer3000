@@ -17,7 +17,8 @@ public class SMSActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sms);
-		if (savedInstanceState == null) {
+		if (savedInstanceState == null) 
+		{
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, new SMSListFragment()).commit();
 		}
@@ -37,11 +38,17 @@ public class SMSActivity extends Activity {
 	    if ((fragment = getFragmentManager().findFragmentByTag("SMSDetails")) != null)
 	    {
 	    	if(((SMSDetailsFragment)fragment).isVisible())
+	    	{
 	    		((SMSDetailsFragment)fragment).reactToBackPress();
+	    	}
 	    	else
+	    	{
 	    		super.onBackPressed();
+	    	}
 	    }
 	    else
+	    {
 	    	super.onBackPressed();
+	    }
 	}
 }

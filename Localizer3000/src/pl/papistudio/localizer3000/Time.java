@@ -45,14 +45,22 @@ public class Time implements Parcelable {
 		StringBuilder stringBuilder = new StringBuilder(6);
 		
 		if(mHour < 10)
+		{
 			stringBuilder.append("0" + mHour+":");
+		}
 		else
+		{
 			stringBuilder.append(mHour+":");
+		}
 		
 		if(mMinute < 10)
+		{
 			stringBuilder.append("0" + mMinute);
+		}
 		else
+		{
 			stringBuilder.append(mMinute);
+		}
 		
 		return stringBuilder.toString();
 	}
@@ -74,9 +82,13 @@ public class Time implements Parcelable {
 		else
 		{
 			if(mHour > refTime.getHour() || (mHour == refTime.getHour() && mMinute > refTime.mMinute))
+			{
 				result = 1;
+			}
 			else
+			{
 				result = -1;
+			}
 		}
 		
 		return result;

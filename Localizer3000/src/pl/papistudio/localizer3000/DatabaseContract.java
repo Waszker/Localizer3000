@@ -64,7 +64,7 @@ public class DatabaseContract {
 	        TableLocationDefinition.COLUMN_NAME_ISBLUETOOTH + INTEGER_TYPE + COMMA_SEP +
 	        TableLocationDefinition.COLUMN_NAME_ISNFC + INTEGER_TYPE + COMMA_SEP +
 	        TableLocationDefinition.COLUMN_NAME_ISMOBILEDATA + INTEGER_TYPE + COMMA_SEP +
-	        TableLocationDefinition.COLUMN_NAME_ISSMS + INTEGER_TYPE +   
+	        TableLocationDefinition.COLUMN_NAME_ISSMS + INTEGER_TYPE + COMMA_SEP +
 	        TableLocationDefinition.COLUMN_NAME_SHOULD_TURN_OFF + INTEGER_TYPE +         
             " )";
 

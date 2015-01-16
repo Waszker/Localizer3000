@@ -82,22 +82,36 @@ public class LocationEditSecondFragment extends Fragment implements OnClickListe
 		final Location location = ((EditLocationActivity)getActivity()).currentlyEditedLocation;
 		
 		if(v.getId() == R.id.edit_location_back_button)
+		{
 			getFragmentManager().popBackStack();
+		}
 		if(v.getId() == R.id.edit_location_save_button)
 		{
 			if(location.getLocation() != null)
+			{
 				saveLocation();
+			}
 			else
-				Toast.makeText(getActivity(), "Location has to be set before saving", Toast.LENGTH_SHORT).show();				
+			{
+				Toast.makeText(getActivity(), "Location has to be set before saving", Toast.LENGTH_SHORT).show();	
+			}
 		}
 		if(v.getId() == R.id.radius_minus_button)
+		{
 			updateRadius(location, -1);
+		}
 		if(v.getId() == R.id.radius_plus_button)
+		{
 			updateRadius(location, +1);
+		}
 		if(v.getId() == R.id.radius_minus_ten_button)
+		{
 			updateRadius(location, -10);
+		}
 		if(v.getId() == R.id.radius_plus_ten_button)
+		{
 			updateRadius(location, +10);
+		}
 	}
 	
 	@Override
@@ -132,7 +146,9 @@ public class LocationEditSecondFragment extends Fragment implements OnClickListe
 			@Override
 			public void onMyLocationChange(android.location.Location arg0) {
 				if(location.getLocation() == null)
+				{
 					location.setLocation(arg0);
+				}
 				drawMarkerWithCircle();
 				setMapCamera();				
 				map.setOnMyLocationChangeListener(null);

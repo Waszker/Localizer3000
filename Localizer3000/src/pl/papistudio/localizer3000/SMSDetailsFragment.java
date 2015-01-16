@@ -28,8 +28,8 @@ public class SMSDetailsFragment extends Fragment implements OnClickListener {
 	/*   VARIABLES    */
 	/******************/
 	private static final int REQUEST_CONTACT_NUMBER = 123456789;
-	private SMS sms;
-	List<Location> listOfLocations;
+	private SMS mSms;
+	private List<Location> mListOfLocations;
 	
 	/******************/
 	/*   FUNCTIONS    */
@@ -37,12 +37,12 @@ public class SMSDetailsFragment extends Fragment implements OnClickListener {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_sms_details, container, false);
-		listOfLocations = DatabaseHelper.getInstance(getActivity()).getAllLocations();
-		sms = ((SMSActivity)getActivity()).getCurrentlyUsedSMS();
+		mListOfLocations = DatabaseHelper.getInstance(getActivity()).getAllLocations();
+		mSms = ((SMSActivity)getActivity()).getCurrentlyUsedSMS();
 		
 		setSpinnerItems(rootView);
 		addListenersToButtons(rootView);
-		fillSMSDetails(sms, rootView);				
+		fillSMSDetails(mSms, rootView);				
 		
 		return rootView;
 	}
@@ -56,10 +56,14 @@ public class SMSDetailsFragment extends Fragment implements OnClickListener {
 		}
 		
 		if(v.getId() == R.id.edit_sms_cancel_button)
+		{
 			showCancelConfirmationDialog();
+		}
 		
 		if(v.getId() == R.id.edit_sms_save_button)
+		{
 			saveSMS();
+		}
 	}
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -102,7 +106,7 @@ public class SMSDetailsFragment extends Fragment implements OnClickListener {
 	private void setSpinnerItems(View v) {
 		Spinner spinner = (Spinner)v.findViewById(R.id.sms_location_chooser);
 		ArrayAdapter<Location> spinnerArrayAdapter = new ArrayAdapter<Location>(getActivity(), 
-															android.R.layout.simple_spinner_item, listOfLocations);
+															android.R.layout.simple_spinner_item, mListOfLocations);
 		spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner.setAdapter(spinnerArrayAdapter);
 	}
@@ -124,9 +128,9 @@ public class SMSDetailsFragment extends Fragment implements OnClickListener {
 	}
 	
 	private void setSpinnerSelectedLocation(Spinner spinner, SMS sms) {
-		for(int i=0; i<listOfLocations.size(); i++)
+		for(int i=0; i<mListOfLocations.size(); i++)
 		{
-			if(listOfLocations.get(i).getName().contentEquals(sms.getLocationToSend().getName()))
+			if(mListOfLocations.get(i).getName().contentEquals(sms.getLocationToSend().getName()))
 			{
 				spinner.setSelection(i);
 				break;
@@ -162,7 +166,9 @@ public class SMSDetailsFragment extends Fragment implements OnClickListener {
 		boolean isValid = false;		
 		if(((EditText)getView().findViewById(R.id.sms_receiver_number)).getText().length() > 0 // validity is set by checking receiver number
 			&& (Location)((Spinner)getView().findViewById(R.id.sms_location_chooser)).getSelectedItem() != null)
+		{
 			isValid = true;
+		}
 		
 		return isValid;
 	}
@@ -175,22 +181,30 @@ public class SMSDetailsFragment extends Fragment implements OnClickListener {
 			getFragmentManager().popBackStack();
 		}
 		else
+		{
 			Toast.makeText(getActivity(), "Fill all SMS details before saving.", Toast.LENGTH_SHORT).show();
+		}
 	}
 	
 	private void fillSMSBeforeSaving() {
-		if(sms == null)
-			sms = new SMS("", 0, "", null, true);
-		sms.setReceiverNumber(Integer.valueOf(((EditText)getView().findViewById(R.id.sms_receiver_number)).getText().toString()));
-		sms.setLocationToSend((Location)((Spinner)getView().findViewById(R.id.sms_location_chooser)).getSelectedItem());
-		sms.setMessageText(((EditText)getView().findViewById(R.id.sms_message_text)).getText().toString());
-		sms.setIsOneTimeUse(((Switch)getView().findViewById(R.id.sms_one_time_checkbox)).isChecked());
+		if(mSms == null)
+		{
+			mSms = new SMS("", 0, "", null, true);
+		}
+		mSms.setReceiverNumber(Integer.valueOf(((EditText)getView().findViewById(R.id.sms_receiver_number)).getText().toString()));
+		mSms.setLocationToSend((Location)((Spinner)getView().findViewById(R.id.sms_location_chooser)).getSelectedItem());
+		mSms.setMessageText(((EditText)getView().findViewById(R.id.sms_message_text)).getText().toString());
+		mSms.setIsOneTimeUse(((Switch)getView().findViewById(R.id.sms_one_time_checkbox)).isChecked());
 	}
 	
 	private void saveOrUpdateSMS() {
-		if(sms.getUniqueIdNumber() == -1)
-			DatabaseHelper.getInstance(getActivity()).addSMS(sms);
+		if(mSms.getUniqueIdNumber() == -1)
+		{
+			DatabaseHelper.getInstance(getActivity()).addSMS(mSms);
+		}
 		else
-			DatabaseHelper.getInstance(getActivity()).updateSMS(sms);
+		{
+			DatabaseHelper.getInstance(getActivity()).updateSMS(mSms);
+		}
 	}
 }

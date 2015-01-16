@@ -37,8 +37,8 @@ public class System {
 	/*   VARIABLES    */
 	/******************/
 	private static final String TAG = "Location Service System module";
-	private static Context mContext;
-	private static Location mCurrentlyActiveLocation;
+	private static Context sContext;
+	private static Location sCurrentlyActiveLocation;
 	
 	/******************/
 	/*   FUNCTIONS    */
@@ -53,15 +53,17 @@ public class System {
 	 * @param context asking for reaction
 	 */
 	public static void reactToLocationChange(android.location.Location location, Context context) {
-		System.mContext = context;
+		System.sContext = context;
 		Location nearestLocation = findBestSuitedLocation(location, context);
 		if(nearestLocation != null)
 		{
 			updatePhoneStatusForFoundLocation(nearestLocation);			
-			mCurrentlyActiveLocation = nearestLocation;
+			sCurrentlyActiveLocation = nearestLocation;
 		}
 		else
+		{
 			Log.d("System Location", "There is no good location to apply...");
+		}
 	}
 	
 	/**
@@ -109,8 +111,8 @@ public class System {
 	
 	private static void updatePhoneStatusForFoundLocation(Location nearestLocation) {
 		EventBus.getDefault().post(nearestLocation);
-		boolean hasLocationChanged = mCurrentlyActiveLocation == null || 
-									 !(mCurrentlyActiveLocation.getName()
+		boolean hasLocationChanged = sCurrentlyActiveLocation == null || 
+									 !(sCurrentlyActiveLocation.getName()
 											 .contentEquals(nearestLocation.getName()));
 		
 		setWifi(nearestLocation.isWifiOn());
@@ -118,7 +120,7 @@ public class System {
 		setMobileData(nearestLocation.isMobileData());
 		setSound(nearestLocation.isSoundOn(), nearestLocation.isVibrationOn());
 		sendSMSes(nearestLocation, hasLocationChanged);
-		turnServiceOffIfRequested(mContext, nearestLocation.shouldTurnOff());
+		turnServiceOffIfRequested(sContext, nearestLocation.shouldTurnOff());
 	}
 	
 	private static Location findBestSuitedLocation(android.location.Location location, Context context) {
@@ -152,11 +154,13 @@ public class System {
 	}
 	
 	private static void setWifi(ToggleStates state) {
-		if(mContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_WIFI))
+		if(sContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_WIFI))
 		{
 			if(state == ToggleStates.On || state == ToggleStates.Off)
-			((WifiManager)mContext.getSystemService(Context.WIFI_SERVICE))
+			{
+				((WifiManager)sContext.getSystemService(Context.WIFI_SERVICE))
 								 .setWifiEnabled(state == ToggleStates.On);
+			}
 		}
 	}
 	
@@ -164,19 +168,27 @@ public class System {
 		if(BluetoothAdapter.getDefaultAdapter() != null)
 		{
 			if(state == ToggleStates.On)
+			{
 				 BluetoothAdapter.getDefaultAdapter().enable();
+			}
 			else if(state == ToggleStates.Off)
+			{
 				BluetoothAdapter.getDefaultAdapter().disable();
+			}
 		}
 	}
 	
 	@SuppressWarnings("deprecation")
 	private static void setSound(ToggleStates stateSound, ToggleStates stateVibration) {
-		AudioManager aManager=(AudioManager)mContext.getSystemService(Context.AUDIO_SERVICE);
-		if(stateSound == ToggleStates.Off && stateVibration == ToggleStates.Off) 
+		AudioManager aManager=(AudioManager)sContext.getSystemService(Context.AUDIO_SERVICE);
+		if(stateSound == ToggleStates.Off && stateVibration == ToggleStates.Off)
+		{
 			aManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+		}
 		if(stateSound == ToggleStates.Off && stateVibration == ToggleStates.On)
+		{
 			aManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+		}
 		if(stateSound == ToggleStates.On && stateVibration == ToggleStates.Off)
 		{
 			aManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
@@ -184,7 +196,9 @@ public class System {
 		            AudioManager.VIBRATE_SETTING_OFF);
 		}
 		if(stateSound == ToggleStates.On && stateVibration == ToggleStates.On)
+		{
 			aManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+		}
 	}
 	
 	private static void setMobileData(ToggleStates state) {
@@ -193,20 +207,26 @@ public class System {
 			// if we are here, problably we are rooted ;)
 			try {
 				if(state == ToggleStates.On)
+				{
 					Runtime.getRuntime().exec("su -c svc data enable");
+				}
 				else if(state == ToggleStates.Off)
+				{
 					Runtime.getRuntime().exec("su -c svc data disable");
+				}
 			} catch (IOException e) {
 				Log.e(TAG, "Error getting root priviledges");
 			}
 		}
 		else if(state != ToggleStates.Not_specified)
+		{
 			Log.e(TAG, "No root...");
+		}
 			
 	}
 	
 	private static void sendSMSes(Location location, boolean hasLocationChanged) {
-		List<SMS> smsList = DatabaseHelper.getInstance(mContext).getAllSMS();
+		List<SMS> smsList = DatabaseHelper.getInstance(sContext).getAllSMS();
 		
 		for(SMS s : smsList)
 		{
@@ -221,7 +241,7 @@ public class System {
 
 					if(s.isOneTimeUse())
 					{
-						DatabaseHelper.getInstance(mContext).deleteSMSAt(s);
+						DatabaseHelper.getInstance(sContext).deleteSMSAt(s);
 					}
 				}
 			}
@@ -230,7 +250,9 @@ public class System {
 	
 	private static void turnServiceOffIfRequested(Context context, boolean shouldTurnOff) {
 		if(shouldTurnOff)
+		{
 			context.stopService(new Intent(context, LocationService.class));
+		}
 	}
 	
 	private static boolean findBinary(String binaryName) {

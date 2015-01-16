@@ -39,10 +39,10 @@ public class SMSListFragment extends Fragment implements OnClickListener {
 		/******************/
 		/*   VARIABLES    */
 		/******************/
-		private LayoutInflater inflater;
-		private List<SMS> list;
-		private TextView smsName;
-		private Activity activity;
+		private LayoutInflater mInflater;
+		private List<SMS> mList;
+		private TextView mSmsName;
+		private Activity mActivity;
 
 		/******************/
 		/*   FUNCTIONS    */
@@ -50,19 +50,19 @@ public class SMSListFragment extends Fragment implements OnClickListener {
 		public SMSListAdapter(Activity context, List<SMS> list)
 		{
 			super();
-			activity = context;
-			this.inflater = LayoutInflater.from(context);
-			this.list = list;
+			mActivity = context;
+			this.mInflater = LayoutInflater.from(context);
+			this.mList = list;
 		}
 
 		@Override
 		public int getCount() {
-			return list.size();
+			return mList.size();
 		}
 
 		@Override
 		public Object getItem(int position) {
-			return list.get(position);
+			return mList.get(position);
 		}
 
 		@Override
@@ -76,21 +76,25 @@ public class SMSListFragment extends Fragment implements OnClickListener {
 
 		    if(rowView == null)
 		    {
-		        rowView = inflater.inflate(R.layout.saved_location_list_item, parent, false);
+		        rowView = mInflater.inflate(R.layout.saved_location_list_item, parent, false);
 		    }
-		    smsName = (TextView)rowView.findViewById(R.id.list_item_location_name);
-		    smsName.setText(list.get(position).getName());
+		    mSmsName = (TextView)rowView.findViewById(R.id.list_item_location_name);
+		    mSmsName.setText(mList.get(position).getName());
 		    createDeleteButtonListener(rowView, position);
 		    
 			/* Setting color */
 			if (position % 2 == 0)
+			{
 				((RelativeLayout) rowView.findViewById(R.id.list_item_location))
-						.setBackgroundColor(activity.getResources()
+						.setBackgroundColor(mActivity.getResources()
 								.getColor(R.color.material_blue));
+			}
 			else
+			{
 				((RelativeLayout) rowView.findViewById(R.id.list_item_location))
-						.setBackgroundColor(activity.getResources()
-								.getColor(R.color.material_blue_lighter));			
+						.setBackgroundColor(mActivity.getResources()
+								.getColor(R.color.material_blue_lighter));		
+			}
 			
 		    return rowView;
 		}
@@ -101,8 +105,8 @@ public class SMSListFragment extends Fragment implements OnClickListener {
 				public void onClick(View v) {
 					Log.d("Item delete", "Deleted item number: " + position);
 					DatabaseHelper dbHelper = DatabaseHelper.getInstance(getActivity());
-					dbHelper.deleteSMSAt(list.get(position));
-					list.remove(position);
+					dbHelper.deleteSMSAt(mList.get(position));
+					mList.remove(position);
 					mAdapter.notifyDataSetChanged();
 				}
 			});
