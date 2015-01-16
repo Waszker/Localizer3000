@@ -26,8 +26,8 @@ public class SMSListFragment extends Fragment implements OnClickListener {
 	/******************/
 	/*   VARIABLES    */
 	/******************/
-	private List<SMS> smsList;
-	private SMSListAdapter adapter;
+	private List<SMS> mSmsList;
+	private SMSListAdapter mAdapter;
 	
 	/**
 	 * Internal list adapter class. 
@@ -103,7 +103,7 @@ public class SMSListFragment extends Fragment implements OnClickListener {
 					DatabaseHelper dbHelper = DatabaseHelper.getInstance(getActivity());
 					dbHelper.deleteSMSAt(list.get(position));
 					list.remove(position);
-					adapter.notifyDataSetChanged();
+					mAdapter.notifyDataSetChanged();
 				}
 			});
 		}		
@@ -135,10 +135,10 @@ public class SMSListFragment extends Fragment implements OnClickListener {
 		DatabaseHelper dbHelper = DatabaseHelper.getInstance(getActivity().getApplicationContext());	
 		DragSortListView listView = (DragSortListView)v.findViewById(R.id.list_of_sms);		
 		
-		smsList = dbHelper.getAllSMS();
-		adapter = new SMSListAdapter(getActivity(), smsList);
-		listView.setAdapter(adapter);	
-		addListViewClickListener(listView, adapter);
+		mSmsList = dbHelper.getAllSMS();
+		mAdapter = new SMSListAdapter(getActivity(), mSmsList);
+		listView.setAdapter(mAdapter);	
+		addListViewClickListener(listView, mAdapter);
 	}
 	
 	private void addListViewClickListener(ListView listView, final SMSListAdapter adapter) {

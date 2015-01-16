@@ -31,6 +31,7 @@ public class DatabaseContract {
         public static final String COLUMN_NAME_ISNFC = "isNfc";
         public static final String COLUMN_NAME_ISMOBILEDATA = "isMobileData";
         public static final String COLUMN_NAME_ISSMS = "isSMS";
+        public static final String COLUMN_NAME_SHOULD_TURN_OFF = "shouldTurnOff";
 
         private static final String TEXT_TYPE = " TEXT";
         private static final String INTEGER_TYPE = " INTEGER";
@@ -63,7 +64,8 @@ public class DatabaseContract {
 	        TableLocationDefinition.COLUMN_NAME_ISBLUETOOTH + INTEGER_TYPE + COMMA_SEP +
 	        TableLocationDefinition.COLUMN_NAME_ISNFC + INTEGER_TYPE + COMMA_SEP +
 	        TableLocationDefinition.COLUMN_NAME_ISMOBILEDATA + INTEGER_TYPE + COMMA_SEP +
-	        TableLocationDefinition.COLUMN_NAME_ISSMS + INTEGER_TYPE +           
+	        TableLocationDefinition.COLUMN_NAME_ISSMS + INTEGER_TYPE +   
+	        TableLocationDefinition.COLUMN_NAME_SHOULD_TURN_OFF + INTEGER_TYPE +         
             " )";
 
         public static final String SQL_DELETE_LOCATION_ENTRIES =

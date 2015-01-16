@@ -28,6 +28,7 @@
     <string name="fragment_location_details_nfc">NFC:</string>
     <string name="fragment_location_details_mobile_data">Mobile Data:</string>
     <string name="fragment_location_details_SMS">SMS:</string>
+    <string name="fragment_location_details_turn_off">Turn app off:</string>
     <string name="title_activity_edit_location">Edit location</string>
     <string name="dialog_modules_main_text">Following functionality is supported by this device:</string>
 

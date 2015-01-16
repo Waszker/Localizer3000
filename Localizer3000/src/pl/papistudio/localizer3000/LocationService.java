@@ -32,10 +32,10 @@ public class LocationService extends Service {
 	private static String TAG = "Location Service";
 	private static int NOTIFICATION_ID = 1;
 	private final IBinder mBinder = new LocalBinder();
-	private android.location.Location location;
-	private BroadcastReceiver networkChangeReceiver;
-	private LocationManager locationManager;
-	private LocationListener locationListener;
+	private android.location.Location mLocation;
+	private BroadcastReceiver mNetworkChangeReceiver;
+	private LocationManager mLocationManager;
+	private LocationListener mLocationListener;
 	private int interval;
 	final private int startMode = Service.START_STICKY;
 	
@@ -97,7 +97,7 @@ public class LocationService extends Service {
     
     @Override
     public void onDestroy() {
-		locationManager.removeUpdates(locationListener);
+		mLocationManager.removeUpdates(mLocationListener);
 		unregisterReceivers();
         Toast.makeText(this, "Location service ending", Toast.LENGTH_SHORT).show();
 		Log.d(TAG, "Location service ending");
@@ -113,8 +113,8 @@ public class LocationService extends Service {
     }
     
     private void sendLocationInfo() {
-    	if(location != null)
-    		EventBus.getDefault().post(location);
+    	if(mLocation != null)
+    		EventBus.getDefault().post(mLocation);
     }
     
 	private Notification createNotification(String contentString) {
@@ -125,13 +125,13 @@ public class LocationService extends Service {
 	}
         
     private void createLocationListener() {
-		locationListener = new LocationListener() {
+		mLocationListener = new LocationListener() {
 		    public void onLocationChanged(android.location.Location location) {
 		    	if(location != null && isNewLocationBetter(location))
 		    	{
-			    	LocationService.this.location = location;
+			    	LocationService.this.mLocation = location;
 			    	broadcastNewLocation(location);
-			    	System.reactToLocationChange(location, LocationService.this.getApplicationContext());
+			    	System.reactToLocationChange(location, LocationService.this);
 			    	Log.d(TAG, "Location updated");
 		    	}
 		    	
@@ -146,7 +146,7 @@ public class LocationService extends Service {
 		    public void onProviderDisabled(String provider) {}
 		    
 		    private boolean isNewLocationBetter(android.location.Location location) {
-		    	android.location.Location oldLocation = LocationService.this.location;
+		    	android.location.Location oldLocation = LocationService.this.mLocation;
 		    	
 		    	return ((oldLocation.distanceTo(location) > location.getAccuracy() + oldLocation.getAccuracy() 	// we want new location when it points to definately new position
 		    			|| oldLocation.getAccuracy() >= location.getAccuracy())									// we want new location always if it provides better accuracy
@@ -155,10 +155,10 @@ public class LocationService extends Service {
 		    }
 		    
 		    private void reactToPoorLocationAccuracy() {
-    			locationManager = (LocationManager)LocationService.this.getSystemService(Context.LOCATION_SERVICE);
+    			mLocationManager = (LocationManager)LocationService.this.getSystemService(Context.LOCATION_SERVICE);
     			
-    			if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
-    				locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, null);		    	
+    			if(mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+    				mLocationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, null);		    	
 		    }
 		    
 		    private void broadcastNewLocation(android.location.Location loc) {
@@ -168,44 +168,44 @@ public class LocationService extends Service {
     }
     
     private void registerForConnectivityChanges() {
-    	networkChangeReceiver = new BroadcastReceiver() {
+    	mNetworkChangeReceiver = new BroadcastReceiver() {
    		 @Override
 		    public void onReceive(Context context, Intent intent) {
 		        Log.w(TAG, "Network Type Changed");
 		        registerForLocationUpdates();
 		    }
     	};
-    	registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+    	registerReceiver(mNetworkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
     
     private void unregisterReceivers() {
-    	unregisterReceiver(networkChangeReceiver);
+    	unregisterReceiver(mNetworkChangeReceiver);
 		EventBus.getDefault().unregister(this);
     }
 
     private void registerForLocationUpdates() {
-		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-		locationManager.removeUpdates(locationListener);
+		mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+		mLocationManager.removeUpdates(mLocationListener);
 
-		if( !(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || isNetworkConnectionEnabled()) ) {
+		if( !(mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || isNetworkConnectionEnabled()) ) {
 			EventBus.getDefault().post(new Exception("No network or GPS!"));
 			updateNotification("No network or GPS connection! Location cannot be obtained!");
 		}
 
-		if(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) && isNetworkConnectionEnabled()) // we prefer NETWORK OVER GPS
+		if(mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) && isNetworkConnectionEnabled()) // we prefer NETWORK OVER GPS
 		{
-			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, interval, 0, locationListener);
-			location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-			locationListener.onLocationChanged(location);
+			mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, interval, 0, mLocationListener);
+			mLocation = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+			mLocationListener.onLocationChanged(mLocation);
 			Log.d(TAG, "Network obtained");
 		}
 		else
 		{
 			
-			if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+			if(mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
 			{
-				locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, interval, 0, locationListener);
-				location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+				mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, interval, 0, mLocationListener);
+				mLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 //				locationListener.onLocationChanged(location);
 				Log.d(TAG, "GPS obtained");
 			}

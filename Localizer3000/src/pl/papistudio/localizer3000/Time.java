@@ -8,51 +8,51 @@ public class Time implements Parcelable {
 	/******************/
 	/*   VARIABLES    */
 	/******************/
-	 private int hour = 0; // 0-23
-	 private int minute = 0; // 0-59		 
+	 private int mHour = 0; // 0-23
+	 private int mMinute = 0; // 0-59		 
 	
 	/******************/
 	/*   FUNCTIONS    */
 	/******************/	 
 	public Time() {
-		hour = 0;
-		minute = 0;
+		mHour = 0;
+		mMinute = 0;
 	}
 
 	public Time(int hour, int minute) {
-		this.hour = hour;
-		this.minute = minute;
+		this.mHour = hour;
+		this.mMinute = minute;
 	}
 
 	public int getHour() {
-		return hour;
+		return mHour;
 	}
 
 	public void setHour(int hour) {
-		this.hour = hour;
+		this.mHour = hour;
 	}
 
 	public int getMinute() {
-		return minute;
+		return mMinute;
 	}
 
 	public void setMinute(int minute) {
-		this.minute = minute;
+		this.mMinute = minute;
 	}
 
 	@Override
 	public String toString() {
 		StringBuilder stringBuilder = new StringBuilder(6);
 		
-		if(hour < 10)
-			stringBuilder.append("0" + hour+":");
+		if(mHour < 10)
+			stringBuilder.append("0" + mHour+":");
 		else
-			stringBuilder.append(hour+":");
+			stringBuilder.append(mHour+":");
 		
-		if(minute < 10)
-			stringBuilder.append("0" + minute);
+		if(mMinute < 10)
+			stringBuilder.append("0" + mMinute);
 		else
-			stringBuilder.append(minute);
+			stringBuilder.append(mMinute);
 		
 		return stringBuilder.toString();
 	}
@@ -67,11 +67,13 @@ public class Time implements Parcelable {
 	public int compareTo(Time refTime) {
 		int result;
 		
-		if(hour == refTime.getHour() && minute == refTime.getMinute())
+		if(mHour == refTime.getHour() && mMinute == refTime.getMinute())
+		{
 			result = 0;
+		}
 		else
 		{
-			if(hour > refTime.getHour() || (hour == refTime.getHour() && minute > refTime.minute))
+			if(mHour > refTime.getHour() || (mHour == refTime.getHour() && mMinute > refTime.mMinute))
 				result = 1;
 			else
 				result = -1;
@@ -88,8 +90,8 @@ public class Time implements Parcelable {
 	 */
 	public Time(Parcel in)
 	{
-		hour=in.readInt();
-		minute=in.readInt();
+		mHour=in.readInt();
+		mMinute=in.readInt();
 	}
 	
 	@Override
@@ -99,8 +101,8 @@ public class Time implements Parcelable {
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeInt(hour);
-		dest.writeInt(minute);		
+		dest.writeInt(mHour);
+		dest.writeInt(mMinute);		
 	}
 	
 	@SuppressWarnings("rawtypes")

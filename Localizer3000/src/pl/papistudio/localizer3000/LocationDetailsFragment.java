@@ -17,14 +17,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * Fragment displaying all location details.
- * It allows to delete or edit location.
- * In case of deletion fragment ends its life and user comes back to previous screen.
- * In case of edition user is moved further to next fragment.
+ * <p>Fragment displaying all location details.</p>
+ * <p>It allows to delete or edit location.</p>
+ * <p>In case of deletion fragment ends its life and user comes back to previous screen.</p>
+ * <p>In case of edition user is moved further to next fragment.</p>
  * 
- * LocationDetailsFragment displays detailed information
+ * <p>LocationDetailsFragment displays detailed information
  * about currently selected location. It takes info from
- * SavedLocalizationsActivity class where reference to location is stored. 
+ * SavedLocalizationsActivity class where reference to location is stored.</p> 
  * 
  * @author PapiTeam
  *
@@ -33,7 +33,7 @@ public class LocationDetailsFragment extends Fragment implements OnClickListener
 	/******************/
 	/*   VARIABLES    */
 	/******************/
-	private Location location;
+	private Location mLocation;
 	
 	/******************/
 	/*   FUNCTIONS    */
@@ -52,7 +52,7 @@ public class LocationDetailsFragment extends Fragment implements OnClickListener
 		if(v.getId() == R.id.details_delete_location_button)
 			showDeleteConfirmationDialog();
 		if(v.getId() == R.id.details_edit_location_button)
-			showEditDetailsFragment(location);
+			showEditDetailsFragment(mLocation);
 	}
 	
 	@Override
@@ -71,59 +71,63 @@ public class LocationDetailsFragment extends Fragment implements OnClickListener
 	}
 	
 	private void getLocationReference() {
-		location = ((SavedLocalizationsActivity)getActivity()).getCurrentlyUsedLocation();
+		mLocation = ((SavedLocalizationsActivity)getActivity()).getCurrentlyUsedLocation();
 	}
 	
 	private void fillLocationDetails(View v) {
-		((TextView)v.findViewById(R.id.details_location_name)).setText(location.getName());
-		((TextView)v.findViewById(R.id.details_location_days)).setText(createActiveDaysString());
-		((TextView)v.findViewById(R.id.details_location_hours)).setText(createActiveHoursString());
+		((TextView)v.findViewById(R.id.details_location_name))
+					.setText(mLocation.getName());
 		
-		setTextAndColorForStateValues((TextView)v.findViewById(R.id.details_location_sounds), location.isSoundOn());
-		setTextAndColorForStateValues((TextView)v.findViewById(R.id.details_location_vibrations), location.isVibrationOn());
-		setTextAndColorForStateValues((TextView)v.findViewById(R.id.details_location_wifi), location.isWifiOn());
-		setTextAndColorForStateValues((TextView)v.findViewById(R.id.details_location_bluetooth), location.isBluetoothOn());
-		setTextAndColorForStateValues((TextView)v.findViewById(R.id.details_location_nfc), location.isNfcOn());
-		setTextAndColorForStateValues((TextView)v.findViewById(R.id.details_location_mobile_data), location.isMobileData());
-		setTextAndColorForStateValues((TextView)v.findViewById(R.id.details_location_nfc), location.isNfcOn());
+		((TextView)v.findViewById(R.id.details_location_days))
+					.setText(createActiveDaysString());
 		
-		TextView smsTextView = ((TextView)v.findViewById(R.id.details_location_SMS));
-		if(isSMSForLocationProvided(location))
-		{
-			smsTextView.setText("ON");
-			smsTextView.setTextColor(getResources().getColor(R.color.material_blue_toggle_unchecked));
-		}
-		else
-		{
-			smsTextView.setText("OFF");
-			smsTextView.setTextColor(getResources().getColor(R.color.offOption));	
-		}
+		((TextView)v.findViewById(R.id.details_location_hours))
+					.setText(createActiveHoursString());
 		
+		setTextAndColorForStateValues(
+				(TextView)v.findViewById(R.id.details_location_sounds), mLocation.isSoundOn());
+		setTextAndColorForStateValues(
+				(TextView)v.findViewById(R.id.details_location_vibrations), mLocation.isVibrationOn());
+		setTextAndColorForStateValues(
+				(TextView)v.findViewById(R.id.details_location_wifi), mLocation.isWifiOn());
+		setTextAndColorForStateValues(
+				(TextView)v.findViewById(R.id.details_location_bluetooth), mLocation.isBluetoothOn());
+		setTextAndColorForStateValues(
+				(TextView)v.findViewById(R.id.details_location_nfc), mLocation.isNfcOn());
+		setTextAndColorForStateValues(
+				(TextView)v.findViewById(R.id.details_location_mobile_data), mLocation.isMobileData());
+		setTextAndColorForStateValues(
+				(TextView)v.findViewById(R.id.details_location_nfc), mLocation.isNfcOn());
+		
+		setTextAndColorForBooleanValues(
+				(TextView)v.findViewById(R.id.details_location_SMS), isSMSForLocationProvided(mLocation));
+		setTextAndColorForBooleanValues(
+				(TextView)v.findViewById(R.id.details_location_turn_off), mLocation.shouldTurnOff());		
 	}
 	
 	private String createActiveDaysString() {
 		StringBuilder stringBuilder = new StringBuilder();
-		if(location.isMon()==true)
+		if(mLocation.isMon()==true)
 			stringBuilder.append("Mon ");
-		if(location.isTue()==true)
+		if(mLocation.isTue()==true)
 			stringBuilder.append("Tue ");
-		if(location.isWed()==true)
+		if(mLocation.isWed()==true)
 			stringBuilder.append("Wed ");
-		if(location.isThu()==true)
+		if(mLocation.isThu()==true)
 			stringBuilder.append("Thu ");
-		if(location.isFri()==true)
+		if(mLocation.isFri()==true)
 			stringBuilder.append("Fri ");
-		if(location.isSat()==true)
+		if(mLocation.isSat()==true)
 			stringBuilder.append("Sat ");
-		if(location.isSun()==true)
+		if(mLocation.isSun()==true)
 			stringBuilder.append("Sun ");
 		return stringBuilder.toString();
 	}
 	
 	private String createActiveHoursString() {
 		StringBuilder stringBuilderHours = new StringBuilder();
-		stringBuilderHours.append(location.getTimeFrom().toString()+"  -  ");
-		stringBuilderHours.append(location.getTimeTo().toString());
+		stringBuilderHours.append(mLocation.getTimeFrom().toString()+"  -  ");
+		stringBuilderHours.append(mLocation.getTimeTo().toString());
 		return stringBuilderHours.toString();
 	}
 	
@@ -142,6 +146,19 @@ public class LocationDetailsFragment extends Fragment implements OnClickListener
 		{
 			view.setText("Unchanged");
 			view.setTextColor(getResources().getColor(R.color.offOption));				
+		}
+	}
+	
+	private void setTextAndColorForBooleanValues(TextView view, boolean isOn) {
+		if(isOn)
+		{
+			view.setText("ON");
+			view.setTextColor(getResources().getColor(R.color.material_blue_toggle_unchecked));
+		}
+		else 
+		{
+			view.setText("OFF");
+			view.setTextColor(getResources().getColor(R.color.offOption));		
 		}
 	}
 	
@@ -165,7 +182,7 @@ public class LocationDetailsFragment extends Fragment implements OnClickListener
 	    {
 	        @Override
 	        public void onClick(DialogInterface dialog, int which) {
-	        	DatabaseHelper.getInstance(getActivity()).deleteLocationAt(location);
+	        	DatabaseHelper.getInstance(getActivity()).deleteLocationAt(mLocation);
 	        	Toast.makeText(LocationDetailsFragment.this.getActivity(), 
 	        			"Location has been deleted", Toast.LENGTH_SHORT).show();
 	        	LocationDetailsFragment.this.getFragmentManager().popBackStack(); 

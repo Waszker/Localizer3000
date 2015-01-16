@@ -33,8 +33,8 @@ public class ListOfSavedLocationsFragment extends Fragment {
 	/******************/
 	/*   VARIABLES    */
 	/******************/
-	private List<Location> locations;
-	private LocationListAdapter adapter;
+	private List<Location> mLocations;
+	private LocationListAdapter mAdapter;
 	
 	/**
 	 * Internal list adapter class. 
@@ -107,7 +107,7 @@ public class ListOfSavedLocationsFragment extends Fragment {
 					DatabaseHelper dbHelper = DatabaseHelper.getInstance(getActivity().getApplicationContext());
 					dbHelper.deleteLocationAt(list.get(position));
 					list.remove(position);
-					adapter.notifyDataSetChanged();
+					mAdapter.notifyDataSetChanged();
 				}
 			});
 
@@ -133,12 +133,12 @@ public class ListOfSavedLocationsFragment extends Fragment {
 		DatabaseHelper dbHelper = DatabaseHelper.getInstance(getActivity().getApplicationContext());	
 		DragSortListView listView = (DragSortListView)v.findViewById(R.id.list_of_localizations);		
 		
-		locations = dbHelper.getAllLocations();	
-		Collections.sort(locations);
-		adapter = new LocationListAdapter(getActivity(), locations);
-		listView.setAdapter(adapter);		
+		mLocations = dbHelper.getAllLocations();	
+		Collections.sort(mLocations);
+		mAdapter = new LocationListAdapter(getActivity(), mLocations);
+		listView.setAdapter(mAdapter);		
 		addDropListener(listView);
-		addListViewClickListener(listView, adapter);
+		addListViewClickListener(listView, mAdapter);
 	}
 	
 	private void addListViewClickListener(ListView listView, final LocationListAdapter adapter) {
@@ -171,18 +171,18 @@ public class ListOfSavedLocationsFragment extends Fragment {
 			public void drop(int from, int to) {
 				if(from > to)
 				{
-					Location l = locations.get(from);
-					locations.add(to, l);
-					locations.remove(from+1);					
+					Location l = mLocations.get(from);
+					mLocations.add(to, l);
+					mLocations.remove(from+1);					
 				}
 				if(from < to)
 				{
-					Location l = locations.get(from);
-					locations.add(to+1, l);
-					locations.remove(from);					
+					Location l = mLocations.get(from);
+					mLocations.add(to+1, l);
+					mLocations.remove(from);					
 				}
 				
-				adapter.notifyDataSetChanged();
+				mAdapter.notifyDataSetChanged();
 				updateLocationPriorities();
 			}
 		});
@@ -191,7 +191,7 @@ public class ListOfSavedLocationsFragment extends Fragment {
 	
 	private void updateLocationPriorities() {
 		int priority = 0;
-		for(Location l : locations)
+		for(Location l : mLocations)
 		{
 			l.setPriority(priority++);
 			DatabaseHelper.getInstance(getActivity()).updateLocation(l, l.getName());

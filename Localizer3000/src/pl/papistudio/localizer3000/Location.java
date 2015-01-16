@@ -9,9 +9,14 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Location class represents object created by user
- * containing all information about place and phone status there.
+ * <p>Location class represents object created by user
+ * containing all information about place and phone status 
+ * in this specified area.</p>
  * 
+ * <p>This class is huge due to many, many, MANY getters and setters.
+ * We decided to use them because of reasons stated here:
+ * http://stackoverflow.com/questions/1568091/why-use-getters-and-setters </p>
+ *  
  * @author PapiTeam
  *
  */
@@ -20,14 +25,14 @@ public class Location implements Parcelable, Comparable<Location> {
 	/*   VARIABLES    */
 	/******************/
 	private String mName;
-	private MultiStateToggleButton.ToggleStates mIsWifiOn, mIsBluetoothOn, mIsNfcOn, 
-							mIsMobileData, mIsSoundOn, mIsVibrationOn;
-	private boolean mIsSMSsendOn;
+	private MultiStateToggleButton.ToggleStates mWifiState, mBluetoothState, mNfcState, 
+												mMobileState, mSoundState, mVibrationState;
+	private boolean mIsSMSsendOn, mShouldTurnOff;
 	private int mRadius;
 	private int mPriority;
 	private Time mTimeFrom, mTimeTo;
 	private boolean mIsMon, mIsTue, mIsWed, mIsThu, mIsFri, mIsSat, mIsSun;
-	private android.location.Location location;
+	private android.location.Location mLocation;
 	
 	
 
@@ -42,9 +47,10 @@ public class Location implements Parcelable, Comparable<Location> {
 	 */
 	public Location(String name) {
 		this.mName = name;
-		this.mIsWifiOn = this.mIsBluetoothOn = this.mIsNfcOn = this.mIsMobileData = 
-				this.mIsSoundOn = this.mIsVibrationOn = ToggleStates.Off;
+		this.mWifiState = this.mBluetoothState = this.mNfcState = this.mMobileState = 
+				this.mSoundState = this.mVibrationState = ToggleStates.Off;
 		this.mIsSMSsendOn=false;
+		this.mShouldTurnOff = false;
 		this.mRadius=100;
 		setTimeFrom(new Time(0,0));
 		setTimeTo(new Time(23,59));
@@ -53,7 +59,7 @@ public class Location implements Parcelable, Comparable<Location> {
 	
 	/**
 	 * Creates location with specified options enabled.
-	 * Location is active on all days of the week.
+	 * Location is active on all days of the week from 00:00 to 23:59.
 	 * @param name
 	 * @param isWifiOn
 	 * @param isBluetoothOn
@@ -67,13 +73,14 @@ public class Location implements Parcelable, Comparable<Location> {
 			ToggleStates isNfcOn, ToggleStates isMobData, ToggleStates isSoundOn,
 			ToggleStates isVibrationOn, int radius) {
 		this.mName = name;
-		this.mIsWifiOn = isWifiOn;
-		this.mIsBluetoothOn = isBluetoothOn;
-		this.mIsNfcOn = isNfcOn;
-		this.mIsMobileData = isMobData;
-		this.mIsSoundOn = isSoundOn;
-		this.mIsVibrationOn = isVibrationOn;
+		this.mWifiState = isWifiOn;
+		this.mBluetoothState = isBluetoothOn;
+		this.mNfcState = isNfcOn;
+		this.mMobileState = isMobData;
+		this.mSoundState = isSoundOn;
+		this.mVibrationState = isVibrationOn;
 		this.mIsSMSsendOn = false;
+		this.mShouldTurnOff = false;
 		this.mRadius = radius;
 		setTimeFrom(new Time(0, 0));
 		setTimeTo(new Time(23, 59));
@@ -107,7 +114,7 @@ public class Location implements Parcelable, Comparable<Location> {
 	 * @param day of the week (taken from Calendar.get())
 	 * @return is location enabled
 	 */
-	public boolean isLocationEnabled(int day, Time time) {
+	public boolean isLocationEnabled(final int day, final Time time) {
 		boolean isEnabled = false;
 		
 		switch (day) {
@@ -146,12 +153,16 @@ public class Location implements Parcelable, Comparable<Location> {
 		if(mTimeFrom.compareTo(mTimeTo) > 0)
 		{
 			if(time.compareTo(mTimeFrom) < 0 && time.compareTo(mTimeTo) > 0)
+			{
 				isEnabled = false;
+			}
 		}
 		else
 		{
 			if(time.compareTo(mTimeFrom) < 0 || time.compareTo(mTimeTo) > 0)
+			{
 				isEnabled = false;
+			}
 		}
 		
 		return isEnabled;
@@ -171,12 +182,18 @@ public class Location implements Parcelable, Comparable<Location> {
 	 * 		   0 if two locations have the same priority
 	 * 		  -1 if second is bigger
 	 */
-	public int compareTo(Location location) {
+	public int compareTo(final Location location) {
 		int result = 0;
+		
 		if(this.mPriority > location.mPriority)
+		{
 			result = 1;
+		}
+		
 		if(this.mPriority < location.mPriority)
+		{
 			result = -1;
+		}
 		return result;
 	}
 
@@ -192,59 +209,59 @@ public class Location implements Parcelable, Comparable<Location> {
 	}
 
 	public android.location.Location getLocation() {
-		return location;
+		return mLocation;
 	}
 
 	public void setLocation(android.location.Location location) {
-		this.location = location;
+		this.mLocation = location;
 	}
 	
 	public ToggleStates isWifiOn() {
-		return mIsWifiOn;
+		return mWifiState;
 	}
 
 	public void setWifiOn(ToggleStates isWifiOn) {
-		this.mIsWifiOn = isWifiOn;
+		this.mWifiState = isWifiOn;
 	}
 
 	public ToggleStates isBluetoothOn() {
-		return mIsBluetoothOn;
+		return mBluetoothState;
 	}
 
 	public void setBluetoothOn(ToggleStates isBluetoothOn) {
-		this.mIsBluetoothOn = isBluetoothOn;
+		this.mBluetoothState = isBluetoothOn;
 	}
 
 	public ToggleStates isNfcOn() {
-		return mIsNfcOn;
+		return mNfcState;
 	}
 
 	public void setNfcOn(ToggleStates isNfcOn) {
-		this.mIsNfcOn = isNfcOn;
+		this.mNfcState = isNfcOn;
 	}
 
 	public ToggleStates isMobileData() {
-		return mIsMobileData;
+		return mMobileState;
 	}
 
 	public void setMobileData(ToggleStates isMobData) {
-		this.mIsMobileData = isMobData;
+		this.mMobileState = isMobData;
 	}
 	
 	public ToggleStates isSoundOn() {
-		return mIsSoundOn;
+		return mSoundState;
 	}
 
 	public void setSoundOn(ToggleStates isSoundOn) {
-		this.mIsSoundOn = isSoundOn;
+		this.mSoundState = isSoundOn;
 	}
 
 	public ToggleStates isVibrationOn() {
-		return mIsVibrationOn;
+		return mVibrationState;
 	}
 
 	public void setVibrationOn(ToggleStates isVibrationOn) {
-		this.mIsVibrationOn = isVibrationOn;
+		this.mVibrationState = isVibrationOn;
 	}
 
 	public boolean isSMSsendOn() {
@@ -253,6 +270,14 @@ public class Location implements Parcelable, Comparable<Location> {
 
 	public void setSMSsendOn(boolean isSMSsendOn) {
 		this.mIsSMSsendOn = isSMSsendOn;
+	}
+	
+	public boolean shouldTurnOff() {
+		return mShouldTurnOff;
+	}
+
+	public void setShouldTurnOff(boolean mShouldTurnOff) {
+		this.mShouldTurnOff = mShouldTurnOff;
 	}
 
 	public int getRadius() {
@@ -352,25 +377,26 @@ public class Location implements Parcelable, Comparable<Location> {
 	 */
 	public Location(Parcel in) {
 		mName = in.readString();
-		mIsMon = (in.readByte() != 0 ? true : false);
-		mIsTue = (in.readByte() != 0 ? true : false);
-		mIsWed = (in.readByte() != 0 ? true : false);
-		mIsThu = (in.readByte() != 0 ? true : false);
-		mIsFri = (in.readByte() != 0 ? true : false);
-		mIsSat = (in.readByte() != 0 ? true : false);
-		mIsSun = (in.readByte() != 0 ? true : false);
-		mIsWifiOn = readState(in.readByte());
-		mIsBluetoothOn = readState(in.readByte());
-		mIsNfcOn = readState(in.readByte());
-		mIsMobileData = readState(in.readByte());
-		mIsSoundOn= readState(in.readByte());
-		mIsVibrationOn = readState(in.readByte());
-		mIsSMSsendOn = (in.readByte() != 0 ? true : false);
-		mRadius = (in.readInt());
-		mTimeFrom=(in.readParcelable(Time.class.getClassLoader()));
-		mTimeTo=(in.readParcelable(Time.class.getClassLoader()));
-		location = (in.readParcelable(null));
-		mPriority = (in.readInt());
+		mIsMon = in.readByte() != 0;
+		mIsTue = in.readByte() != 0;
+		mIsWed = in.readByte() != 0;
+		mIsThu = in.readByte() != 0;
+		mIsFri = in.readByte() != 0;
+		mIsSat = in.readByte() != 0;
+		mIsSun = in.readByte() != 0;
+		mWifiState = readState(in.readByte());
+		mBluetoothState = readState(in.readByte());
+		mNfcState = readState(in.readByte());
+		mMobileState = readState(in.readByte());
+		mSoundState= readState(in.readByte());
+		mVibrationState = readState(in.readByte());
+		mIsSMSsendOn = in.readByte() != 0;
+		mShouldTurnOff = in.readByte() != 0;
+		mRadius = in.readInt();
+		mTimeFrom=in.readParcelable(Time.class.getClassLoader());
+		mTimeTo=in.readParcelable(Time.class.getClassLoader());
+		mLocation = in.readParcelable(null);
+		mPriority = in.readInt();
 	}
 	
 	@Override
@@ -388,25 +414,26 @@ public class Location implements Parcelable, Comparable<Location> {
 		dest.writeByte((byte)(mIsFri ? 1 : 0));
 		dest.writeByte((byte)(mIsSat ? 1 : 0));
 		dest.writeByte((byte)(mIsSun ? 1 : 0));
-		dest.writeByte((byte)(mIsWifiOn.getIdentifier()));
-		dest.writeByte((byte)(mIsBluetoothOn.getIdentifier()));
-		dest.writeByte((byte)(mIsNfcOn.getIdentifier()));
-		dest.writeByte((byte)(mIsMobileData.getIdentifier()));
-		dest.writeByte((byte)(mIsSoundOn.getIdentifier()));
-		dest.writeByte((byte)(mIsVibrationOn.getIdentifier()));
+		dest.writeByte((byte)(mWifiState.getIdentifier()));
+		dest.writeByte((byte)(mBluetoothState.getIdentifier()));
+		dest.writeByte((byte)(mNfcState.getIdentifier()));
+		dest.writeByte((byte)(mMobileState.getIdentifier()));
+		dest.writeByte((byte)(mSoundState.getIdentifier()));
+		dest.writeByte((byte)(mVibrationState.getIdentifier()));
 		dest.writeByte((byte)(mIsSMSsendOn ? 1 : 0));
+		dest.writeByte((byte)(mShouldTurnOff ? 1 : 0));
 		dest.writeInt(mRadius);
 		dest.writeParcelable(mTimeFrom, flags);
 		dest.writeParcelable(mTimeTo, flags);
-		dest.writeParcelable(location, flags);
+		dest.writeParcelable(mLocation, flags);
 		dest.writeInt(mPriority);
 	}
 	
 	@SuppressWarnings("rawtypes")
 	public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-        public Location createFromParcel(Parcel in) {
-            return new Location(in); 
-        }
+        public Location createFromParcel(Parcel in) { // NOPMD by waszka on 1/16/15 6:48 PM        											  
+            return new Location(in); 				  // It was taken from official Google site.
+        }											  // I think this variable's name is ok.
 
         public Location[] newArray(int size) {
             return new Location[size];

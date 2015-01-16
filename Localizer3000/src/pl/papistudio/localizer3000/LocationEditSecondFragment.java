@@ -35,46 +35,46 @@ public class LocationEditSecondFragment extends Fragment implements OnClickListe
 	/******************/
 	/* VARIABLES 	  */
 	/******************/
-	private View rootView;
-	MapView mapView;
+	private View mRootView;
+	private MapView mMapView;
 
 	/******************/
 	/* FUNCTIONS 	  */
 	/******************/
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		rootView = inflater.inflate(R.layout.fragment_location_edit2, container, false);
-		mapView = (MapView) rootView.findViewById(R.id.map);
-		mapView.onCreate(savedInstanceState);
-		addOnClickActionsToButtons(rootView);
+		mRootView = inflater.inflate(R.layout.fragment_location_edit2, container, false);
+		mMapView = (MapView) mRootView.findViewById(R.id.map);
+		mMapView.onCreate(savedInstanceState);
+		addOnClickActionsToButtons(mRootView);
 		addMapListeners();
 		changeMyLocationButtonPosition();
 		
-		return rootView;
+		return mRootView;
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		mapView.onResume();
+		mMapView.onResume();
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		mapView.onPause();
+		mMapView.onPause();
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		mapView.onDestroy();
+		mMapView.onDestroy();
 	}
 
 	@Override
 	public void onLowMemory() {
 		super.onLowMemory();
-		mapView.onLowMemory();
+		mMapView.onLowMemory();
 	}
 	
 	@Override
@@ -122,7 +122,7 @@ public class LocationEditSecondFragment extends Fragment implements OnClickListe
 	}
 	
 	private void addMapListeners() {
-		final GoogleMap map = mapView.getMap();
+		final GoogleMap map = mMapView.getMap();
 		final Location location = ((EditLocationActivity)getActivity()).currentlyEditedLocation;
 		MapsInitializer.initialize(getActivity());
 		map.setMyLocationEnabled(true);	
@@ -143,7 +143,7 @@ public class LocationEditSecondFragment extends Fragment implements OnClickListe
 	private void changeMyLocationButtonPosition() {
 		// taken from:
 		// http://stackoverflow.com/questions/14489880/how-to-change-the-position-of-maps-apis-get-my-location-button
-		View locationButton = ((View) mapView.findViewById(1).getParent()).findViewById(2);
+		View locationButton = ((View) mMapView.findViewById(1).getParent()).findViewById(2);
 		RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
 		rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
 		rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
@@ -153,7 +153,7 @@ public class LocationEditSecondFragment extends Fragment implements OnClickListe
 	}
 	
 	private void setMapCamera() {
-		final GoogleMap map = mapView.getMap();
+		final GoogleMap map = mMapView.getMap();
 		final Location location = ((EditLocationActivity)getActivity()).currentlyEditedLocation;
 		MapsInitializer.initialize(getActivity());
 		
@@ -172,7 +172,7 @@ public class LocationEditSecondFragment extends Fragment implements OnClickListe
 	}
 	
 	private void drawMarkerWithCircle(){
-		final GoogleMap map = mapView.getMap();
+		final GoogleMap map = mMapView.getMap();
 		final Location location = ((EditLocationActivity)getActivity()).currentlyEditedLocation;
 		final LatLng position = new LatLng(location.getLocation().getLatitude(), 
 											location.getLocation().getLongitude());
@@ -182,7 +182,8 @@ public class LocationEditSecondFragment extends Fragment implements OnClickListe
 
 	    map.clear();
 		map.addMarker(new MarkerOptions().position(position).title(location.getName()));
-	    CircleOptions circleOptions = new CircleOptions().center(position).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
+	    CircleOptions circleOptions = new CircleOptions().center(position).radius(radiusInMeters)
+	    							.fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
 	    map.addCircle(circleOptions);
 	}
 	

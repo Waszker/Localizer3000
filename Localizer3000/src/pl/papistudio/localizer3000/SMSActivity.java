@@ -8,7 +8,7 @@ public class SMSActivity extends Activity {
 	/******************/
 	/*   VARIABLES    */
 	/******************/
-	private SMS currentlyUsedSMS; 
+	private SMS mCurrentlyUsedSMS; 
 	
 	/******************/
 	/*   FUNCTIONS    */
@@ -24,11 +24,11 @@ public class SMSActivity extends Activity {
 	}
 
 	public SMS getCurrentlyUsedSMS() {
-		return currentlyUsedSMS;
+		return mCurrentlyUsedSMS;
 	}
 
 	public void setCurrentlyUsedSMS(SMS currentlyUsedSMS) {
-		this.currentlyUsedSMS = currentlyUsedSMS;
+		this.mCurrentlyUsedSMS = currentlyUsedSMS;
 	}	
 	
 	@Override

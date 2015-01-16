@@ -20,9 +20,9 @@
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
                 android:text="@string/fragment_location_details_name"
-                android:textSize="@dimen/location_details_static_text"
-                android:layout_marginBottom="5dp" />
+                android:textSize="@dimen/location_details_static_text" />
 
             <EditText
                 android:id="@+id/edit_location_name"
@@ -36,17 +36,17 @@
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/darker_gray"
-                android:layout_margin="15dp" />
+                android:layout_margin="15dp"
+                android:background="@android:color/darker_gray" />
 
             <!-- Days of week -->
 
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
                 android:text="@string/fragment_location_details_active_days"
-                android:textSize="@dimen/location_details_static_text" 
-                android:layout_marginBottom="5dp"/>
+                android:textSize="@dimen/location_details_static_text" />
 
             <org.apmem.tools.layouts.FlowLayout
                 xmlns:f="http://schemas.android.com/apk/res/pl.papistudio.localizer3000"
@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 f:orientation="horizontal" >
-                
+
                 <com.andexert.library.RippleView
                     xmlns:ripple="http://schemas.android.com/apk/res/pl.papistudio.localizer3000"
                     android:layout_width="wrap_content"
@@ -71,7 +71,6 @@
                         android:textColor="@drawable/toggle_button_text"
                         android:textOff="Mon"
                         android:textOn="Mon" />
-                    
                 </com.andexert.library.RippleView>
 
                 <com.andexert.library.RippleView
@@ -175,14 +174,13 @@
                         android:textOff="Sun"
                         android:textOn="Sun" />
                 </com.andexert.library.RippleView>
-
             </org.apmem.tools.layouts.FlowLayout>
 
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/darker_gray"
-                android:layout_margin="15dp" />
+                android:layout_margin="15dp"
+                android:background="@android:color/darker_gray" />
 
             <!-- Time picker -->
 
@@ -204,13 +202,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/fragment_location_edit_time_to" />
-            
+
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
                 android:layout_margin="15dp"
                 android:background="@android:color/darker_gray" />
-            
+
             <!-- WiFi, Bluetooth, NFC -->
 
             <TableLayout
@@ -277,7 +275,7 @@
                         android:layout_column="1"
                         android:layout_gravity="center" />
                 </TableRow>
-                
+
                 <TableRow
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -297,7 +295,7 @@
                         android:layout_column="1"
                         android:layout_gravity="center" />
                 </TableRow>
-                
+
                 <TableRow
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -317,7 +315,7 @@
                         android:layout_column="1"
                         android:layout_gravity="center" />
                 </TableRow>
-                
+
                 <TableRow
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -336,13 +334,36 @@
                         android:layout_height="wrap_content"
                         android:layout_column="1"
                         android:layout_gravity="center" />
-                </TableRow>                
-                
+                </TableRow>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="15dp"
+                    android:background="@android:color/darker_gray" />
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp" >
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:text="@string/fragment_location_details_turn_off"
+                        android:textSize="@dimen/location_details_static_text" />
+
+                    <Switch
+                        android:id="@+id/edit_location_turn_off_switch"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:layout_gravity="center" />
+                </TableRow>
             </TableLayout>
-            
-        </LinearLayout>      
-                
-    </ScrollView>   
+        </LinearLayout>
+    </ScrollView>
 
     <!-- Buttons at the end -->
 

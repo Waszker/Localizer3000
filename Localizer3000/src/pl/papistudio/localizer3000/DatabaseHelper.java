@@ -11,14 +11,21 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+/**
+ * <p>Singleton class responsible for all database-related
+ * queries.</p>
+ * 
+ * @author PapiTeam
+ *
+ */
 public final class DatabaseHelper extends SQLiteOpenHelper {
 	/******************/
 	/*   VARIABLES    */
 	/******************/
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 3;
 	private static final String DATABASE_NAME = "Locations.db";
 	private static DatabaseHelper dbInstance;
-	private static int currentPriorityNumber;
+	private static int mCurrentPriorityNumber;
 
 	/******************/
 	/*   VARIABLES    */
@@ -46,36 +53,19 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	}
 
 	@Override
-	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		// load all object from database to lists
-		// drop old tables
-		// create new tables and fill 'em with updated values
-		List<Location> locations = getAllLocations(db);
-		List<SMS> smses = getAllSMS(db);
-		
+	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {		
 		if(oldVersion == 1)
 		{
-			for(SMS s : smses)
-				s.setIsOneTimeUse(true);
+			db.execSQL("ALTER TABLE " + DatabaseContract.TableSMSDefinition.TABLE_NAME +
+					   " ADD " + DatabaseContract.TableSMSDefinition.COLUMN_NAME_IS_ONE_TIME +
+					   " INTEGER");
 		}
 		
-		db.execSQL(DatabaseContract.TableLocationDefinition.SQL_DELETE_LOCATION_ENTRIES);
-		db.execSQL(DatabaseContract.TableSMSDefinition.SQL_DELETE_SMS_ENTRIES);
-		db.execSQL(DatabaseContract.TableLocationDefinition.SQL_CREATE_TABLE);
-		db.execSQL(DatabaseContract.TableSMSDefinition.SQL_CREATE_TABLE);
-		
-		// fill new tables
-		for(Location l : locations)
+		if(oldVersion == 2)
 		{
-			ContentValues values = createValuesFromLocation(l);
-			db.insert(DatabaseContract.TableLocationDefinition.TABLE_NAME,
-					null, values);
-		}
-		for(SMS s : smses)
-		{
-			ContentValues values = createValuesFromSMS(s);
-			db.insert(DatabaseContract.TableSMSDefinition.TABLE_NAME,
-					null, values);
+			db.execSQL("ALTER TABLE " + DatabaseContract.TableLocationDefinition.TABLE_NAME +
+					   " ADD " + DatabaseContract.TableLocationDefinition.COLUMN_NAME_SHOULD_TURN_OFF +
+					   " INTEGER");
 		}
 	}
 
@@ -144,7 +134,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	 */
 	public long addLocation(Location location) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		location.setPriority(currentPriorityNumber++);
+		location.setPriority(mCurrentPriorityNumber++);
 		ContentValues values = createValuesFromLocation(location);
 		long newRowId = db.insert(DatabaseContract.TableLocationDefinition.TABLE_NAME,
 				null, values);
@@ -228,7 +218,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	}
 	
 	private void getBiggestPriorityNumber() {
-		currentPriorityNumber = getAllLocations().size();
+		mCurrentPriorityNumber = getAllLocations().size();
 	}
 	
 	private Location createLocationFromCursor(Cursor c) {
@@ -267,6 +257,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 								  c.getInt(22) == 1 ? ToggleStates.On : 
 									  				  ToggleStates.Not_specified);
 		newLocation.setSMSsendOn(c.getInt(23) == 0 ? false : true);
+		newLocation.setShouldTurnOff(c.getInt(24) == 0 ? false : true);
 		
 		return newLocation;
 	}
@@ -321,6 +312,8 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 				location.isMobileData().getIdentifier());
 		values.put(DatabaseContract.TableLocationDefinition.COLUMN_NAME_ISSMS,
 				location.isSMSsendOn() ? 1 : 0);
+		values.put(DatabaseContract.TableLocationDefinition.COLUMN_NAME_SHOULD_TURN_OFF,
+				location.shouldTurnOff() ? 1 : 0);
 		
 		return values;
 	}
@@ -332,7 +325,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 		newSMS.setReceiverNumber(Integer.parseInt(c.getString(1)));
 		newSMS.setMessageText(c.getString(2));
 		newSMS.setLocationToSend(new Location(c.getString(3)));
-		newSMS.setIsOneTimeUse((c.getInt(4)) == 1);
+		newSMS.setIsOneTimeUse(c.getInt(4) == 1);
 		
 		return newSMS;
 	}
@@ -350,41 +343,5 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 				(sms.isOneTimeUse() ? 1 : 0));
 		
 		return values;
-	}
-	
-	private List<Location> getAllLocations(SQLiteDatabase db) {
-		// This function is used only during database upgrades
-		// as it uses previous database reference
-		String selectQuery = "SELECT  * FROM "
-				+ DatabaseContract.TableLocationDefinition.TABLE_NAME;
-		Cursor c = db.rawQuery(selectQuery, null);
-
-		List<Location> locationList = new ArrayList<>();
-		if (c.moveToFirst()) {
-			do {
-				locationList.add(createLocationFromCursor(c));
-			} while (c.moveToNext());
-		}
-		c.close();
-
-		return locationList;
-	}
-	
-	private List<SMS> getAllSMS(SQLiteDatabase db) {
-		// This function is used only during database upgrades
-		// as it uses previous database reference
-		String selectQuery = "SELECT  * FROM "
-				+ DatabaseContract.TableSMSDefinition.TABLE_NAME;
-		Cursor c = db.rawQuery(selectQuery, null);
-
-		List<SMS> smsList = new ArrayList<>();
-		if (c.moveToFirst()) {
-			do {
-				smsList.add(createSMSFromCursor(c));
-			} while (c.moveToNext());
-		}
-		c.close();
-
-		return smsList;
 	}
 }

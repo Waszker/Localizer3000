@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -35,7 +36,7 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 	/******************/
 	/*   VARIABLES    */
 	/******************/
-	private Location location;
+	private Location mLocation;
 	
 	/******************/
 	/*   FUNCTIONS    */
@@ -60,9 +61,9 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 		if(v.getId() == R.id.edit_location_next_button)
 			checkLocationNameAndShowSecondFragment();
 		if(v.getId() == R.id.edit_location_time_from_button)
-			location.setTimeFrom(showTimePicker(location.getTimeFrom(), "Select starting hour"));
+			mLocation.setTimeFrom(showTimePicker(mLocation.getTimeFrom(), "Select starting hour"));
 		if(v.getId() == R.id.edit_location_time_to_button)
-			location.setTimeTo(showTimePicker(location.getTimeTo(), "Select ending hour"));
+			mLocation.setTimeTo(showTimePicker(mLocation.getTimeTo(), "Select ending hour"));
 	}
 	
 	/**
@@ -85,7 +86,7 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 	}
 	
 	private void getCurrentlyEditedLocationReference() {
-		location = ((EditLocationActivity)getActivity()).currentlyEditedLocation;
+		mLocation = ((EditLocationActivity)getActivity()).currentlyEditedLocation;
 	}
 	
 	private void addOnClickActionsToButtons(View v) {
@@ -96,44 +97,49 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 	}
 	
 	private void fillLocationDetails(View v) {
-		((TextView)v.findViewById(R.id.edit_location_name)).setText(location.getName());
-		((MultiStateToggleButton)v.findViewById(R.id.edit_location_wifi_switch)).setSelection(location.isWifiOn());
-		((MultiStateToggleButton)v.findViewById(R.id.edit_location_bluetooth_switch)).setSelection(location.isBluetoothOn());
-		((MultiStateToggleButton)v.findViewById(R.id.edit_location_nfc_switch)).setSelection(location.isNfcOn());
-		((MultiStateToggleButton)v.findViewById(R.id.edit_location_mobile_data_switch)).setSelection(location.isMobileData());
-		((MultiStateToggleButton)v.findViewById(R.id.edit_location_sound_switch)).setSelection(location.isSoundOn());
-		((MultiStateToggleButton)v.findViewById(R.id.edit_location_vibration_switch)).setSelection(location.isVibrationOn());
+		((TextView)v.findViewById(R.id.edit_location_name)).setText(mLocation.getName());
+		((MultiStateToggleButton)v.findViewById(R.id.edit_location_wifi_switch)).setSelection(mLocation.isWifiOn());
+		((MultiStateToggleButton)v.findViewById(R.id.edit_location_bluetooth_switch)).setSelection(mLocation.isBluetoothOn());
+		((MultiStateToggleButton)v.findViewById(R.id.edit_location_nfc_switch)).setSelection(mLocation.isNfcOn());
+		((MultiStateToggleButton)v.findViewById(R.id.edit_location_mobile_data_switch)).setSelection(mLocation.isMobileData());
+		((MultiStateToggleButton)v.findViewById(R.id.edit_location_sound_switch)).setSelection(mLocation.isSoundOn());
+		((MultiStateToggleButton)v.findViewById(R.id.edit_location_vibration_switch)).setSelection(mLocation.isVibrationOn());
 		
-		((ToggleButton)v.findViewById(R.id.toggle_monday)).setChecked(location.isMon());
-		((ToggleButton)v.findViewById(R.id.toggle_tuesday)).setChecked(location.isTue());
-		((ToggleButton)v.findViewById(R.id.toggle_wednesday)).setChecked(location.isWed());
-		((ToggleButton)v.findViewById(R.id.toggle_thursday)).setChecked(location.isThu());
-		((ToggleButton)v.findViewById(R.id.toggle_friday)).setChecked(location.isFri());
-		((ToggleButton)v.findViewById(R.id.toggle_saturday)).setChecked(location.isSat());
-		((ToggleButton)v.findViewById(R.id.toggle_sunday)).setChecked(location.isSun());
+		((ToggleButton)v.findViewById(R.id.toggle_monday)).setChecked(mLocation.isMon());
+		((ToggleButton)v.findViewById(R.id.toggle_tuesday)).setChecked(mLocation.isTue());
+		((ToggleButton)v.findViewById(R.id.toggle_wednesday)).setChecked(mLocation.isWed());
+		((ToggleButton)v.findViewById(R.id.toggle_thursday)).setChecked(mLocation.isThu());
+		((ToggleButton)v.findViewById(R.id.toggle_friday)).setChecked(mLocation.isFri());
+		((ToggleButton)v.findViewById(R.id.toggle_saturday)).setChecked(mLocation.isSat());
+		((ToggleButton)v.findViewById(R.id.toggle_sunday)).setChecked(mLocation.isSun());
+		((Switch)v.findViewById(R.id.edit_location_turn_off_switch)).setChecked(mLocation.shouldTurnOff());
 						
-		setActiveTimeStrings(v, location.getTimeFrom(), location.getTimeTo());
+		setActiveTimeStrings(v, mLocation.getTimeFrom(), mLocation.getTimeTo());
 	}
 	 
 	private void fillNullLocation() {
-		if (location == null) 
+		if (mLocation == null) 
 		{
-			location = new Location("", ToggleStates.Off, ToggleStates.Off, 
+			mLocation = new Location("", ToggleStates.Off, ToggleStates.Off, 
 									ToggleStates.Off, ToggleStates.Off, ToggleStates.Off, 
 									ToggleStates.Off, 100);
-			((EditLocationActivity) getActivity()).currentlyEditedLocation = location;
+			((EditLocationActivity) getActivity()).currentlyEditedLocation = mLocation;
 		}
 	}
 	
 	private void saveLocationOriginalName() {
-		((EditLocationActivity)getActivity()).originalLocationName = location.getName();
+		((EditLocationActivity)getActivity()).originalLocationName = mLocation.getName();
 	}
 	 
 	private void showCancelConfirmationDialog() {
-			new AlertDialog.Builder(getActivity())
+		String message = ((((EditLocationActivity)getActivity()).originalLocationName
+							.contentEquals("")) ? "Are you sure you want to lose this location?" : 
+												  "Are you sure you want to stop editing this location?");
+		
+		new AlertDialog.Builder(getActivity())
 	        .setIcon(android.R.drawable.ic_dialog_alert)
 	        .setTitle("Cancel location")
-	        .setMessage("Are you sure you want to lose this location?")
+	        .setMessage(message)
 	        .setPositiveButton("Yes", new DialogInterface.OnClickListener()
 		    {
 		        @Override
@@ -182,7 +188,7 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 					public void onTimeSet(TimePicker timePicker,int selectedHour, int selectedMinute) {
 						selectedTime.setHour(selectedHour);
 						selectedTime.setMinute(selectedMinute);
-						setActiveTimeStrings(getView(), location.getTimeFrom(), location.getTimeTo());
+						setActiveTimeStrings(getView(), mLocation.getTimeFrom(), mLocation.getTimeTo());
 					}
 				}, locationTime.getHour(), locationTime.getMinute(), true /* 24 hour time */);
 		mTimePicker.setTitle(title);
@@ -199,20 +205,21 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 	 }
 	 
 	 private void fillEditedLocationDetails() {
-			location.setName(String.valueOf(((TextView) getView().findViewById(R.id.edit_location_name)).getText()));
-			location.setWifiOn(((MultiStateToggleButton)getView().findViewById(R.id.edit_location_wifi_switch)).getStateValue());
-			location.setBluetoothOn(((MultiStateToggleButton)getView().findViewById(R.id.edit_location_bluetooth_switch)).getStateValue());
-			location.setNfcOn(((MultiStateToggleButton)getView().findViewById(R.id.edit_location_nfc_switch)).getStateValue());
-			location.setMobileData(((MultiStateToggleButton)getView().findViewById(R.id.edit_location_mobile_data_switch)).getStateValue());
-			location.setSoundOn(((MultiStateToggleButton)getView().findViewById(R.id.edit_location_sound_switch)).getStateValue());
-			location.setVibrationOn(((MultiStateToggleButton)getView().findViewById(R.id.edit_location_vibration_switch)).getStateValue());
-			location.setLocation(location.getLocation());
-			location.setMon(((ToggleButton)getView().findViewById(R.id.toggle_monday)).isChecked());
-			location.setTue(((ToggleButton)getView().findViewById(R.id.toggle_tuesday)).isChecked());
-			location.setWed(((ToggleButton)getView().findViewById(R.id.toggle_wednesday)).isChecked());
-			location.setThu(((ToggleButton)getView().findViewById(R.id.toggle_thursday)).isChecked());
-			location.setFri(((ToggleButton)getView().findViewById(R.id.toggle_friday)).isChecked());
-			location.setSat(((ToggleButton)getView().findViewById(R.id.toggle_saturday)).isChecked());
-			location.setSun(((ToggleButton)getView().findViewById(R.id.toggle_sunday)).isChecked());		 
+			mLocation.setName(String.valueOf(((TextView) getView().findViewById(R.id.edit_location_name)).getText()));
+			mLocation.setWifiOn(((MultiStateToggleButton)getView().findViewById(R.id.edit_location_wifi_switch)).getStateValue());
+			mLocation.setBluetoothOn(((MultiStateToggleButton)getView().findViewById(R.id.edit_location_bluetooth_switch)).getStateValue());
+			mLocation.setNfcOn(((MultiStateToggleButton)getView().findViewById(R.id.edit_location_nfc_switch)).getStateValue());
+			mLocation.setMobileData(((MultiStateToggleButton)getView().findViewById(R.id.edit_location_mobile_data_switch)).getStateValue());
+			mLocation.setSoundOn(((MultiStateToggleButton)getView().findViewById(R.id.edit_location_sound_switch)).getStateValue());
+			mLocation.setVibrationOn(((MultiStateToggleButton)getView().findViewById(R.id.edit_location_vibration_switch)).getStateValue());
+			mLocation.setLocation(mLocation.getLocation());
+			mLocation.setMon(((ToggleButton)getView().findViewById(R.id.toggle_monday)).isChecked());
+			mLocation.setTue(((ToggleButton)getView().findViewById(R.id.toggle_tuesday)).isChecked());
+			mLocation.setWed(((ToggleButton)getView().findViewById(R.id.toggle_wednesday)).isChecked());
+			mLocation.setThu(((ToggleButton)getView().findViewById(R.id.toggle_thursday)).isChecked());
+			mLocation.setFri(((ToggleButton)getView().findViewById(R.id.toggle_friday)).isChecked());
+			mLocation.setSat(((ToggleButton)getView().findViewById(R.id.toggle_saturday)).isChecked());
+			mLocation.setSun(((ToggleButton)getView().findViewById(R.id.toggle_sunday)).isChecked());
+			mLocation.setShouldTurnOff(((Switch)getView().findViewById(R.id.edit_location_turn_off_switch)).isChecked());
 	 }
 }
