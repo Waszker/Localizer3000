@@ -2,7 +2,7 @@ package pl.papistudio.localizer3000;
 
 
 
-public class SMS {
+public class Sms {
 	/******************/
 	/*   VARIABLES    */
 	/******************/
@@ -10,27 +10,27 @@ public class SMS {
 	private String mReceiverName;
 	private int mReceiverNumber;
 	private String mMessageText;
-	private Location mLocationToSend;
+	private String mLocationNameToSend;
 	private boolean mIsOneTimeUse;
 	
 	/******************/
 	/*   FUNCTIONS    */
 	/******************/
-	public SMS() {
+	public Sms() {
 		
 	}
 	
-	public SMS(String name, int number, String text, Location location, boolean isOneTimeUse) {
+	public Sms(String name, int number, String text, String locationName, boolean isOneTimeUse) {
 		this.mUniqueIdNumber = -1;
 		this.mReceiverName = name;
 		this.mReceiverNumber = number;
 		this.mMessageText = text;
-		this.mLocationToSend = location;
+		this.mLocationNameToSend = locationName;
 		this.mIsOneTimeUse = isOneTimeUse; 
 	}
 	
 	public String getName() {
-		return mLocationToSend.getName() + " : " + mReceiverNumber;
+		return mLocationNameToSend + " : " + mReceiverNumber;
 	}
 
 	public String getReceiverName() {
@@ -57,12 +57,12 @@ public class SMS {
 		this.mMessageText = messageText;
 	}
 
-	public Location getLocationToSend() {
-		return mLocationToSend;
+	public String getLocationNameToSend() {
+		return mLocationNameToSend;
 	}
 
-	public void setLocationToSend(Location locationToSend) {
-		this.mLocationToSend = locationToSend;
+	public void setLocationNameToSend(String locationToSend) {
+		this.mLocationNameToSend = locationToSend;
 	}
 
 	public int getUniqueIdNumber() {

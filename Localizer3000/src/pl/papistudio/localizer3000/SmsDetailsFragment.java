@@ -23,12 +23,12 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
-public class SMSDetailsFragment extends Fragment implements OnClickListener {
+public class SmsDetailsFragment extends Fragment implements OnClickListener {
 	/******************/
 	/*   VARIABLES    */
 	/******************/
 	private static final int REQUEST_CONTACT_NUMBER = 123456789;
-	private SMS mSms;
+	private Sms mSms;
 	private List<Location> mListOfLocations;
 	
 	/******************/
@@ -38,7 +38,7 @@ public class SMSDetailsFragment extends Fragment implements OnClickListener {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_sms_details, container, false);
 		mListOfLocations = DatabaseHelper.getInstance(getActivity()).getAllLocations();
-		mSms = ((SMSActivity)getActivity()).getCurrentlyUsedSMS();
+		mSms = ((SmsActivity)getActivity()).getCurrentlyUsedSMS();
 		
 		setSpinnerItems(rootView);
 		addListenersToButtons(rootView);
@@ -117,7 +117,7 @@ public class SMSDetailsFragment extends Fragment implements OnClickListener {
 		((ImageButton)v.findViewById(R.id.add_sms_receiver_button)).setOnClickListener(this);
 	}
 	
-	private void fillSMSDetails(SMS sms, View v) {
+	private void fillSMSDetails(Sms sms, View v) {
 		if(sms != null)
 		{
 			((EditText)v.findViewById(R.id.sms_receiver_number)).setText(String.valueOf(sms.getReceiverNumber()));
@@ -127,10 +127,10 @@ public class SMSDetailsFragment extends Fragment implements OnClickListener {
 		}
 	}
 	
-	private void setSpinnerSelectedLocation(Spinner spinner, SMS sms) {
+	private void setSpinnerSelectedLocation(Spinner spinner, Sms sms) {
 		for(int i=0; i<mListOfLocations.size(); i++)
 		{
-			if(mListOfLocations.get(i).getName().contentEquals(sms.getLocationToSend().getName()))
+			if(mListOfLocations.get(i).getName().contentEquals(sms.getLocationNameToSend()))
 			{
 				spinner.setSelection(i);
 				break;
@@ -148,7 +148,7 @@ public class SMSDetailsFragment extends Fragment implements OnClickListener {
 	        @Override
 	        public void onClick(DialogInterface dialog, int which) {
 	        	getActivity().setResult(Activity.RESULT_CANCELED, null);
-	        	SMSDetailsFragment.this.getFragmentManager().popBackStack();
+	        	SmsDetailsFragment.this.getFragmentManager().popBackStack();
 	        }
 	
 	    })
@@ -189,12 +189,16 @@ public class SMSDetailsFragment extends Fragment implements OnClickListener {
 	private void fillSMSBeforeSaving() {
 		if(mSms == null)
 		{
-			mSms = new SMS("", 0, "", null, true);
+			mSms = new Sms("", 0, "", null, true);
 		}
-		mSms.setReceiverNumber(Integer.valueOf(((EditText)getView().findViewById(R.id.sms_receiver_number)).getText().toString()));
-		mSms.setLocationToSend((Location)((Spinner)getView().findViewById(R.id.sms_location_chooser)).getSelectedItem());
-		mSms.setMessageText(((EditText)getView().findViewById(R.id.sms_message_text)).getText().toString());
-		mSms.setIsOneTimeUse(((Switch)getView().findViewById(R.id.sms_one_time_checkbox)).isChecked());
+		mSms.setReceiverNumber(Integer.valueOf(
+				((EditText)getView().findViewById(R.id.sms_receiver_number)).getText().toString()));
+		mSms.setLocationNameToSend(
+				((Location)((Spinner)getView().findViewById(R.id.sms_location_chooser)).getSelectedItem()).getName());
+		mSms.setMessageText(
+				((EditText)getView().findViewById(R.id.sms_message_text)).getText().toString());
+		mSms.setIsOneTimeUse(
+				((Switch)getView().findViewById(R.id.sms_one_time_checkbox)).isChecked());
 	}
 	
 	private void saveOrUpdateSMS() {

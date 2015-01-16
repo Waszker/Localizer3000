@@ -4,11 +4,11 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 
-public class SMSActivity extends Activity {
+public class SmsActivity extends Activity {
 	/******************/
 	/*   VARIABLES    */
 	/******************/
-	private SMS mCurrentlyUsedSMS; 
+	private Sms mCurrentlyUsedSMS; 
 	
 	/******************/
 	/*   FUNCTIONS    */
@@ -20,15 +20,15 @@ public class SMSActivity extends Activity {
 		if (savedInstanceState == null) 
 		{
 			getFragmentManager().beginTransaction()
-					.add(R.id.container, new SMSListFragment()).commit();
+					.add(R.id.container, new SmsListFragment()).commit();
 		}
 	}
 
-	public SMS getCurrentlyUsedSMS() {
+	public Sms getCurrentlyUsedSMS() {
 		return mCurrentlyUsedSMS;
 	}
 
-	public void setCurrentlyUsedSMS(SMS currentlyUsedSMS) {
+	public void setCurrentlyUsedSMS(Sms currentlyUsedSMS) {
 		this.mCurrentlyUsedSMS = currentlyUsedSMS;
 	}	
 	
@@ -37,9 +37,9 @@ public class SMSActivity extends Activity {
     	Fragment fragment;
 	    if ((fragment = getFragmentManager().findFragmentByTag("SMSDetails")) != null)
 	    {
-	    	if(((SMSDetailsFragment)fragment).isVisible())
+	    	if(((SmsDetailsFragment)fragment).isVisible())
 	    	{
-	    		((SMSDetailsFragment)fragment).reactToBackPress();
+	    		((SmsDetailsFragment)fragment).reactToBackPress();
 	    	}
 	    	else
 	    	{

@@ -3,5 +3,5 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="pl.papistudio.localizer3000.SMSActivity"
+    tools:context="pl.papistudio.localizer3000.SmsActivity"
     tools:ignore="MergeRootFrame" />

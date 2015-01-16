@@ -163,7 +163,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	 * assigns unique id to SMS.
 	 * @param sms
 	 */
-	public void addSMS(SMS sms) {
+	public void addSMS(Sms sms) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = createValuesFromSMS(sms);
 		db.insert(DatabaseContract.TableSMSDefinition.TABLE_NAME, null, values);	
@@ -173,7 +173,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	 * Updating SMS with specific unique id.
 	 * @param sms
 	 */
-	public void updateSMS(SMS sms) {
+	public void updateSMS(Sms sms) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = createValuesFromSMS(sms);
 		db.update(DatabaseContract.TableSMSDefinition.TABLE_NAME, values, 
@@ -186,7 +186,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	 * @param smsToDelete
 	 * @return has SMS been deleted.
 	 */
-	public boolean deleteSMSAt(SMS smsToDelete) {
+	public boolean deleteSMSAt(Sms smsToDelete) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		return db.delete(DatabaseContract.TableSMSDefinition.TABLE_NAME,
 		DatabaseContract.TableSMSDefinition._ID
@@ -197,13 +197,13 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	 * Returns list of all SMS objects in database.
 	 * @return list of SMS
 	 */
-	public List<SMS> getAllSMS() {
+	public List<Sms> getAllSMS() {
 		String selectQuery = "SELECT  * FROM "
 				+ DatabaseContract.TableSMSDefinition.TABLE_NAME;
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor c = db.rawQuery(selectQuery, null);
 
-		List<SMS> smsList = new ArrayList<>();
+		List<Sms> smsList = new ArrayList<>();
 		if (c.moveToFirst()) {
 			do {
 				smsList.add(createSMSFromCursor(c));
@@ -320,19 +320,19 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 		return values;
 	}
 	
-	private SMS createSMSFromCursor(Cursor c) {
-		SMS newSMS = new SMS();
+	private Sms createSMSFromCursor(Cursor c) {
+		Sms newSMS = new Sms();
 		
 		newSMS.setUniqueIdNumber(c.getInt(0));
 		newSMS.setReceiverNumber(Integer.parseInt(c.getString(1)));
 		newSMS.setMessageText(c.getString(2));
-		newSMS.setLocationToSend(new Location(c.getString(3)));
+		newSMS.setLocationNameToSend(c.getString(3));
 		newSMS.setIsOneTimeUse(c.getInt(4) == 1);
 		
 		return newSMS;
 	}
 	
-	private ContentValues createValuesFromSMS(SMS sms) {
+	private ContentValues createValuesFromSMS(Sms sms) {
 		ContentValues values = new ContentValues();
 
 		values.put(DatabaseContract.TableSMSDefinition.COLUMN_NAME_RECEIVER_NUMBER,
@@ -340,7 +340,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 		values.put(DatabaseContract.TableSMSDefinition.COLUMN_NAME_MESSAGE_TEXT,
 				sms.getMessageText());
 		values.put(DatabaseContract.TableSMSDefinition.COLUMN_NAME_LOCATION_NAME,
-				sms.getLocationToSend().getName());
+				sms.getLocationNameToSend());
 		values.put(DatabaseContract.TableSMSDefinition.COLUMN_NAME_IS_ONE_TIME,
 				(sms.isOneTimeUse() ? 1 : 0));
 		

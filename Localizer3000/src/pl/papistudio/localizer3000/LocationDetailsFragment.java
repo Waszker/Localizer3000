@@ -219,8 +219,8 @@ public class LocationDetailsFragment extends Fragment implements OnClickListener
 	
 	private boolean isSMSForLocationProvided(Location location) {
 		boolean isProvided = false;
-		for(SMS s : DatabaseHelper.getInstance(getActivity()).getAllSMS())
-			if(s.getLocationToSend().getName().contentEquals(location.getName()))
+		for(Sms s : DatabaseHelper.getInstance(getActivity()).getAllSMS())
+			if(s.getLocationNameToSend().contentEquals(location.getName()))
 			{
 				isProvided = true;
 				break;

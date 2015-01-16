@@ -22,11 +22,11 @@ import android.widget.TextView;
 import com.melnykov.fab.FloatingActionButton;
 import com.mobeta.android.dslv.DragSortListView;
 
-public class SMSListFragment extends Fragment implements OnClickListener {
+public class SmsListFragment extends Fragment implements OnClickListener {
 	/******************/
 	/*   VARIABLES    */
 	/******************/
-	private List<SMS> mSmsList;
+	private List<Sms> mSmsList;
 	private SMSListAdapter mAdapter;
 	
 	/**
@@ -40,14 +40,14 @@ public class SMSListFragment extends Fragment implements OnClickListener {
 		/*   VARIABLES    */
 		/******************/
 		private LayoutInflater mInflater;
-		private List<SMS> mList;
+		private List<Sms> mList;
 		private TextView mSmsName;
 		private Activity mActivity;
 
 		/******************/
 		/*   FUNCTIONS    */
 		/******************/
-		public SMSListAdapter(Activity context, List<SMS> list)
+		public SMSListAdapter(Activity context, List<Sms> list)
 		{
 			super();
 			mActivity = context;
@@ -151,8 +151,8 @@ public class SMSListFragment extends Fragment implements OnClickListener {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					SMS i = (SMS)adapter.getItem(position);
-					((SMSActivity)SMSListFragment.this
+					Sms i = (Sms)adapter.getItem(position);
+					((SmsActivity)SmsListFragment.this
 							.getActivity()).setCurrentlyUsedSMS(i);
 					showDetailsFragment();					
 			}			
@@ -160,15 +160,15 @@ public class SMSListFragment extends Fragment implements OnClickListener {
 	}
 	
 	private void addNewSMS() {
-		((SMSActivity)SMSListFragment.this.getActivity()).setCurrentlyUsedSMS(null);
+		((SmsActivity)SmsListFragment.this.getActivity()).setCurrentlyUsedSMS(null);
 		showDetailsFragment();
 	}
 	
 	private void showDetailsFragment() {
-		FragmentTransaction ft = SMSListFragment.this.getFragmentManager().beginTransaction();
+		FragmentTransaction ft = SmsListFragment.this.getFragmentManager().beginTransaction();
 		ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out,
 					android.R.animator.fade_in, android.R.animator.fade_out);
-		ft.replace(SMSListFragment.this.getId(), new SMSDetailsFragment(), "SMSDetails");
+		ft.replace(SmsListFragment.this.getId(), new SmsDetailsFragment(), "SMSDetails");
 		ft.addToBackStack(null);
 		ft.commit();
 	}

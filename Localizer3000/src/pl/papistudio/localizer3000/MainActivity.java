@@ -151,7 +151,7 @@ public class MainActivity extends Activity {
 	 * @param v
 	 */
 	public void manageSMS(View v) {
-		Intent intent = new Intent(this, SMSActivity.class);
+		Intent intent = new Intent(this, SmsActivity.class);
 		startActivity(intent);
 	}
 	

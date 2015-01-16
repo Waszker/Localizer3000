@@ -226,11 +226,11 @@ public class System {
 	}
 	
 	private static void sendSMSes(Location location, boolean hasLocationChanged) {
-		List<SMS> smsList = DatabaseHelper.getInstance(sContext).getAllSMS();
+		List<Sms> smsList = DatabaseHelper.getInstance(sContext).getAllSMS();
 		
-		for(SMS s : smsList)
+		for(Sms s : smsList)
 		{
-			if(s.getLocationToSend().getName().contentEquals(location.getName()))
+			if(s.getLocationNameToSend().contentEquals(location.getName()))
 			{
 				if(hasLocationChanged)
 				{
