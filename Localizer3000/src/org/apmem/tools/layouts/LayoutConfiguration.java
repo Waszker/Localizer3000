@@ -12,7 +12,7 @@ class LayoutConfiguration {
 	private int orientation = FlowLayout.HORIZONTAL;
 	private boolean debugDraw = false;
 	private float weightDefault = 0;
-	private int gravity = Gravity.LEFT | Gravity.TOP;
+	private int gravity = Gravity.START | Gravity.TOP;
 	private int layoutDirection = FlowLayout.LAYOUT_DIRECTION_LTR;
 
 	public LayoutConfiguration(Context context, AttributeSet attributeSet) {
@@ -89,7 +89,7 @@ class LayoutConfiguration {
 
 	public void setGravity(int gravity) {
 		if ((gravity & Gravity.HORIZONTAL_GRAVITY_MASK) == 0) {
-			gravity |= Gravity.LEFT;
+			gravity |= Gravity.START;
 		}
 		if ((gravity & Gravity.VERTICAL_GRAVITY_MASK) == 0) {
 			gravity |= Gravity.TOP;

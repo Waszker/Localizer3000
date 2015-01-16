@@ -8,9 +8,6 @@
     <string name="delete_text">Delete</string>
     <string name="main_activity_service_status_text">Service status:</string>
     <string name="main_activity_text1">Current coordinates:</string>
-    <string name="main_activity_button1_text">Add location</string>
-    <string name="main_activity_button2_text">My locations</string>
-    <string name="sms_management_button_text">Manage SMS</string>
     <string name="current_localization">\nUnknown\n</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_saved_localizations">Saved locations</string>
@@ -40,13 +37,11 @@
     <string name="back_text">Back</string>
     <string name="save_text">Save</string>
     <string name="title_activity_sms">SMS Edition</string>
-    <string name="hello_world">Hello world!</string>
 
     <!-- SMS strings -->
     <string name="message_receiver_hint">Receiver number</string>
     <string name="message_text_hint">Enter message text</string>
     <string name="message_location">Send when location: </string>
-    <string name="one_time_message_text">Delete sms after sending: </string>
-    
+    <string name="one_time_message_text">Delete sms after sending: </string>    
 
 </resources>

@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 
+import org.honorato.multistatetogglebutton.MultiStateToggleButton.ToggleStates;
+
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.media.AudioManager;
@@ -94,19 +96,20 @@ public class System {
 				&& nearestLocation.getLocation().distanceTo(location) <= nearestLocation.getRadius();
 	}
 	
-	private static void setWifi(boolean isEnabled) {
+	private static void setWifi(ToggleStates state) {
 		try {
-			((WifiManager)service.getSystemService(Context.WIFI_SERVICE)).setWifiEnabled(isEnabled);
+			if(state == ToggleStates.On || state == ToggleStates.Off)
+			((WifiManager)service.getSystemService(Context.WIFI_SERVICE)).setWifiEnabled(state == ToggleStates.On);
 		} catch(Exception e) {
 			Log.e(TAG, "Probably no WiFi module\n" + e.getLocalizedMessage());
 		}
 	}
 	
-	private static void setBluetooth(boolean isEnabled) {
+	private static void setBluetooth(ToggleStates state) {
 		try {
-			if(isEnabled)
+			if(state == ToggleStates.On)
 				 BluetoothAdapter.getDefaultAdapter().enable();
-			else
+			else if(state == ToggleStates.Off)
 				BluetoothAdapter.getDefaultAdapter().disable();
 		} catch (Exception e) {
 			Log.e(TAG, "Probably no bluetooth module\n" + e.getLocalizedMessage());
@@ -114,29 +117,29 @@ public class System {
 	}
 	
 	@SuppressWarnings("deprecation")
-	private static void setSound(boolean isSoundEnabled, boolean isVibrationEnabled) {
+	private static void setSound(ToggleStates stateSound, ToggleStates stateVibration) {
 		AudioManager aManager=(AudioManager)service.getSystemService(Context.AUDIO_SERVICE);
-		if(!isSoundEnabled && !isVibrationEnabled) 
+		if(stateSound == ToggleStates.Off && stateVibration == ToggleStates.Off) 
 			aManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-		if(isVibrationEnabled && !isSoundEnabled)
+		if(stateSound == ToggleStates.Off && stateVibration == ToggleStates.On)
 			aManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-		if(!isVibrationEnabled && isSoundEnabled)
+		if(stateSound == ToggleStates.On && stateVibration == ToggleStates.Off)
 		{
 			aManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
 			aManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, // this doesn't work on newer API
 		            AudioManager.VIBRATE_SETTING_OFF);
 		}
-		if(isVibrationEnabled && isSoundEnabled)
+		if(stateSound == ToggleStates.On && stateVibration == ToggleStates.On)
 			aManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
 	}
 	
-	private static void setMobileData(boolean isEnabled) {
-		if(findBinary("su"))
+	private static void setMobileData(ToggleStates state) {
+		if(state != ToggleStates.Not_specified && findBinary("su"))
 		{ // if we are here, problably we are rooted ;)
 			try {
-				if(isEnabled)
+				if(state == ToggleStates.On)
 					Runtime.getRuntime().exec("su -c svc data enable");
-				else
+				else if(state == ToggleStates.Off)
 					Runtime.getRuntime().exec("su -c svc data disable");
 			} catch (IOException e) {
 				Log.e(TAG, "Error getting root priviledges");

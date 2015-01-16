@@ -21,6 +21,7 @@
 
 package com.mobeta.android.dslv;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.database.DataSetObserver;
@@ -440,7 +441,8 @@ public class DragSortListView extends ListView {
     private boolean mUseRemoveVelocity;
     private float mRemoveVelocityX = 0;
 
-    public DragSortListView(Context context, AttributeSet attrs) {
+    @SuppressLint("Recycle")
+	public DragSortListView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         int defaultDuration = 150;

@@ -64,7 +64,7 @@ public class MainActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		int id = item.getItemId();
+		final int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			FragmentTransaction ft = getFragmentManager().beginTransaction();
 			ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out,
@@ -185,9 +185,9 @@ public class MainActivity extends Activity {
 			@Override
 			public void run() {
 				((TextView) findViewById(R.id.current_location_textview))
-						.setText(location.getLatitude() + "\n"
-								+ location.getLongitude() + "\nwith accuracy: "
-								+ location.getAccuracy());				
+						.setText(location.getLatitude() + "\n" + 
+								 location.getLongitude() + "\nwith accuracy: " +
+								 location.getAccuracy());				
 			}
 		});
 	}
@@ -206,7 +206,7 @@ public class MainActivity extends Activity {
 
 	private void setServiceButtonTextAccordingToServiceState() {
 		ToggleButton b = (ToggleButton)findViewById(R.id.service_start_stop_button);
-		boolean isServiceNotRunning = isLocationServiceNotRunning();
+		final boolean isServiceNotRunning = isLocationServiceNotRunning();
 		
 		if(isServiceNotRunning)
 		{
@@ -225,11 +225,13 @@ public class MainActivity extends Activity {
 		ActivityManager manager = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
 		
 		for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE))
+		{
 			if (LocationService.class.getName().equals(service.service.getClassName()))
 			{
 				isNotRunning = false;
 				break;
 			}
+		}
 		
 		return isNotRunning;
 	}

@@ -1,5 +1,7 @@
 package pl.papistudio.localizer3000;
 
+import org.honorato.multistatetogglebutton.MultiStateToggleButton.ToggleStates;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -77,14 +79,25 @@ public class LocationDetailsFragment extends Fragment implements OnClickListener
 		((TextView)v.findViewById(R.id.details_location_days)).setText(createActiveDaysString());
 		((TextView)v.findViewById(R.id.details_location_hours)).setText(createActiveHoursString());
 		
-		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_sounds), location.isSoundOn());
-		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_vibrations), location.isVibrationOn());
-		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_wifi), location.isWifiOn());
-		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_bluetooth), location.isBluetoothOn());
-		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_nfc), location.isNfcOn());
-		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_mobile_data), location.isMobileData());
-		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_nfc), location.isNfcOn());
-		setTextAndColorForBooleanValues((TextView)v.findViewById(R.id.details_location_SMS), isSMSForLocationProvided(location));
+		setTextAndColorForStateValues((TextView)v.findViewById(R.id.details_location_sounds), location.isSoundOn());
+		setTextAndColorForStateValues((TextView)v.findViewById(R.id.details_location_vibrations), location.isVibrationOn());
+		setTextAndColorForStateValues((TextView)v.findViewById(R.id.details_location_wifi), location.isWifiOn());
+		setTextAndColorForStateValues((TextView)v.findViewById(R.id.details_location_bluetooth), location.isBluetoothOn());
+		setTextAndColorForStateValues((TextView)v.findViewById(R.id.details_location_nfc), location.isNfcOn());
+		setTextAndColorForStateValues((TextView)v.findViewById(R.id.details_location_mobile_data), location.isMobileData());
+		setTextAndColorForStateValues((TextView)v.findViewById(R.id.details_location_nfc), location.isNfcOn());
+		
+		TextView smsTextView = ((TextView)v.findViewById(R.id.details_location_SMS));
+		if(isSMSForLocationProvided(location))
+		{
+			smsTextView.setText("ON");
+			smsTextView.setTextColor(getResources().getColor(R.color.material_blue_toggle_unchecked));
+		}
+		else
+		{
+			smsTextView.setText("OFF");
+			smsTextView.setTextColor(getResources().getColor(R.color.offOption));	
+		}
 		
 	}
 	
@@ -114,16 +127,21 @@ public class LocationDetailsFragment extends Fragment implements OnClickListener
 		return stringBuilderHours.toString();
 	}
 	
-	private void setTextAndColorForBooleanValues(TextView view, boolean booleanValue) {
-		if(booleanValue)
+	private void setTextAndColorForStateValues(TextView view, ToggleStates state) {
+		if(state == ToggleStates.On)
 		{
 			view.setText("ON");
 			view.setTextColor(getResources().getColor(R.color.material_blue_toggle_unchecked));
 		}
-		else
+		else if(state == ToggleStates.Off)
 		{
 			view.setText("OFF");
 			view.setTextColor(getResources().getColor(R.color.offOption));		
+		}
+		else 
+		{
+			view.setText("Unchanged");
+			view.setTextColor(getResources().getColor(R.color.offOption));				
 		}
 	}
 	

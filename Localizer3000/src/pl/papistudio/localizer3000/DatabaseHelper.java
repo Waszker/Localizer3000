@@ -3,6 +3,8 @@ package pl.papistudio.localizer3000;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.honorato.multistatetogglebutton.MultiStateToggleButton.ToggleStates;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -246,12 +248,24 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 		newLocation.setTimeTo(new Time(c.getInt(13), c.getInt(14)));
 		newLocation.setRadius(c.getInt(15));
 		newLocation.setPriority(c.getInt(16));
-		newLocation.setSoundOn(c.getInt(17) == 0 ? false : true);
-		newLocation.setVibrationOn(c.getInt(18) == 0 ? false : true);
-		newLocation.setWifiOn(c.getInt(19) == 0 ? false : true);
-		newLocation.setBluetoothOn(c.getInt(20) == 0 ? false : true);
-		newLocation.setNfcOn(c.getInt(21) == 0 ? false : true);
-		newLocation.setMobileData(c.getInt(22) == 0 ? false : true);
+		newLocation.setSoundOn(c.getInt(17) == 0 ? ToggleStates.Off : 
+							   c.getInt(17) == 1 ? ToggleStates.On : 
+								   				   ToggleStates.Not_specified);
+		newLocation.setVibrationOn(c.getInt(18) == 0 ? ToggleStates.Off : 
+								   c.getInt(18) == 1 ? ToggleStates.On : 
+									   				   ToggleStates.Not_specified);
+		newLocation.setWifiOn(c.getInt(19) == 0 ? ToggleStates.Off : 
+							  c.getInt(19) == 1 ? ToggleStates.On : 
+								  				  ToggleStates.Not_specified);
+		newLocation.setBluetoothOn(c.getInt(20) == 0 ? ToggleStates.Off : 
+								   c.getInt(20) == 1 ? ToggleStates.On : 
+									   				   ToggleStates.Not_specified);
+		newLocation.setNfcOn(c.getInt(21) == 0 ? ToggleStates.Off : 
+							 c.getInt(21) == 1 ? ToggleStates.On : 
+								 				 ToggleStates.Not_specified);
+		newLocation.setMobileData(c.getInt(22) == 0 ? ToggleStates.Off : 
+								  c.getInt(22) == 1 ? ToggleStates.On : 
+									  				  ToggleStates.Not_specified);
 		newLocation.setSMSsendOn(c.getInt(23) == 0 ? false : true);
 		
 		return newLocation;
@@ -294,17 +308,17 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 		values.put(DatabaseContract.TableLocationDefinition.COLUMN_NAME_PRIORITY,
 				location.getPriority());
 		values.put(DatabaseContract.TableLocationDefinition.COLUMN_NAME_ISSOUND,
-				location.isSoundOn() ? 1 : 0);
+				location.isSoundOn().getIdentifier());
 		values.put(DatabaseContract.TableLocationDefinition.COLUMN_NAME_ISVIBRATION,
-				location.isVibrationOn() ? 1 : 0);
+				location.isVibrationOn().getIdentifier());
 		values.put(DatabaseContract.TableLocationDefinition.COLUMN_NAME_ISWIFI,
-				location.isWifiOn() ? 1 : 0);
+				location.isWifiOn().getIdentifier());
 		values.put(DatabaseContract.TableLocationDefinition.COLUMN_NAME_ISBLUETOOTH,
-				location.isBluetoothOn() ? 1 : 0);
+				location.isBluetoothOn().getIdentifier());
 		values.put(DatabaseContract.TableLocationDefinition.COLUMN_NAME_ISNFC,
-				location.isNfcOn() ? 1 : 0);
+				location.isNfcOn().getIdentifier());
 		values.put(DatabaseContract.TableLocationDefinition.COLUMN_NAME_ISMOBILEDATA,
-				location.isMobileData() ? 1 : 0);
+				location.isMobileData().getIdentifier());
 		values.put(DatabaseContract.TableLocationDefinition.COLUMN_NAME_ISSMS,
 				location.isSMSsendOn() ? 1 : 0);
 		

@@ -1,7 +1,7 @@
 package pl.papistudio.localizer3000;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
+import org.honorato.multistatetogglebutton.MultiStateToggleButton;
+import org.honorato.multistatetogglebutton.MultiStateToggleButton.ToggleStates;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -15,11 +15,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 
 /**
  * Fragment displaying editable location
@@ -42,7 +44,7 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_location_edit1, container, false);
 		checkForGooglePlayServicesAndExitIfNone();
-		getLocationReference();
+		getCurrentlyEditedLocationReference();
 		fillNullLocation();
 		saveLocationOriginalName();
 		addOnClickActionsToButtons(rootView);
@@ -82,7 +84,7 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 		}
 	}
 	
-	private void getLocationReference() {
+	private void getCurrentlyEditedLocationReference() {
 		location = ((EditLocationActivity)getActivity()).currentlyEditedLocation;
 	}
 	
@@ -95,12 +97,12 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 	
 	private void fillLocationDetails(View v) {
 		((TextView)v.findViewById(R.id.edit_location_name)).setText(location.getName());
-		((Switch)v.findViewById(R.id.edit_location_wifi_switch)).setChecked(location.isWifiOn());
-		((Switch)v.findViewById(R.id.edit_location_bluetooth_switch)).setChecked(location.isBluetoothOn());
-		((Switch)v.findViewById(R.id.edit_location_nfc_switch)).setChecked(location.isNfcOn());
-		((Switch)v.findViewById(R.id.edit_location_mobile_data_switch)).setChecked(location.isMobileData());
-		((Switch)v.findViewById(R.id.edit_location_sound_switch)).setChecked(location.isSoundOn());
-		((Switch)v.findViewById(R.id.edit_location_vibration_switch)).setChecked(location.isVibrationOn());
+		((MultiStateToggleButton)v.findViewById(R.id.edit_location_wifi_switch)).setSelection(location.isWifiOn());
+		((MultiStateToggleButton)v.findViewById(R.id.edit_location_bluetooth_switch)).setSelection(location.isBluetoothOn());
+		((MultiStateToggleButton)v.findViewById(R.id.edit_location_nfc_switch)).setSelection(location.isNfcOn());
+		((MultiStateToggleButton)v.findViewById(R.id.edit_location_mobile_data_switch)).setSelection(location.isMobileData());
+		((MultiStateToggleButton)v.findViewById(R.id.edit_location_sound_switch)).setSelection(location.isSoundOn());
+		((MultiStateToggleButton)v.findViewById(R.id.edit_location_vibration_switch)).setSelection(location.isVibrationOn());
 		
 		((ToggleButton)v.findViewById(R.id.toggle_monday)).setChecked(location.isMon());
 		((ToggleButton)v.findViewById(R.id.toggle_tuesday)).setChecked(location.isTue());
@@ -116,7 +118,9 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 	private void fillNullLocation() {
 		if (location == null) 
 		{
-			location = new Location("", false, false, false, false, false, false, 100);
+			location = new Location("", ToggleStates.Off, ToggleStates.Off, 
+									ToggleStates.Off, ToggleStates.Off, ToggleStates.Off, 
+									ToggleStates.Off, 100);
 			((EditLocationActivity) getActivity()).currentlyEditedLocation = location;
 		}
 	}
@@ -196,12 +200,12 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 	 
 	 private void fillEditedLocationDetails() {
 			location.setName(String.valueOf(((TextView) getView().findViewById(R.id.edit_location_name)).getText()));
-			location.setWifiOn(((Switch)getView().findViewById(R.id.edit_location_wifi_switch)).isChecked());
-			location.setBluetoothOn(((Switch)getView().findViewById(R.id.edit_location_bluetooth_switch)).isChecked());
-			location.setNfcOn(((Switch)getView().findViewById(R.id.edit_location_nfc_switch)).isChecked());
-			location.setMobileData(((Switch)getView().findViewById(R.id.edit_location_mobile_data_switch)).isChecked());
-			location.setSoundOn(((Switch)getView().findViewById(R.id.edit_location_sound_switch)).isChecked());
-			location.setVibrationOn(((Switch)getView().findViewById(R.id.edit_location_vibration_switch)).isChecked());
+			location.setWifiOn(((MultiStateToggleButton)getView().findViewById(R.id.edit_location_wifi_switch)).getStateValue());
+			location.setBluetoothOn(((MultiStateToggleButton)getView().findViewById(R.id.edit_location_bluetooth_switch)).getStateValue());
+			location.setNfcOn(((MultiStateToggleButton)getView().findViewById(R.id.edit_location_nfc_switch)).getStateValue());
+			location.setMobileData(((MultiStateToggleButton)getView().findViewById(R.id.edit_location_mobile_data_switch)).getStateValue());
+			location.setSoundOn(((MultiStateToggleButton)getView().findViewById(R.id.edit_location_sound_switch)).getStateValue());
+			location.setVibrationOn(((MultiStateToggleButton)getView().findViewById(R.id.edit_location_vibration_switch)).getStateValue());
 			location.setLocation(location.getLocation());
 			location.setMon(((ToggleButton)getView().findViewById(R.id.toggle_monday)).isChecked());
 			location.setTue(((ToggleButton)getView().findViewById(R.id.toggle_tuesday)).isChecked());

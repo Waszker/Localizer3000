@@ -25,6 +25,7 @@
 package com.andexert.library;
 
 import pl.papistudio.localizer3000.R;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -100,7 +101,8 @@ public class RippleView extends RelativeLayout
         init(context, attrs);
     }
 
-    private void init(final Context context, final AttributeSet attrs)
+    @SuppressLint("Recycle")
+	private void init(final Context context, final AttributeSet attrs)
     {
         if (isInEditMode())
             return;
@@ -216,7 +218,8 @@ public class RippleView extends RelativeLayout
         scaleAnimation.setRepeatCount(1);
     }
 
-    @Override
+    @SuppressLint("ClickableViewAccessibility")
+	@Override
     public boolean onTouchEvent(MotionEvent event)
     {
         if (gestureDetector.onTouchEvent(event) && !animationRunning)

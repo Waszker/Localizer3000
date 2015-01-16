@@ -230,7 +230,7 @@
                         android:text="@string/fragment_location_details_wifi"
                         android:textSize="@dimen/location_details_static_text" />
 
-                    <Switch
+                    <org.honorato.multistatetogglebutton.MultiStateToggleButton
                         android:id="@+id/edit_location_wifi_switch"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -250,7 +250,7 @@
                         android:text="@string/fragment_location_details_bluetooth"
                         android:textSize="@dimen/location_details_static_text" />
 
-                    <Switch
+                    <org.honorato.multistatetogglebutton.MultiStateToggleButton
                         android:id="@+id/edit_location_bluetooth_switch"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -270,7 +270,7 @@
                         android:text="@string/fragment_location_details_nfc"
                         android:textSize="@dimen/location_details_static_text" />
 
-                    <Switch
+                    <org.honorato.multistatetogglebutton.MultiStateToggleButton
                         android:id="@+id/edit_location_nfc_switch"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -290,7 +290,7 @@
                         android:text="@string/fragment_location_details_mobile_data"
                         android:textSize="@dimen/location_details_static_text" />
 
-                    <Switch
+                    <org.honorato.multistatetogglebutton.MultiStateToggleButton
                         android:id="@+id/edit_location_mobile_data_switch"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -310,7 +310,7 @@
                         android:text="@string/fragment_location_details_sound"
                         android:textSize="@dimen/location_details_static_text" />
 
-                    <Switch
+                    <org.honorato.multistatetogglebutton.MultiStateToggleButton
                         android:id="@+id/edit_location_sound_switch"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -330,13 +330,13 @@
                         android:text="@string/fragment_location_details_vibrations"
                         android:textSize="@dimen/location_details_static_text" />
 
-                    <Switch
+                    <org.honorato.multistatetogglebutton.MultiStateToggleButton
                         android:id="@+id/edit_location_vibration_switch"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_column="1"
                         android:layout_gravity="center" />
-                </TableRow>
+                </TableRow>                
                 
             </TableLayout>
             

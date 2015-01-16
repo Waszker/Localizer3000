@@ -2,6 +2,9 @@ package pl.papistudio.localizer3000;
 
 import java.util.Calendar;
 
+import org.honorato.multistatetogglebutton.MultiStateToggleButton;
+import org.honorato.multistatetogglebutton.MultiStateToggleButton.ToggleStates;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -17,7 +20,9 @@ public class Location implements Parcelable, Comparable<Location> {
 	/*   VARIABLES    */
 	/******************/
 	private String mName;
-	private boolean mIsWifiOn, mIsBluetoothOn, mIsNfcOn, mIsMobileData, mIsSoundOn, mIsVibrationOn, mIsSMSsendOn;
+	private MultiStateToggleButton.ToggleStates mIsWifiOn, mIsBluetoothOn, mIsNfcOn, 
+							mIsMobileData, mIsSoundOn, mIsVibrationOn;
+	private boolean mIsSMSsendOn;
 	private int mRadius;
 	private int mPriority;
 	private Time mTimeFrom, mTimeTo;
@@ -37,7 +42,8 @@ public class Location implements Parcelable, Comparable<Location> {
 	 */
 	public Location(String name) {
 		this.mName = name;
-		this.mIsWifiOn = this.mIsBluetoothOn = this.mIsNfcOn = this.mIsMobileData = this.mIsSoundOn = this.mIsVibrationOn =true;
+		this.mIsWifiOn = this.mIsBluetoothOn = this.mIsNfcOn = this.mIsMobileData = 
+				this.mIsSoundOn = this.mIsVibrationOn = ToggleStates.Off;
 		this.mIsSMSsendOn=false;
 		this.mRadius=100;
 		setTimeFrom(new Time(0,0));
@@ -57,9 +63,9 @@ public class Location implements Parcelable, Comparable<Location> {
 	 * @param isVibrationOn
 	 * @param radius
 	 */
-	public Location(String name, boolean isWifiOn, boolean isBluetoothOn,
-			boolean isNfcOn, boolean isMobData, boolean isSoundOn,
-			boolean isVibrationOn, int radius) {
+	public Location(String name, ToggleStates isWifiOn, ToggleStates isBluetoothOn,
+			ToggleStates isNfcOn, ToggleStates isMobData, ToggleStates isSoundOn,
+			ToggleStates isVibrationOn, int radius) {
 		this.mName = name;
 		this.mIsWifiOn = isWifiOn;
 		this.mIsBluetoothOn = isBluetoothOn;
@@ -193,51 +199,51 @@ public class Location implements Parcelable, Comparable<Location> {
 		this.location = location;
 	}
 	
-	public boolean isWifiOn() {
+	public ToggleStates isWifiOn() {
 		return mIsWifiOn;
 	}
 
-	public void setWifiOn(boolean isWifiOn) {
+	public void setWifiOn(ToggleStates isWifiOn) {
 		this.mIsWifiOn = isWifiOn;
 	}
 
-	public boolean isBluetoothOn() {
+	public ToggleStates isBluetoothOn() {
 		return mIsBluetoothOn;
 	}
 
-	public void setBluetoothOn(boolean isBluetoothOn) {
+	public void setBluetoothOn(ToggleStates isBluetoothOn) {
 		this.mIsBluetoothOn = isBluetoothOn;
 	}
 
-	public boolean isNfcOn() {
+	public ToggleStates isNfcOn() {
 		return mIsNfcOn;
 	}
 
-	public void setNfcOn(boolean isNfcOn) {
+	public void setNfcOn(ToggleStates isNfcOn) {
 		this.mIsNfcOn = isNfcOn;
 	}
 
-	public boolean isMobileData() {
+	public ToggleStates isMobileData() {
 		return mIsMobileData;
 	}
 
-	public void setMobileData(boolean isMobData) {
+	public void setMobileData(ToggleStates isMobData) {
 		this.mIsMobileData = isMobData;
 	}
 	
-	public boolean isSoundOn() {
+	public ToggleStates isSoundOn() {
 		return mIsSoundOn;
 	}
 
-	public void setSoundOn(boolean isSoundOn) {
+	public void setSoundOn(ToggleStates isSoundOn) {
 		this.mIsSoundOn = isSoundOn;
 	}
 
-	public boolean isVibrationOn() {
+	public ToggleStates isVibrationOn() {
 		return mIsVibrationOn;
 	}
 
-	public void setVibrationOn(boolean isVibrationOn) {
+	public void setVibrationOn(ToggleStates isVibrationOn) {
 		this.mIsVibrationOn = isVibrationOn;
 	}
 
@@ -353,12 +359,12 @@ public class Location implements Parcelable, Comparable<Location> {
 		mIsFri = (in.readByte() != 0 ? true : false);
 		mIsSat = (in.readByte() != 0 ? true : false);
 		mIsSun = (in.readByte() != 0 ? true : false);
-		mIsWifiOn = (in.readByte() != 0 ? true : false);
-		mIsBluetoothOn = (in.readByte() != 0 ? true : false);
-		mIsNfcOn = (in.readByte() != 0 ? true : false);
-		mIsMobileData = (in.readByte() != 0 ? true : false);
-		mIsSoundOn= (in.readByte() != 0 ? true : false);
-		mIsVibrationOn = (in.readByte() != 0 ? true : false);
+		mIsWifiOn = readState(in.readByte());
+		mIsBluetoothOn = readState(in.readByte());
+		mIsNfcOn = readState(in.readByte());
+		mIsMobileData = readState(in.readByte());
+		mIsSoundOn= readState(in.readByte());
+		mIsVibrationOn = readState(in.readByte());
 		mIsSMSsendOn = (in.readByte() != 0 ? true : false);
 		mRadius = (in.readInt());
 		mTimeFrom=(in.readParcelable(Time.class.getClassLoader()));
@@ -382,12 +388,12 @@ public class Location implements Parcelable, Comparable<Location> {
 		dest.writeByte((byte)(mIsFri ? 1 : 0));
 		dest.writeByte((byte)(mIsSat ? 1 : 0));
 		dest.writeByte((byte)(mIsSun ? 1 : 0));
-		dest.writeByte((byte)(mIsWifiOn ? 1 : 0));
-		dest.writeByte((byte)(mIsBluetoothOn ? 1 : 0));
-		dest.writeByte((byte)(mIsNfcOn ? 1 : 0));
-		dest.writeByte((byte)(mIsMobileData ? 1 : 0));
-		dest.writeByte((byte)(mIsSoundOn ? 1 : 0));
-		dest.writeByte((byte)(mIsVibrationOn ? 1 : 0));
+		dest.writeByte((byte)(mIsWifiOn.getIdentifier()));
+		dest.writeByte((byte)(mIsBluetoothOn.getIdentifier()));
+		dest.writeByte((byte)(mIsNfcOn.getIdentifier()));
+		dest.writeByte((byte)(mIsMobileData.getIdentifier()));
+		dest.writeByte((byte)(mIsSoundOn.getIdentifier()));
+		dest.writeByte((byte)(mIsVibrationOn.getIdentifier()));
 		dest.writeByte((byte)(mIsSMSsendOn ? 1 : 0));
 		dest.writeInt(mRadius);
 		dest.writeParcelable(mTimeFrom, flags);
@@ -406,4 +412,9 @@ public class Location implements Parcelable, Comparable<Location> {
             return new Location[size];
         }
     };
+    
+    private ToggleStates readState(byte b) {
+    	return (b == 0 ? ToggleStates.Off : 
+    			b == 1 ? ToggleStates.On : ToggleStates.Not_specified);
+    }
 }
