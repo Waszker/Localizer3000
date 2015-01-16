@@ -156,6 +156,11 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 		db.update(DatabaseContract.TableLocationDefinition.TABLE_NAME, values, 
 				  DatabaseContract.TableLocationDefinition.COLUMN_NAME_LOCATION_NAME + 
 				  "=\"" + originalName + "\"", null);
+		
+		if(location.getName()!=originalName)
+		{
+			updateSmsReferences(originalName, location.getName());
+		}
 	}
 	
 	/**
@@ -179,6 +184,16 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 		db.update(DatabaseContract.TableSMSDefinition.TABLE_NAME, values, 
 				  DatabaseContract.TableSMSDefinition._ID + 
 				  "=\"" + sms.getUniqueIdNumber() + "\"", null);
+	}
+	
+	private void updateSmsReferences(String oldLocationName, String newLocationName)
+	{
+		List<Sms> SmsList = getAllSMS();
+		for (Sms sms : SmsList) {
+			if(sms.getLocationNameToSend()==oldLocationName)
+			sms.setLocationNameToSend(newLocationName);
+			updateSMS(sms);
+		}
 	}
 	
 	/**
