@@ -34,7 +34,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_column="0"
-                    android:text="@string/fragment_location_details_location"
+                    android:text="@string/fragment_location_details_network_location"
                     android:textSize="@dimen/location_details_static_text" />
 
                 <TextView
@@ -54,11 +54,11 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_column="0"
-                    android:text="@string/fragment_location_details_gps"
+                    android:text="@string/fragment_location_details_gps_location"
                     android:textSize="@dimen/location_details_static_text" />
 
                 <TextView
-                    android:id="@+id/gps_availability"
+                    android:id="@+id/gps_location_availability"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_column="1"
@@ -104,6 +104,47 @@
                     android:layout_column="1"
                     android:layout_gravity="center" />
             </TableRow>
+            
+            
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp" >
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_column="0"
+                    android:text="@string/fragment_location_details_gps"
+                    android:textSize="@dimen/location_details_static_text" />
+
+                <TextView
+                    android:id="@+id/gps_availability"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_gravity="center" />
+            </TableRow>  
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp" >
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_column="0"
+                    android:text="@string/fragment_location_details_mobile_data"
+                    android:textSize="@dimen/location_details_static_text" />
+
+                <TextView
+                    android:id="@+id/mobile_availability"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_gravity="center" />
+            </TableRow>
 
             <TableRow
                 android:layout_width="wrap_content"
@@ -124,6 +165,27 @@
                     android:layout_column="1"
                     android:layout_gravity="center" />
             </TableRow>
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp" >
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_column="0"
+                    android:text="@string/fragment_location_details_root"
+                    android:textSize="@dimen/location_details_static_text" />
+
+                <TextView
+                    android:id="@+id/root_availability"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_gravity="center" />
+            </TableRow>
+            
         </TableLayout>
     </ScrollView>
         

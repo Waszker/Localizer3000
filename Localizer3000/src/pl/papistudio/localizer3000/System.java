@@ -10,7 +10,9 @@ import org.honorato.multistatetogglebutton.MultiStateToggleButton.ToggleStates;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.media.AudioManager;
+import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.Vibrator;
 import android.telephony.SmsManager;
@@ -56,15 +58,33 @@ public class System {
 			Log.d("System Location", "There is no good location to apply...");
 	}
 	
+	/**
+	 * Function checks for several phone functionalities:
+	 * <ul>
+	 * 		<li>Location support</li>
+	 * 		<li>Accurate location support</li>
+	 * 		<li>WiFi support</li>
+	 * 		<li>Bluetooth support</li>
+	 * 		<li>GPS support</li>
+	 * 		<li>Mobile connection support</li>
+	 * 		<li>Vibration support</li>
+	 * 		<li>Root privileges support</li>
+	 * </ul>
+	 * and returns array of bools indicating what is supported or not.
+	 * @param context
+	 * @return array of bools indicating what is supported or not
+	 */
 	public static boolean[] checkPhoneModules(Context context) {
-//		StringBuilder response = new StringBuilder("Device has support for following modules:\n");
-		boolean[] availability = new boolean[5];
+		boolean[] availability = new boolean[8];
 
 		availability[0] = context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_LOCATION);
 		availability[1] = context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS);
 		availability[2] = context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_WIFI);
 		availability[3] = context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH);
-		availability[4] = (((Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE)).hasVibrator());
+		availability[4] = ((LocationManager)context.getSystemService(Context.LOCATION_SERVICE)).isProviderEnabled(LocationManager.GPS_PROVIDER);
+		availability[5] = ((ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE)).getNetworkInfo(ConnectivityManager.TYPE_MOBILE) != null;
+		availability[6] = (((Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE)).hasVibrator());
+		availability[7] = findBinary("su");
 		
 		return availability;
 	}

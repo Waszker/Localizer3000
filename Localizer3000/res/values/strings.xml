@@ -17,7 +17,9 @@
     <string name="fragment_location_details_name">Location name:</string>
     <string name="fragment_location_details_active_days">Active on days:</string>
     <string name="fragment_location_details_active_time">Active time:</string>
-    <string name="fragment_location_details_location">Location:</string>
+    <string name="fragment_location_details_network_location">Network location:</string>
+    <string name="fragment_location_details_gps_location">GPS location:</string>
+    <string name="fragment_location_details_root">Root:</string>
     <string name="fragment_location_details_gps">GPS:</string>
     <string name="fragment_location_details_sound">Sounds:</string>
     <string name="fragment_location_details_vibrations">Vibrations:</string>

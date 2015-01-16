@@ -24,10 +24,13 @@ public class ModuleDialog {
 		dialog.setTitle("Check-up");
 		dialog.setCancelable(false);
 		setTextAndColorForModuleDialog((TextView)dialog.findViewById(R.id.location_availability), available[0]);
-		setTextAndColorForModuleDialog((TextView)dialog.findViewById(R.id.gps_availability), available[1]);
+		setTextAndColorForModuleDialog((TextView)dialog.findViewById(R.id.gps_location_availability), available[1]);
 		setTextAndColorForModuleDialog((TextView)dialog.findViewById(R.id.wifi_availability), available[2]);
 		setTextAndColorForModuleDialog((TextView)dialog.findViewById(R.id.bluetooth_availability), available[3]);
-		setTextAndColorForModuleDialog((TextView)dialog.findViewById(R.id.vibrations_availability), available[4]);
+		setTextAndColorForModuleDialog((TextView)dialog.findViewById(R.id.gps_availability), available[4]);
+		setTextAndColorForModuleDialog((TextView)dialog.findViewById(R.id.vibrations_availability), available[5]);
+		setTextAndColorForModuleDialog((TextView)dialog.findViewById(R.id.mobile_availability), available[6]);
+		setTextAndColorForModuleDialog((TextView)dialog.findViewById(R.id.root_availability), available[7]);
 		((Button)dialog.findViewById(R.id.ok_button)).setOnClickListener(new View.OnClickListener() {
 			
 			@Override
