@@ -33,6 +33,7 @@ public class LocationService extends Service {
 	private static final int NOTIFICATION_ID = 1;
 	private final IBinder mBinder = new LocalBinder();
 	private android.location.Location mLocation;
+	private Location mActiveLocation;
 	private BroadcastReceiver mNetworkChangeReceiver;
 	private LocationManager mLocationManager;
 	private LocationListener mLocationListener;
@@ -91,7 +92,13 @@ public class LocationService extends Service {
 		}
 	}
 	
+	/**
+	 * Invoked when new saved location becomes
+	 * active. Method updates notification.
+	 * @param l
+	 */
 	public void onEvent(Location l) {
+		mActiveLocation = l;
 		updateNotification("Currently active profile:\n"+l.getName());
 	}
     
@@ -116,6 +123,11 @@ public class LocationService extends Service {
     	if(mLocation != null)
     	{
     		EventBus.getDefault().post(mLocation);
+    	}
+    	
+    	if(mActiveLocation != null)
+    	{
+    		EventBus.getDefault().post(mActiveLocation);
     	}
     }
     

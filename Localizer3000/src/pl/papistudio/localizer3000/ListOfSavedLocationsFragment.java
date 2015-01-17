@@ -4,8 +4,10 @@ import java.util.Collections;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -106,11 +108,23 @@ public class ListOfSavedLocationsFragment extends Fragment {
 				
 				@Override
 				public void onClick(View v) {
-					Log.d("Item delete", "Deleted item number: " + position);
-					DatabaseHelper dbHelper = DatabaseHelper.getInstance(getActivity().getApplicationContext());
-					dbHelper.deleteLocationAt(mList.get(position));
-					mList.remove(position);
-					mAdapter.notifyDataSetChanged();
+					new AlertDialog.Builder(getActivity())
+			        .setIcon(android.R.drawable.ic_dialog_alert)
+			        .setTitle("Delete location")
+			        .setMessage("Are you sure you want to delete this location?")
+			        .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+				    {
+				        @Override
+				        public void onClick(DialogInterface dialog, int which) {
+							Log.d("Item delete", "Deleted item number: " + position);
+							DatabaseHelper dbHelper = DatabaseHelper.getInstance(getActivity().getApplicationContext());
+							dbHelper.deleteLocationAt(mList.get(position));
+							mList.remove(position);
+							mAdapter.notifyDataSetChanged(); 
+				        }
+				
+				    })
+				    .setNegativeButton("No", null).show();
 				}
 			});
 

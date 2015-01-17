@@ -1,7 +1,19 @@
 package pl.papistudio.localizer3000;
 
 
-
+/**
+ * <p>Class representing Sms object in system.</p>
+ * <p>Each sms has its receiver number, text and name
+ * of location indicating when to send it. It also has
+ * boolean property that defines behaviour after sending
+ * it - should it be erased or not.</p>
+ * <p>Saving and updating sms object in database is 
+ * done by providing unique id acquired when first
+ * adding sms to database.</p> 
+ * 
+ * @author PapiTeam
+ *
+ */
 public class Sms {
 	/******************/
 	/*   VARIABLES    */

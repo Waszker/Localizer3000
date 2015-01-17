@@ -10,6 +10,7 @@
     <string name="never_again_text">Nie pokazuj ponownie</string>
     <string name="main_activity_service_status_text">Stan aplikacji:</string>
     <string name="main_activity_text1">Obecne współrzędne:</string>
+    <string name="main_activity_text2">Obowiązujący profil lokalizacji:</string>
     <string name="current_localization">\nNieznane\n</string>
     <string name="action_settings">Ustawienia</string>
     <string name="title_activity_saved_localizations">Zapisane lokalizacje</string>

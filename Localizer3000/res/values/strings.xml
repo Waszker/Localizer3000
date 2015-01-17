@@ -10,6 +10,7 @@
     <string name="never_again_text">Don\'t show again</string>
     <string name="main_activity_service_status_text">Service status:</string>
     <string name="main_activity_text1">Current coordinates:</string>
+    <string name="main_activity_text2">Currently valid location:</string>
     <string name="current_localization">\nUnknown\n</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_saved_localizations">Saved locations</string>

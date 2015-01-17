@@ -1,5 +1,7 @@
 package pl.papistudio.localizer3000;
 
+import java.text.DecimalFormat;
+
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
@@ -183,8 +185,24 @@ public class MainActivity extends Activity {
 	 * Method invoked by EventBus when location becomes updated.
 	 * @param location - updated location
 	 */
-	public void onEvent(android.location.Location location) {
+	public void onEvent(final android.location.Location location) {
 		updateCurrentLocation(location);
+	}
+
+	/**
+	 * Method invoked by EventBus when certain location becomes valid.
+	 * It updates text view on main screen showing name of currently
+	 * active location.
+	 * @param location - updated location
+	 */
+	public void onEvent(final Location location) {
+		runOnUiThread(new Runnable() {			
+			@Override
+			public void run() {
+				((TextView) findViewById(R.id.current_location_name_textview))
+						.setText(location.getName());				
+			}
+		});
 	}
 	
 	/**
@@ -195,10 +213,12 @@ public class MainActivity extends Activity {
 		runOnUiThread(new Runnable() {			
 			@Override
 			public void run() {
+				DecimalFormat f = new DecimalFormat("0.#####");
 				((TextView) findViewById(R.id.current_location_textview))
-						.setText(location.getLatitude() + "\n" + 
-								 location.getLongitude() + "\nwith accuracy: " +
-								 location.getAccuracy());				
+						.setText(f.format(location.getLatitude()) + "\u00B0 \n" + 
+								 f.format(location.getLongitude()) + "\u00B0 \n" +
+								 "with accuracy: " +
+								 location.getAccuracy() + "m.");				
 			}
 		});
 	}
