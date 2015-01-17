@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Localizer3000</string>
+
+    <!-- Location list and details -->
+    <string name="edit_text">Edycja</string>
+    <string name="delete_text">Usuń</string>
+    <string name="ok_text">Ok</string>
+    <string name="never_again_text">Nie pokazuj ponownie</string>
+    <string name="main_activity_service_status_text">Stan aplikacji:</string>
+    <string name="main_activity_text1">Obecne współrzędne:</string>
+    <string name="current_localization">\nNieznane\n</string>
+    <string name="action_settings">Ustawienia</string>
+    <string name="title_activity_saved_localizations">Zapisane lokalizacje</string>
+    <string name="fragment_location_details_text">Szczegóły lokalizacji</string>
+    <string name="fragment_location_details_name">Nazwa lokalizacji:</string>
+    <string name="fragment_location_details_active_days">Dni obowiązywania:</string>
+    <string name="fragment_location_details_active_time">Godziny obowiązywania:</string>
+    <string name="fragment_location_details_network_location">Współrzędne z sieci:</string>
+    <string name="fragment_location_details_gps_location">Współrzędne z nadajnika GPS:</string>
+    <string name="fragment_location_details_root">Uprawnienia root:</string>
+    <string name="fragment_location_details_gps">GPS:</string>
+    <string name="fragment_location_details_sound">Dźwięki:</string>
+    <string name="fragment_location_details_vibrations">Wibracje:</string>
+    <string name="fragment_location_details_wifi">Wifi:</string>
+    <string name="fragment_location_details_bluetooth">Bluetooth:</string>
+    <string name="fragment_location_details_nfc">NFC:</string>
+    <string name="fragment_location_details_mobile_data">Dane mobilne:</string>
+    <string name="fragment_location_details_SMS">SMS:</string>
+    <string name="fragment_location_details_turn_off">Wyłącz aplikację:</string>
+    <string name="title_activity_edit_location">Edytuj lokalizację</string>
+    <string name="dialog_modules_main_text">Następujące funkcjonalności są dostępne na tym urządzeniu:</string>
+
+    <!-- Location edit -->
+    <string name="fragment_location_edit_time_from">Od: 00:00</string>
+    <string name="fragment_location_edit_time_to">Do:   23:59</string>
+    <string name="edit_location_name_edittext_hint">Wprowadź nazwę lokalizacji</string>
+    <string name="radius_plus_text">+1</string>
+    <string name="radius_minus_text">&#8212;1</string>
+    <string name="radius_plus_ten_text">+10</string>
+    <string name="radius_minus_ten_text">&#8212;10</string>
+    <string name="next_text">Dalej</string>
+    <string name="cancel_text">Anuluj</string>
+    <string name="back_text">Wstecz</string>
+    <string name="save_text">Zapisz</string>
+    <string name="title_activity_sms">Edycja SMS</string>
+
+    <!-- SMS strings -->
+    <string name="message_receiver_hint">Numer odbiorcy</string>
+    <string name="message_text_hint">Wpisz treść wiadomości</string>
+    <string name="message_location">Wyślij dla lokalizacji: </string>
+    <string name="one_time_message_text">Usuń wiadomość po wysłaniu: </string>    
+
+</resources>
