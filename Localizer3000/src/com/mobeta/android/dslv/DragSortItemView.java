@@ -25,7 +25,8 @@ public class DragSortItemView extends ViewGroup {
 
     private int mGravity = Gravity.TOP;
 
-    public DragSortItemView(Context context) {
+    @SuppressWarnings("deprecation")
+	public DragSortItemView(Context context) {
         super(context);
 
         // always init with standard ListView layout params

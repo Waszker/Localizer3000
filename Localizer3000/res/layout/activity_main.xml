@@ -1,8 +1,9 @@
  <!-- Icons taken from: http://www.iconsdb.com/icons/preview/white/activity-feed-xxl.png -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -11,7 +12,9 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="0dp"
+        android:layout_weight="1" 
+        android:fillViewport="true"       >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -51,7 +54,7 @@
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="15dp"
                 android:gravity="center"
                 android:text="@string/main_activity_text2"
                 android:textSize="28sp" />
@@ -61,20 +64,20 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:paddingTop="15dp"
+                android:paddingTop="10dp"
                 android:text="@string/current_localization"
                 android:textSize="26sp" />
 
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="5dp"
                 android:background="@android:color/darker_gray" />
 
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="15dp"
                 android:gravity="center"
                 android:text="@string/main_activity_text1"
                 android:textSize="28sp" />
@@ -84,24 +87,24 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:paddingTop="15dp"
+                android:paddingTop="10dp"
                 android:text="@string/current_localization"
                 android:textSize="26sp" />
 
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="5dp"
                 android:background="@android:color/darker_gray" />
             
         </LinearLayout>
     </ScrollView>
 
     <RelativeLayout
+        android:id="@+id/buttons_layout"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom" 
-        android:layout_alignParentBottom="true">
+        android:layout_height="70dp"
+        android:layout_gravity="bottom" >            
 
         <com.melnykov.fab.FloatingActionButton
             xmlns:fab="http://schemas.android.com/apk/res/pl.papistudio.localizer3000"
@@ -140,4 +143,4 @@
             fab:fab_colorRipple="@color/material_blue" />
     </RelativeLayout>
 
-</RelativeLayout>
+</LinearLayout>

@@ -13,8 +13,6 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Interpolator;
 import android.widget.ImageButton;
 
 /**
@@ -23,26 +21,16 @@ import android.widget.ImageButton;
  * @author Oleksandr Melnykov
  */
 public class FloatingActionButton extends ImageButton {
-    private static final int TRANSLATE_DURATION_MILLIS = 200;
-
     public static final int TYPE_NORMAL = 0;
     public static final int TYPE_MINI = 1;
-
     private boolean mVisible;
-
     private int mColorNormal;
     private int mColorPressed;
     private int mColorRipple;
     private boolean mShadow;
     private int mType;
-
     private int mShadowSize;
-
-    private int mScrollThreshold;
-
     private boolean mMarginsSet;
-
-    private final Interpolator mInterpolator = new AccelerateDecelerateInterpolator();
 
     public FloatingActionButton(Context context) {
         this(context, null);
@@ -94,7 +82,6 @@ public class FloatingActionButton extends ImageButton {
         mColorRipple = getColor(android.R.color.white);
         mType = TYPE_NORMAL;
         mShadow = true;
-        mScrollThreshold = getResources().getDimensionPixelOffset(R.dimen.fab_scroll_threshold);
         mShadowSize = getDimension(R.dimen.fab_shadow_size);
         if (attributeSet != null) {
             initAttributes(context, attributeSet);
@@ -163,15 +150,6 @@ public class FloatingActionButton extends ImageButton {
         } else {
             setBackgroundDrawable(drawable);
         }
-    }
-
-    private int getMarginBottom() {
-        int marginBottom = 0;
-        final ViewGroup.LayoutParams layoutParams = getLayoutParams();
-        if (layoutParams instanceof ViewGroup.MarginLayoutParams) {
-            marginBottom = ((ViewGroup.MarginLayoutParams) layoutParams).bottomMargin;
-        }
-        return marginBottom;
     }
 
     public void setColorNormal(int color) {
