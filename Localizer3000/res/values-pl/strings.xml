@@ -57,5 +57,16 @@
     <string name="dialog_modules_main_text">Następujące funkcjonalności są dostępne na tym urządzeniu:</string>
     <string name="dialog_modules_supported">Dostępne</string>
     <string name="dialog_modules_unsupported">Niedostępne</string>
+    
+    <!-- Coordinate strings -->
+    <string name="coordinates_degrees">Stopnie</string>
+    <string name="coordinates_minutes">Minuty</string>
+
+    
+    <!-- Preferences strings -->
+    <string name="preferences_interval_title">Interwał aktualizacji lokacji</string>
+    <string name="preferences_modules_title">Sprawdź wspierane moduły</string>
+    <string name="preferences_modules_summary">przez to urządzenie</string>
+    <string name="preferences_location_coords_title">Format współrzędnych</string>
 
 </resources>

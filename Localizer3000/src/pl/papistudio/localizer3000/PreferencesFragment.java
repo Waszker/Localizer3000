@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
 import android.util.Log;
@@ -16,11 +18,13 @@ import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import de.greenrobot.event.EventBus;
 
-public class PreferencesFragment extends PreferenceFragment implements OnPreferenceClickListener {
+public class PreferencesFragment extends PreferenceFragment 
+								implements OnPreferenceClickListener, OnPreferenceChangeListener {
 	/******************/
 	/*   VARIABLES    */
 	/******************/
 	private int mInterval;
+	private String mLocationType;
 	private SharedPreferences mSharedPref;
 	
 	/******************/
@@ -56,17 +60,32 @@ public class PreferencesFragment extends PreferenceFragment implements OnPrefere
 		
 		return false;
 	}
+
+	@Override
+	public boolean onPreferenceChange(Preference preference, Object newValue) {
+		if(preference.getKey().contentEquals("location_coords"))
+		{
+			mLocationType = (getResources()
+					.getStringArray(R.array.coordinateSystem))[Integer.parseInt((String)newValue)-1];
+			saveCoordinatesSystemToSharedPreferences(mLocationType);
+			changePreferenceTexts();
+		}
+		
+		return true;
+	}
 	
 	private void addOnClickListeners() {
         ((Preference)findPreference("interval")).setOnPreferenceClickListener(this);
-        ((Preference)findPreference("modules")).setOnPreferenceClickListener(this);		
+        ((Preference)findPreference("modules")).setOnPreferenceClickListener(this);	
+        ((ListPreference)findPreference("location_coords")).setOnPreferenceChangeListener(this);		
 	}
 	
 	private void initializePreferenceVariables() {
 		mSharedPref = getActivity().getSharedPreferences(MainActivity.SHARED_PREFERENCES, 
 													 	Context.MODE_PRIVATE);
         mInterval = mSharedPref.getInt(MainActivity.INTERVAL_PREFERENCE, 5);
-        changeIntervalPreferenceText();
+        mLocationType = mSharedPref.getString(MainActivity.COORDINATES_TYPE, "Degrees");
+        changePreferenceTexts();
 	}
 	
 	private void showPickerDialog() {
@@ -108,7 +127,7 @@ public class PreferencesFragment extends PreferenceFragment implements OnPrefere
 					public void onClick(DialogInterface dialog, int id) {						
 						mInterval = picker.getValue();
 						saveIntervalToSharedPreferences();
-						changeIntervalPreferenceText();
+						changePreferenceTexts();
 						EventBus.getDefault().post(Integer.valueOf(mInterval*1000));
 						Log.d("Preference Fragment", "New interval value : " + picker.getValue());
 					}
@@ -128,7 +147,14 @@ public class PreferencesFragment extends PreferenceFragment implements OnPrefere
 		editor.commit();
 	}
 	
-	private void changeIntervalPreferenceText() {
+	private void saveCoordinatesSystemToSharedPreferences(String type) {
+		SharedPreferences.Editor editor = mSharedPref.edit();
+		editor.putString(MainActivity.COORDINATES_TYPE, type);
+		editor.commit();		
+	}
+	
+	private void changePreferenceTexts() {
 		((Preference)findPreference("interval")).setSummary(mInterval + " min.");
+		((ListPreference)findPreference("location_coords")).setSummary(mLocationType);
 	}
 }

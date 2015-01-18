@@ -1,7 +1,5 @@
 package pl.papistudio.localizer3000;
 
-import java.text.DecimalFormat;
-
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
@@ -31,6 +29,7 @@ public class MainActivity extends Activity {
 	public static final String SHARED_PREFERENCES = "SHARED_PREFERENCES";
 	public static final String INTERVAL_PREFERENCE = "INTERVAL_PREFERENCE";
 	public static final String CHECK_FOR_MODULES_PREFERENCE = "MODULES_PREFERENCE";
+	public static final String COORDINATES_TYPE = "COORDINATES_TYPE";
 	public static final int EDIT_EXISTING_LOCATION = 0x1;
 	private AlertDialog mAlertDialog;
 	private boolean mIsServiceBinded;
@@ -213,12 +212,10 @@ public class MainActivity extends Activity {
 		runOnUiThread(new Runnable() {			
 			@Override
 			public void run() {
-				DecimalFormat f = new DecimalFormat("0.#####");
 				((TextView) findViewById(R.id.current_location_textview))
-						.setText(f.format(location.getLatitude()) + "\u00B0 \n" + 
-								 f.format(location.getLongitude()) + "\u00B0 \n" +
-								 "with accuracy: " +
-								 location.getAccuracy() + "m.");				
+						.setText(CoordinatesConverter.convertLocationToString(
+								MainActivity.this, location.getLatitude(), 
+								location.getLongitude(), location.getAccuracy()));				
 			}
 		});
 	}

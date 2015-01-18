@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <PreferenceCategory
-        android:title="Location service options">
+    <PreferenceCategory android:title="Location service options" >
         
         <Preference
             android:key="interval"
-            android:summary="5 minutes"
-            android:title="Location update interval" />
-        
+            android:summary="5 min."
+            android:title="@string/preferences_interval_title" />
         <Preference
             android:key="modules"
-            android:summary="by this device"
-            android:title="Check for modules supported" />
+            android:summary="@string/preferences_modules_summary"
+            android:title="@string/preferences_modules_title" />
+
+        <ListPreference
+            android:key="location_coords"
+            android:title="@string/preferences_location_coords_title"
+            android:entries="@array/coordinateSystem"
+            android:entryValues="@array/coordinateSystemValues"
+            android:defaultValue="1" />
         
     </PreferenceCategory>
 

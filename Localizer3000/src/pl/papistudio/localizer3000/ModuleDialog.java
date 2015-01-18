@@ -8,8 +8,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 /**
- * Static class that provides method to
- * show dialog with system checkup.
+ * <p>Static class that provides method to
+ * show dialog with system checkup.</p>
  * 
  * @author PapiTeam
  *
@@ -49,8 +49,8 @@ public class ModuleDialog {
 			
 			@Override
 			public void onClick(View v) {
-				context.getSharedPreferences(MainActivity.SHARED_PREFERENCES, 
-						Context.MODE_PRIVATE).edit().putBoolean(MainActivity.CHECK_FOR_MODULES_PREFERENCE, false).commit();
+				context.getSharedPreferences(MainActivity.SHARED_PREFERENCES, Context.MODE_PRIVATE)
+					.edit().putBoolean(MainActivity.CHECK_FOR_MODULES_PREFERENCE, false).commit();
 				dialog.dismiss();				
 			}
 		});

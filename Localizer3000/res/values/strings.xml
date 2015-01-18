@@ -57,5 +57,18 @@
     <string name="dialog_modules_main_text">Following functionality is supported by this device:</string>
     <string name="dialog_modules_supported">Supported</string>
     <string name="dialog_modules_unsupported">Unsupported</string>
+    
+    <!-- Coordinate strings -->
+    <string name="coordinates_degrees">Degrees</string>
+    <string name="coordinates_minutes">Minutes</string>
+
+    
+    <!-- Preferences strings -->
+    <string name="preferences_interval_title">Location update interval</string>
+    <string name="preferences_modules_title">Check for modules supported</string>
+    <string name="preferences_modules_summary">by this device</string>
+    <string name="preferences_location_coords_title">Displayed location coordination type</string>
+    
+
 
 </resources>
