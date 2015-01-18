@@ -19,7 +19,7 @@
     <string name="fragment_location_details_active_days">Dni obowiązywania:</string>
     <string name="fragment_location_details_active_time">Godziny obowiązywania:</string>
     <string name="fragment_location_details_network_location">Współrzędne z sieci:</string>
-    <string name="fragment_location_details_gps_location">Współrzędne z nadajnika GPS:</string>
+    <string name="fragment_location_details_gps_location">Współrzędne GPS:</string>
     <string name="fragment_location_details_root">Uprawnienia root:</string>
     <string name="fragment_location_details_gps">GPS:</string>
     <string name="fragment_location_details_sound">Dźwięki:</string>
@@ -31,7 +31,6 @@
     <string name="fragment_location_details_SMS">SMS:</string>
     <string name="fragment_location_details_turn_off">Wyłącz aplikację:</string>
     <string name="title_activity_edit_location">Edytuj lokalizację</string>
-    <string name="dialog_modules_main_text">Następujące funkcjonalności są dostępne na tym urządzeniu:</string>
 
     <!-- Location edit -->
     <string name="fragment_location_edit_time_from">Od: 00:00</string>
@@ -52,5 +51,11 @@
     <string name="message_text_hint">Wpisz treść wiadomości</string>
     <string name="message_location">Wyślij dla lokalizacji: </string>
     <string name="one_time_message_text">Usuń wiadomość po wysłaniu: </string>    
+    
+    <!-- Dialog strings -->
+    <string name="dialog_modules_main_title">Sprawdzenie</string>
+    <string name="dialog_modules_main_text">Następujące funkcjonalności są dostępne na tym urządzeniu:</string>
+    <string name="dialog_modules_supported">Dostępne</string>
+    <string name="dialog_modules_unsupported">Niedostępne</string>
 
 </resources>

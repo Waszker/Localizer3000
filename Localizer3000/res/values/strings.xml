@@ -31,7 +31,6 @@
     <string name="fragment_location_details_SMS">SMS:</string>
     <string name="fragment_location_details_turn_off">Turn app off:</string>
     <string name="title_activity_edit_location">Edit location</string>
-    <string name="dialog_modules_main_text">Following functionality is supported by this device:</string>
 
     <!-- Location edit -->
     <string name="fragment_location_edit_time_from">From: 00:00</string>
@@ -51,6 +50,12 @@
     <string name="message_receiver_hint">Receiver number</string>
     <string name="message_text_hint">Enter message text</string>
     <string name="message_location">Send when location: </string>
-    <string name="one_time_message_text">Delete sms after sending: </string>    
+    <string name="one_time_message_text">Delete sms after sending: </string>
+
+    <!-- Dialog strings -->
+    <string name="dialog_modules_main_title">Checkup</string>
+    <string name="dialog_modules_main_text">Following functionality is supported by this device:</string>
+    <string name="dialog_modules_supported">Supported</string>
+    <string name="dialog_modules_unsupported">Unsupported</string>
 
 </resources>

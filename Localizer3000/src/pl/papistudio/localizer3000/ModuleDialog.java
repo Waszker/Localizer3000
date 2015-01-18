@@ -7,7 +7,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-
+/**
+ * Static class that provides method to
+ * show dialog with system checkup.
+ * 
+ * @author PapiTeam
+ *
+ */
 public class ModuleDialog {
 	/******************/
 	/*   VARIABLES    */
@@ -21,7 +27,7 @@ public class ModuleDialog {
 	
 		final Dialog dialog = new Dialog(context);
 		dialog.setContentView(R.layout.module_availability_dialog);
-		dialog.setTitle("Check-up");
+		dialog.setTitle(R.string.dialog_modules_main_title);
 		dialog.setCancelable(false);
 		setTextAndColorForModuleDialog((TextView)dialog.findViewById(R.id.location_availability), available[0]);
 		setTextAndColorForModuleDialog((TextView)dialog.findViewById(R.id.gps_location_availability), available[1]);
@@ -54,12 +60,12 @@ public class ModuleDialog {
 	private static void setTextAndColorForModuleDialog(TextView text, boolean isAvailable) {
 		if (isAvailable) 
 		{
-			text.setText("Supported");
+			text.setText(R.string.dialog_modules_supported);
 			text.setTextColor((Color.GREEN));
 		} 
 		else 
 		{
-			text.setText("Not supported");
+			text.setText(R.string.dialog_modules_unsupported);
 			text.setTextColor((Color.RED));
 		}
 	}

@@ -2,6 +2,7 @@ package pl.papistudio.localizer3000;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -132,9 +133,16 @@ public class LocationService extends Service {
     }
     
 	private Notification createNotification(String contentString) {
+		 Intent notificationIntent = new Intent(this, MainActivity.class);
+		 notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | 
+				 					 Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		 PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, 
+				 									notificationIntent, 0);
+		 
 		return new Notification.Builder(getApplicationContext())
 				.setContentTitle("Location service running")
 				.setContentText(contentString)
+				.setContentIntent(pendingIntent)
 				.setSmallIcon(R.drawable.ic_launcher).build(); // TODO change!
 	}
         
