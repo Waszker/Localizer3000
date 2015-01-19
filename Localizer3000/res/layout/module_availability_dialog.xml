@@ -43,8 +43,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_column="1"
-                    android:layout_gravity="center"
-                    android:layout_weight="1" />
+                    android:layout_gravity="center" />
             </TableRow>
 
             <TableRow
@@ -65,8 +64,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_column="1"
-                    android:layout_gravity="center"
-                    android:layout_weight="1" />
+                    android:layout_gravity="center"/>
             </TableRow>
 
             <TableRow
@@ -87,8 +85,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_column="1"
-                    android:layout_gravity="center"
-                    android:layout_weight="1" />
+                    android:layout_gravity="center" />
             </TableRow>
 
             <TableRow
@@ -109,8 +106,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_column="1"
-                    android:layout_gravity="center"
-                    android:layout_weight="1" />
+                    android:layout_gravity="center"/>
             </TableRow>
 
             <TableRow
@@ -131,8 +127,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_column="1"
-                    android:layout_gravity="center"
-                    android:layout_weight="1" />
+                    android:layout_gravity="center" />
             </TableRow>
 
             <TableRow
@@ -153,8 +148,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_column="1"
-                    android:layout_gravity="center"
-                    android:layout_weight="1" />
+                    android:layout_gravity="center"/>
             </TableRow>
 
             <TableRow
@@ -166,6 +160,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_column="0"
+                    android:layout_weight="1"
                     android:text="@string/fragment_location_details_vibrations"
                     android:textSize="@dimen/location_details_static_text" />
 
@@ -185,7 +180,8 @@
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_column="0"
+                    android:layout_column="0"                    
+                    android:layout_weight="1"
                     android:text="@string/fragment_location_details_root"
                     android:textSize="@dimen/location_details_static_text" />
 

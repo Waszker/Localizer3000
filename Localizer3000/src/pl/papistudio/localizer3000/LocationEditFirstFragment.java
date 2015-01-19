@@ -9,6 +9,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -140,34 +141,70 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 	}
 	 
 	private void showCancelConfirmationDialog() {
-		String message = ((((EditLocationActivity)getActivity()).originalLocationName
-							.contentEquals("")) ? "Are you sure you want to lose this location?" : 
-												  "Are you sure you want to stop editing this location?");
-		
+		if(!((EditLocationActivity)getActivity()).originalLocationName.contentEquals(""))
+		{
+			showCancelEditionDialog();
+		}
+		else
+		{
+			new AlertDialog.Builder(getActivity())
+		        .setIcon(android.R.drawable.ic_dialog_alert)
+		        .setTitle("Cancel location")
+		        .setMessage("Are you sure you want to lose this location?")
+		        .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+			    {
+			        @Override
+			        public void onClick(DialogInterface dialog, int which) {
+			        	/* Move to previous screen */
+			        	Toast.makeText(LocationEditFirstFragment.this.getActivity(), 
+			        			"Location has not been saved", Toast.LENGTH_SHORT).show();
+			        	getActivity().setResult(Activity.RESULT_CANCELED, null);
+			        	LocationEditFirstFragment.this.getActivity().finish(); 
+			        }
+			
+			    })
+			    .setNegativeButton("No", new DialogInterface.OnClickListener()
+			    {
+			        @Override
+			        public void onClick(DialogInterface dialog, int which) {
+			        }
+			
+			    })
+			    .show();
+		}
+	}
+	
+	private void showCancelEditionDialog() {
 		new AlertDialog.Builder(getActivity())
-	        .setIcon(android.R.drawable.ic_dialog_alert)
-	        .setTitle("Cancel location")
-	        .setMessage(message)
-	        .setPositiveButton("Yes", new DialogInterface.OnClickListener()
-		    {
-		        @Override
-		        public void onClick(DialogInterface dialog, int which) {
-		        	/* Move to previous screen */
-		        	Toast.makeText(LocationEditFirstFragment.this.getActivity(), 
-		        			"Location has not been saved", Toast.LENGTH_SHORT).show();
-		        	getActivity().setResult(Activity.RESULT_CANCELED, null);
-		        	LocationEditFirstFragment.this.getActivity().finish(); 
-		        }
-		
-		    })
-		    .setNegativeButton("No", new DialogInterface.OnClickListener()
-		    {
-		        @Override
-		        public void onClick(DialogInterface dialog, int which) {
-		        }
-		
-		    })
-		    .show();
+        .setIcon(android.R.drawable.ic_dialog_alert)
+        .setTitle("Save location")
+        .setMessage("Do you want to save changes to this location?")
+        .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+	    {
+	        @Override
+	        public void onClick(DialogInterface dialog, int which) {
+	        	fillEditedLocationDetails();
+	        	DatabaseHelper.getInstance(getActivity())
+	        		.updateLocation(((EditLocationActivity)getActivity()).currentlyEditedLocation, 
+	        					((EditLocationActivity)getActivity()).originalLocationName);
+				Toast.makeText(getActivity(), "Location has been updated", Toast.LENGTH_SHORT).show();
+				Intent data = new Intent();
+				data.putExtra("location", ((EditLocationActivity)getActivity()).currentlyEditedLocation);
+				getActivity().setResult(Activity.RESULT_OK, data);
+				getActivity().finish();
+	        }	
+	    })
+	    .setNegativeButton("No", new DialogInterface.OnClickListener()
+	    {
+	        @Override
+	        public void onClick(DialogInterface dialog, int which) {Toast.makeText(LocationEditFirstFragment.this.getActivity(), 
+        		"Location has not been edited", Toast.LENGTH_SHORT).show();
+	        	getActivity().setResult(Activity.RESULT_CANCELED, null);
+	        	LocationEditFirstFragment.this.getActivity().finish(); 
+	        }
+	
+	    })
+	    .show();
 	}
 	 
 	private void checkLocationNameAndShowSecondFragment() {
