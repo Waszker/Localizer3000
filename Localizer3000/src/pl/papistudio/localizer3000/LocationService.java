@@ -143,7 +143,7 @@ public class LocationService extends Service {
 				.setContentTitle("Location service running")
 				.setContentText(contentString)
 				.setContentIntent(pendingIntent)
-				.setSmallIcon(R.drawable.ic_launcher).build(); // TODO change!
+				.setSmallIcon(R.drawable.notification_icon).build(); // TODO change!
 	}
         
     private void createLocationListener() {
@@ -172,7 +172,8 @@ public class LocationService extends Service {
 		    private boolean isNewLocationBetter(android.location.Location location) {
 		    	android.location.Location oldLocation = LocationService.this.mLocation;
 		    	
-		    	return ((oldLocation.distanceTo(location) > location.getAccuracy() + oldLocation.getAccuracy() 	// we want new location when it points to definately new position
+		    	return (oldLocation == null ||
+		    			(oldLocation.distanceTo(location) > location.getAccuracy() + oldLocation.getAccuracy() 	// we want new location when it points to definately new position
 		    			|| oldLocation.getAccuracy() >= location.getAccuracy())									// we want new location always if it provides better accuracy
 		    			&& oldLocation.getElapsedRealtimeNanos() <= location.getElapsedRealtimeNanos());		// we reject new location if it is "older" one than we have right now
 		    																									// (for example GPS last known location compared to network location)
