@@ -23,6 +23,8 @@ public class EditLocationActivity extends Activity {
 		{
 			Intent i = getIntent();
 			currentlyEditedLocation = (Location)i.getParcelableExtra("location");
+			if(null == currentlyEditedLocation) originalLocationName = "";
+			else originalLocationName = currentlyEditedLocation.getName();
 			
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, new LocationEditFirstFragment(), "EditPart1").commit();

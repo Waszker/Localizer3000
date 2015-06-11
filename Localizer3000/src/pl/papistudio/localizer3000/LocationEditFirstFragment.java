@@ -48,7 +48,6 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 		checkForGooglePlayServicesAndExitIfNone();
 		getCurrentlyEditedLocationReference();
 		fillNullLocation();
-		saveLocationOriginalName();
 		addOnClickActionsToButtons(rootView);
 		fillLocationDetails(rootView);
 		
@@ -134,10 +133,6 @@ public class LocationEditFirstFragment extends Fragment implements OnClickListen
 									ToggleStates.Off, 100);
 			((EditLocationActivity) getActivity()).currentlyEditedLocation = mLocation;
 		}
-	}
-	
-	private void saveLocationOriginalName() {
-		((EditLocationActivity)getActivity()).originalLocationName = mLocation.getName();
 	}
 	 
 	private void showCancelConfirmationDialog() {
